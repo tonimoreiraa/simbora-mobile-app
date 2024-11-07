@@ -1,25 +1,30 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import tw from 'twrnc';
 
-const colors = ['tomato', 'thistle', 'skyblue', 'teal'];
+interface TCarouselProps<T> {
+  items: T[];
+}
 
-const MyCarousel = () => (
+const Carousel = <T,>({ items }: TCarouselProps<T>) => (
   <View>
     <SwiperFlatList
       autoplay
       autoplayDelay={2}
       autoplayLoop
-      index={2}
-      data={colors}
+      index={0}
+      data={items}
       renderItem={({ item }) => (
-        <View style={tw`p-2 mt-2`}>
-          <View style={tw`w-60 h-30 rounded-lg bg-gray-200`}>{}</View>
+        <View>
+          <Image
+            source={typeof item === 'string' ? { uri: item } : item}
+            resizeMode="cover"
+          />
         </View>
       )}
     />
   </View>
 );
 
-export default MyCarousel;
+export default Carousel;

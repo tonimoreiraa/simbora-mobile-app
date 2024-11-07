@@ -1,4 +1,4 @@
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg';
 import {useState} from 'react';

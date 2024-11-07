@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 function InputSearch() {
   return (
-    <View style={tw`flex-row items-center bg-gray-200 rounded-lg px-4`}>
+    <View style={tw`flex-row items-center bg-gray-100 rounded-lg px-4`}>
       <Icon name="search-outline" size={20} />
       <TextInput
         style={tw`flex-1 ml-2 text-base text-gray-900`}

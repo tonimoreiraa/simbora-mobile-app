@@ -2,6 +2,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg'
 import AccountInput from '../components/create_account_input';
+
 function login() {
   return (
     <View style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
