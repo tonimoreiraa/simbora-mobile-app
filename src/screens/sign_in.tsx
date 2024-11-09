@@ -1,12 +1,39 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg'
 import AccountInput from '../components/create_account_input';
-import { useNavigation } from '@react-navigation/native';
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SignInPayload, signInSchema } from '../validators/auth';
+import { useAuth } from '../contexts/auth_provider';
+import { useMutation } from 'react-query'
+
+async function signIn({ email, password }: SignInPayload)
+{
+  await new Promise(r => setTimeout(r, 1000))
+
+  if (Math.random() > 0.5) {
+    throw new Error('Simulando erro: Email invalido: ' + email)
+  } else {
+    return {message: 'Deu certo.', email, password}
+  }
+}
 
 function SignIn() {
+  const auth = useAuth()
+  const mutation = useMutation(signIn)
+  console.log(mutation.error)
 
-  const navigation = useNavigation()
+  const form = useForm<SignInPayload>({
+    resolver: zodResolver(signInSchema),
+  })
+
+  async function handleSubmit({ email, password }: SignInPayload)
+  {
+    mutation.mutate({ email, password })
+    console.log(1)
+  }
+
   return (
     <View style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
         <Logo style={tw`mt-20 mb-6`}/>
@@ -14,14 +41,36 @@ function SignIn() {
         Crie sua conta ou entre agora mesmo
       </Text>
       <View style={tw`w-full`}>
-        <AccountInput description='Seu Login' placeholder='erivaldo@dpibrasil.com' />
-        <AccountInput description='Sua Senha' placeholder='************' secureTextEntry />
+        <AccountInput
+          control={form.control}
+          name="email"
+          label="Seu Login"
+          placeholder="voce@exemplo.com"
+          keyboardType='email-address'
+          autoCapitalize='none'
+        />
+        <AccountInput
+          control={form.control}
+          label="Sua Senha"
+          name="password"
+          placeholder="••••••••"
+          secureTextEntry
+        />
+        {mutation.isError && <Text style={tw`text-red-500 mt-2`}>
+          {/* @ts-ignore */}
+          {mutation.error?.message}
+        </Text>}
         <View style={tw`flex-row justify-between w-full py-2`}>
           <Text>Lembrar login</Text>
           <Text style={tw`text-red-500`}>Esqueci a senha</Text>
         </View>
         <View style={tw`w-full gap-4`}>
-          <TouchableOpacity style={tw`bg-blue-500 w-full py-4 rounded-md`}>
+          <TouchableOpacity
+            disabled={mutation.isLoading || mutation.isSuccess}
+            onPress={form.handleSubmit(handleSubmit)}
+            style={tw`bg-blue-500 w-full py-4 rounded-md items-center justify-center flex-row gap-2`}
+          >
+            {mutation.isLoading && <ActivityIndicator color="white" />}
             <Text style={tw`text-white text-center`}>Entre com e-mail</Text>
           </TouchableOpacity>
           <TouchableOpacity style={tw`bg-stone-100 w-full py-4 rounded-md`}>
