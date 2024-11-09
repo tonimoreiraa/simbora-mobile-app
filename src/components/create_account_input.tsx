@@ -14,7 +14,7 @@ const accountInput: React.FC<inputProps> = ({description, placeholder, secureTex
       <TextInput
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
-        style={tw`bg-gray-100 py-4 px-3 w-full rounded-md`}
+        style={tw`bg-stone-100 py-4 px-3 w-full rounded-md`}
       />
     </View>
   );

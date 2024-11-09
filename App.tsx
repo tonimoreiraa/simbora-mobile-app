@@ -7,12 +7,14 @@ import Order from "./src/screens/order";
 import Account from "./src/screens/my_account";
 import MyOrder from "./src/screens/my_order";
 import ViewProduct from "./src/screens/view_product";
+import Routes from "./routes"
+import { NavigationContainer } from "@react-navigation/native";
 
 function app() {
   return (
-    <View>
-      <ViewProduct />
-    </View>
+    <NavigationContainer>
+      <Routes />
+    </NavigationContainer>
   )
 }
 

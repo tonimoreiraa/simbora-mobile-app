@@ -11,7 +11,7 @@ function signUp() {
       style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
       <Logo style={tw`flex`} width={100} />
       <View style={tw`mb-4`}>
-        <Text style={tw`text-gray-500 text-center mb-2`}>
+        <Text style={tw`text-stone-500 text-center mb-2`}>
           Crie sua conta gratuitamente
         </Text>
         <Text style={tw`text-xl font-bold text-center px-8`}>
@@ -44,11 +44,11 @@ function signUp() {
         </View>
         <View
           style={tw`flex flex-row items-center justify-between w-full py-4`}>
-          <View style={tw`border border-gray-200 w-24`}></View>
-          <Text style={tw`text-xs text-gray-400`}>
+          <View style={tw`border border-stone-200 w-24`}></View>
+          <Text style={tw`text-xs text-stone-400`}>
             Entre com uma rede social
           </Text>
-          <View style={tw`border border-gray-200 w-24`}></View>
+          <View style={tw`border border-stone-200 w-24`}></View>
         </View>
       </View>
       <View style={tw`flex mt-20`}>

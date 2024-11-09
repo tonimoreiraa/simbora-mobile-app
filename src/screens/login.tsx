@@ -2,12 +2,15 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg'
 import AccountInput from '../components/create_account_input';
+import { useNavigation } from '@react-navigation/native';
 
 function login() {
+
+  const navigation = useNavigation()
   return (
     <View style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
         <Logo style={tw`mt-20 mb-6`}/>
-      <Text style={tw`text-gray-500 text-center mb-6`}>
+      <Text style={tw`text-stone-500 text-center mb-6`}>
         Crie sua conta ou entre agora mesmo
       </Text>
       <View style={tw`w-full`}>
@@ -18,19 +21,19 @@ function login() {
           <Text style={tw`text-red-500`}>Esqueci a senha</Text>
         </View>
         <View style={tw`w-full gap-4`}>
-          <TouchableOpacity style={tw`bg-blue-500 w-full py-4 rounded-md`}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')} style={tw`bg-blue-500 w-full py-4 rounded-md`}>
             <Text style={tw`text-white text-center`}>Entre com e-mail</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={tw`bg-gray-100 w-full py-4 rounded-md`}>
-            <Text style={tw`text-gray-400 text-center`}>Criar conta</Text>
+          <TouchableOpacity style={tw`bg-stone-100 w-full py-4 rounded-md`}>
+            <Text style={tw`text-stone-400 text-center`}>Criar conta</Text>
           </TouchableOpacity>
         </View>
         <View style={tw`flex flex-row items-center justify-between w-full py-4`}>
-          <View style={tw`border border-gray-200 w-24`}></View>
-          <Text style={tw`text-xs text-gray-400`}>
+          <View style={tw`border border-stone-200 w-24`}></View>
+          <Text style={tw`text-xs text-stone-400`}>
             Entre com uma rede social
           </Text>
-          <View style={tw`border border-gray-200 w-24`}></View>
+          <View style={tw`border border-stone-200 w-24`}></View>
         </View>
       </View>
 

@@ -21,7 +21,7 @@ function Checkout() {
                             <Text style={tw`text-xl font-bold`}>Produtos Recomendados</Text>
                         </View>
                         <View style={tw`border border-blue-400 p-1 rounded-lg ml-2`}>
-                            <Text style={tw`text-gray-500`}>Relacionados</Text>
+                            <Text style={tw`text-stone-500`}>Relacionados</Text>
                         </View>
                     </View>
                     <View style={tw`flex flex-row flex-wrap items-center justify-between w-full px-4 mb-22`}>
@@ -30,7 +30,7 @@ function Checkout() {
                     </View>
                 </View>
             </ScrollView>
-            <View style={tw`absolute bottom-0 bg-white border-t border-gray-400 w-full py-8 px-4`}>
+            <View style={tw`absolute bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
                 <TouchableOpacity style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl`}>
                     <Text style={tw`font-bold text-lg text-white`}>Método de pagamento</Text>
                 </TouchableOpacity>

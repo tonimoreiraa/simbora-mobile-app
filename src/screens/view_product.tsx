@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, ScrollView } from "react-native";
+import { SafeAreaView, TouchableOpacity, View, ScrollView } from "react-native";
 import InputSearch from "../components/input_search";
 import Icon from 'react-native-vector-icons/Ionicons'
 import tw from "twrnc";
@@ -11,8 +11,8 @@ const ViewProduct: React.FC = () => {
     ];
 
     return (
-        <View>
-            <View style={tw`flex flex-row items-center justify-center w-full py-8 px-12 `}>
+        <SafeAreaView>
+            <View style={tw`flex flex-row items-center justify-center w-full px-12 `}>
                 <TouchableOpacity>
                     <Icon name="chevron-back" size={28} style={tw`mr-2`} />
                 </TouchableOpacity>
@@ -24,7 +24,7 @@ const ViewProduct: React.FC = () => {
             <View>
             <Carousel items={items} />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
