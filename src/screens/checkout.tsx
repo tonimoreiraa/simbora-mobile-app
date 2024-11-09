@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import tw from "twrnc";
 import CartProduct from "../components/cart_product";
 import ProductCard from "../components/product_card";
 
 function Checkout() {
     return (
-        <View>
+        <SafeAreaView>
             <ScrollView>
                 <View style={tw`flex flex-col items-center justify-start py-6 h-full`}>
                     <View>
@@ -35,7 +35,7 @@ function Checkout() {
                     <Text style={tw`font-bold text-lg text-white`}>Método de pagamento</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
 
     )
 }

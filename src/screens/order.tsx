@@ -1,13 +1,13 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView} from "react-native";
 import tw from "twrnc"
 import Price from "../components/price";
 import Delivery from "../components/delivery";
 
 function Order() {
     return (
-        <View>
+        <SafeAreaView>
             <ScrollView>
-                <View style={tw`flex flex-col items-center justify-center px-4 mt-6 h-full w-full`}>
+                <View style={tw`flex flex-col items-center justify-center px-4 mt-06 h-full w-full`}>
                     <View>
                         <Text style={tw`text-2xl font-bold text-center`}>Resumo do pedido</Text>
                     </View>
@@ -34,7 +34,7 @@ function Order() {
                     <Text style={tw`font-bold text-lg text-white`}>Finalizar pedido</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

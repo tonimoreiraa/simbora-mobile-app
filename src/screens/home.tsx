@@ -8,7 +8,7 @@ import Categories from '../components/categories';
 import Tags from '../components/tags';
 import ProductCard from '../components/product_card';
 
-function home() {
+function Home() {
   return (
     <SafeAreaView>
       <ScrollView>
@@ -67,4 +67,4 @@ function home() {
   );
 }
 
-export default home;
+export default Home;
