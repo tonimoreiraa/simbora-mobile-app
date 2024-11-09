@@ -4,7 +4,7 @@ import Logo from '../assets/LOGO.svg'
 import AccountInput from '../components/create_account_input';
 import { useNavigation } from '@react-navigation/native';
 
-function login() {
+function SignIn() {
 
   const navigation = useNavigation()
   return (
@@ -21,7 +21,7 @@ function login() {
           <Text style={tw`text-red-500`}>Esqueci a senha</Text>
         </View>
         <View style={tw`w-full gap-4`}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')} style={tw`bg-blue-500 w-full py-4 rounded-md`}>
+          <TouchableOpacity style={tw`bg-blue-500 w-full py-4 rounded-md`}>
             <Text style={tw`text-white text-center`}>Entre com e-mail</Text>
           </TouchableOpacity>
           <TouchableOpacity style={tw`bg-stone-100 w-full py-4 rounded-md`}>

@@ -4,7 +4,7 @@ import Logo from '../assets/LOGO.svg';
 import {useState} from 'react';
 import AccountInput from '../components/create_account_input';
 
-function signUp() {
+function SignUp() {
   const [selected, setSelected] = useState(0);
   return (
     <View
@@ -69,4 +69,4 @@ function signUp() {
   );
 }
 
-export default signUp;
+export default SignUp;
