@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import SignUp from './src/screens/sign_in';
+import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
 import { useAuth } from './src/contexts/auth_provider';
 import SignIn from './src/screens/sign_in';
@@ -120,6 +120,7 @@ function BottomTab() {
 export default function Routes() {
   const { signed } = useAuth();
 
+  return <SignIn />
   console.log(signed);
 
   return (
