@@ -1,13 +1,13 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView } from "react-native";
 import tw from "twrnc"
 import AccountInput from '../components/create_account_input';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 function MyAccount() {
     return (
-        <View>
+        <SafeAreaView style={tw`bg-white`}>
             <ScrollView>
-                <View style={tw`flex flex-col items-center justify-center px-4 mt-6 h-full w-full`}>
+                <View style={tw`flex flex-col items-center justify-center px-4 h-full w-full`}>
                     <View>
                         <Text style={tw`text-2xl font-bold text-center`}>Minha conta</Text>
                     </View>
@@ -53,7 +53,7 @@ function MyAccount() {
                     </View>
                 </View>
             </ScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 
