@@ -67,6 +67,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function signInWithToken(token: string, userData: User)
+  {
+    await AsyncStorage.setItem('@simbora-user', JSON.stringify(userData));
+    await AsyncStorage.setItem('@simbora-token', token);
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+    setUser(userData);
+  }
+
   async function signOut() {
     await AsyncStorage.removeItem('@simbora-user');
     await AsyncStorage.removeItem('@simbora-token');

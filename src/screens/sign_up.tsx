@@ -1,11 +1,26 @@
 import {Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg';
-import {useState} from 'react';
 import AccountInput from '../components/create_account_input';
+import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SignUpPayload, signUpSchema } from '../validators/auth';
+import { UserRoleSelector } from '../components/user_role_selector';
+import { api } from '../services/api';
 
 function SignUp() {
-  const [selected, setSelected] = useState(0);
+  const navigation = useNavigation()
+  const form = useForm<SignUpPayload>({
+    resolver: zodResolver(signUpSchema),
+  })
+  const handleSignIn = () => navigation.navigate('SignIn')
+
+  async function handleSubmit(payload: SignUpPayload) {
+    const { data } = await api.post('/sign-up', payload)
+    console.log(data)
+  }
+
   return (
     <View
       style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
@@ -18,27 +33,49 @@ function SignUp() {
           Preencha os seus dados abaixo e agilize sua rotina com a volevu.
         </Text>
       </View>
-      <AccountInput description="Seu nome" placeholder="Erivaldo Cavalcante"/>
-      <AccountInput description="Seu Email" placeholder="erivaldo@dpibrasil.com" />
-      <AccountInput description="Seu id person" placeholder="@erivaldocavalcante" />
-      <AccountInput description="Sua senha" placeholder="*********" secureTextEntry/>
+      <AccountInput
+        control={form.control}
+        name="name"
+        label="Seu nome"
+        autoComplete='name'
+        placeholder="Erivaldo Cavalcante"
+      />
+      <AccountInput
+        control={form.control}
+        name="email"
+        label="Seu Email"
+        autoCapitalize='none'
+        keyboardType='email-address'
+        autoComplete='email'
+        placeholder="erivaldo@dpibrasil.com"
+      />
+      <AccountInput
+        control={form.control}
+        name="username"
+        label="Seu id person"
+        autoCapitalize='none'
+        autoComplete='username'
+        placeholder="@erivaldocavalcante"
+      />
+      <AccountInput
+        control={form.control}
+        name="password"
+        label="Sua senha"
+        autoComplete='password'
+        placeholder="*********"
+        secureTextEntry
+      />
       <View style={tw`w-full`}>
-        <View style={tw`flex-row items-center justify-between w-full py-2`}>
-          <TouchableOpacity
-            style={tw`flex items-center justify-center border border-black py-5 w-46 rounded ${selected === 1 ? 'bg-blue-500 border-transparent' : ''}`}
-            onPress={() => setSelected(1)}>
-            <Text>Sou cliente</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={tw`flex items-center justify-center border border-black py-5 w-46 rounded ${selected === 2 ? 'bg-blue-500 border-transparent' : ''}`}
-            onPress={() => setSelected(2)}>
-            <Text>Sou eletricista</Text>
-          </TouchableOpacity>
-        </View>
+        <UserRoleSelector control={form.control} name="role" />
         <View style={tw`w-full gap-4`}>
-          <TouchableOpacity style={tw`bg-blue-500 w-full py-4 rounded-md`}>
+          <TouchableOpacity onPress={form.handleSubmit(handleSubmit)} style={tw`bg-blue-500 w-full py-4 rounded-md`}>
             <Text style={tw`text-white text-center font-semibold`}>
               Criar conta
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSignIn} style={tw`bg-stone-100 w-full py-4 rounded-md`}>
+            <Text style={tw`text-stone-400 text-center`}>
+              Já tenho uma conta
             </Text>
           </TouchableOpacity>
         </View>

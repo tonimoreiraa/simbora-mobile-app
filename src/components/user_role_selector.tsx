@@ -1,0 +1,40 @@
+import { Control, FieldValues, FieldPath, Controller, useFormContext } from "react-hook-form";
+import { Text, TouchableOpacity, View } from "react-native";
+import tw from 'twrnc'
+
+interface InputProps<TFieldValues extends FieldValues>
+{
+    name: FieldPath<TFieldValues>;
+    control: Control<TFieldValues>;
+}
+
+export function UserRoleSelector<T extends FieldValues>({ name, control }: InputProps<T>)
+{
+    return (
+        <View style={tw`flex-row items-center justify-between w-full py-2`}>
+        <Controller
+            name={name}
+            control={control}
+            render={({ field, fieldState }) => {
+                return (
+                    <>
+                        <TouchableOpacity
+                            style={tw`flex items-center justify-center border border-black py-5 w-46 rounded ${field.value === 'customer' ? 'bg-blue-500 border-transparent' : ''}`}
+                            onPress={() => field.onChange('customer')}>
+                            <Text>Sou cliente</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={tw`flex items-center justify-center border border-black py-5 w-46 rounded ${field.value === 'professional' ? 'bg-blue-500 border-transparent' : ''}`}
+                            onPress={() => field.onChange('professional')}>
+                            <Text>Sou eletricista</Text>
+                        </TouchableOpacity>
+                        {fieldState.error && <Text style={tw`text-red-500 text-xs mt-0.5`}>
+                            {fieldState.error.message}
+                        </Text>}
+                    </>
+                )
+            }}
+        />
+        </View>
+    )
+}

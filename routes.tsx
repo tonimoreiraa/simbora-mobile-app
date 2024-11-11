@@ -120,12 +120,9 @@ function BottomTab() {
 export default function Routes() {
   const { signed } = useAuth();
 
-  return <SignIn />
-  console.log(signed);
-
   return (
     <Stack.Navigator
-      initialRouteName={'BottomTab'}
+      initialRouteName={'SignIn'}
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="BottomTab" component={BottomTab} />

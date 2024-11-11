@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SignInPayload, signInSchema } from '../validators/auth';
 import { useAuth } from '../contexts/auth_provider';
 import { useMutation } from 'react-query'
+import { useNavigation } from '@react-navigation/native';
 
 async function signIn({ email, password }: SignInPayload)
 {
@@ -20,6 +21,7 @@ async function signIn({ email, password }: SignInPayload)
 }
 
 function SignIn() {
+  const navigation = useNavigation()
   const auth = useAuth()
   const mutation = useMutation(signIn)
   console.log(mutation.error)
@@ -33,6 +35,8 @@ function SignIn() {
     mutation.mutate({ email, password })
     console.log(1)
   }
+
+  const handleSignUp = () => navigation.navigate('SignUp')
 
   return (
     <View style={tw`flex items-center justify-center h-full w-full px-4 relative`}>
@@ -73,7 +77,7 @@ function SignIn() {
             {mutation.isLoading && <ActivityIndicator color="white" />}
             <Text style={tw`text-white text-center`}>Entre com e-mail</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={tw`bg-stone-100 w-full py-4 rounded-md`}>
+          <TouchableOpacity onPress={handleSignUp} style={tw`bg-stone-100 w-full py-4 rounded-md`}>
             <Text style={tw`text-stone-400 text-center`}>Criar conta</Text>
           </TouchableOpacity>
         </View>
