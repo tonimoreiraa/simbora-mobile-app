@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const ProductCard = () => {
     return (
@@ -17,7 +18,7 @@ const ProductCard = () => {
                     <Text style={tw`text-stone-600 text-lg`}>
                         R$189,90
                     </Text>
-                    <View style={tw`flex-row items-center`}>
+                    <View style={tw`flex-row items-center border border-black rounded p-1`}>
                         <Text style={tw`text-stone-500 text-xs`}>
                             LuzExpress
                         </Text>

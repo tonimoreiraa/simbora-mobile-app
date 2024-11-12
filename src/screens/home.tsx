@@ -1,4 +1,10 @@
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,6 +13,7 @@ import MyCarousel from '../components/carousel';
 import Categories from '../components/categories';
 import Tags from '../components/tags';
 import ProductCard from '../components/product_card';
+import Banner from '../components/banner';
 
 function Home() {
   return (
@@ -26,15 +33,24 @@ function Home() {
           <View>
             <InputSearch />
           </View>
-          <View>
-            {/* <MyCarousel /> */}
-          </View>
+          <ScrollView style={tw`mt-4`} horizontal={true} showsHorizontalScrollIndicator={false}>
+            <Banner />
+            <Banner />
+            <Banner />
+            <Banner />
+          </ScrollView>
           <View>
             <View style={tw`flex flex-row items-center justify-between mt-2`}>
               <Text style={tw`font-bold text-xl`}>Categorias</Text>
-              <Text>Ver todas</Text>
+              <View style={tw`flex flex-row items-center`}>
+              <Text style={tw`text-stone-400`}>Ver todas</Text>
+              <Icon name="chevron-forward-outline" size={16} style={tw`text-stone-400`}/>
+              </View>
             </View>
-            <ScrollView horizontal={true} style={tw`py-4`} showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal={true}
+              style={tw`py-4`}
+              showsHorizontalScrollIndicator={false}>
               <Categories />
               <Categories />
               <Categories />
@@ -42,7 +58,9 @@ function Home() {
             </ScrollView>
           </View>
           <View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
               <Tags />
               <Tags />
               <Tags />
@@ -51,7 +69,8 @@ function Home() {
               <Tags />
             </ScrollView>
           </View>
-          <View style={tw`flex flex-row flex-wrap items-center justify-between mt-6`}>
+          <View
+            style={tw`flex flex-row flex-wrap items-center justify-between mt-6`}>
             <ProductCard />
             <ProductCard />
             <ProductCard />

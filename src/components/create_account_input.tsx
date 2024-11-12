@@ -10,7 +10,7 @@ interface InputProps<TFieldValues extends FieldValues> extends ComponentProps<ty
 
 function AccountInput<TFieldValues extends FieldValues>({ label, name, control, ...props }: InputProps<TFieldValues>) {
   return (
-    <View style={tw`w-full mt-2`}>
+    <View style={tw`w-full mt-3`}>
       <Text style={tw`text-xs mb-1`}>
         {label}
       </Text>

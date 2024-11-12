@@ -36,7 +36,7 @@ const ViewProduct: React.FC = () => {
           </View>
         </View>
         <View>
-          <Carousel items={items} />
+          <Carousel />
         </View>
         <View style={tw`py-4`}>
           <Text style={tw`text-xl font-bold`}>

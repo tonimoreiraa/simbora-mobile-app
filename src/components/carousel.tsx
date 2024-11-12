@@ -8,7 +8,7 @@ interface TCarouselProps<T> {
 }
 
 const Carousel = <T,>({ items }: TCarouselProps<T>) => (
-  <View>
+  <View style={tw`w-full h-96`}>
     <SwiperFlatList
       autoplay
       autoplayDelay={2}
@@ -16,10 +16,11 @@ const Carousel = <T,>({ items }: TCarouselProps<T>) => (
       index={0}
       data={items}
       renderItem={({ item }) => (
-        <View>
+        <View  style={tw`w-full h-96`}>
           <Image
             source={typeof item === 'string' ? { uri: item } : item}
             resizeMode="cover"
+            style={tw`w-full h-96`}
           />
         </View>
       )}

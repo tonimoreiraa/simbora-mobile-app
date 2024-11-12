@@ -12,7 +12,7 @@ const passwordSchema = z.string({message: 'A senha é obrigatória.'})
     .regex(/[\W_]/, { message: "A senha deve conter pelo menos um caractere especial." })
 
 export const signInSchema = z.object({
-    email: z.string().email('E-mail inválido.'),
+    email: z.string({message: "E-mail obrigatório"}).email('E-mail inválido.'),
     password: passwordSchema,
 })
 
