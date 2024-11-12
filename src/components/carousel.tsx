@@ -1,31 +1,36 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import tw from 'twrnc';
 
-interface TCarouselProps<T> {
-  items: T[];
+const { width } = Dimensions.get('window');
+
+interface CarouselProps {
+  items: string[];
 }
 
-const Carousel = <T,>({ items }: TCarouselProps<T>) => (
-  <View style={tw`w-full h-96`}>
-    <SwiperFlatList
-      autoplay
-      autoplayDelay={2}
-      autoplayLoop
-      index={0}
-      data={items}
-      renderItem={({ item }) => (
-        <View  style={tw`w-full h-96`}>
-          <Image
-            source={typeof item === 'string' ? { uri: item } : item}
-            resizeMode="cover"
-            style={tw`w-full h-96`}
-          />
-        </View>
-      )}
-    />
-  </View>
-);
+const Carousel: React.FC<CarouselProps> = ({ items }) => {
+  return (
+    <View style={tw`w-full h-96`}>
+      <SwiperFlatList
+        autoplay
+        autoplayDelay={3000}
+        autoplayLoop
+        index={0}
+        showPagination
+        data={items}
+        renderItem={({ item }) => (
+          <View style={[tw`h-96`, { width }]}>
+            <Image
+              source={{ uri: item }}
+              style={[tw`h-96`, { width }]}
+              resizeMode="cover"
+            />
+          </View>
+        )}
+      />
+    </View>
+  );
+};
 
 export default Carousel;

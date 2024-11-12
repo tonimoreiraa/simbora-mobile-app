@@ -35,8 +35,8 @@ const ViewProduct: React.FC = () => {
             <Icon name="bag-handle" size={28} style={tw`ml-2`} />
           </View>
         </View>
-        <View>
-          <Carousel />
+        <View style={tw`mt-4`}>
+          <Carousel items={items} />
         </View>
         <View style={tw`py-4`}>
           <Text style={tw`text-xl font-bold`}>
