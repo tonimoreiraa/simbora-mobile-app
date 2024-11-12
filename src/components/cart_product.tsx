@@ -13,7 +13,7 @@ function CartProduct() {
     const less = () => count !== 0 && setCount(count - 1)
 
     return (
-        <View style={tw`flex-row rounded-xl mt-2 p-2 items-center w-full border border-stone-300`}>
+        <View style={tw`flex-row rounded-xl mt-2 py-2 px-4 items-center w-full border border-stone-300`}>
             <View style={tw`bg-stone-200 p-2 rounded-xl`}>
                 <Fio width="100" height="100" />
             </View>
