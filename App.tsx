@@ -10,7 +10,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <NavigationContainer>
-          <Checkout />
+          <Routes />
         </NavigationContainer>
       </AuthProvider>
     </QueryClientProvider>

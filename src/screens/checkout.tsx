@@ -11,6 +11,7 @@ import ProductCard from '../components/product_card';
 import Discount from '../components/discount';
 import Price from '../components/price';
 import Adress from '../components/adress';
+import ShippingMethod from '../components/shipping_method';
 
 function Checkout() {
   return (
@@ -42,12 +43,16 @@ function Checkout() {
           <View style={tw`flex w-full mb-4 px-4`}>
             <Discount />
           </View>
-          <View style={tw`w-full mb-4 px-4`}>
+          <View style={tw`flex w-full mb-4 px-4`}>
             <Price />
           </View>
-          <View style={tw`mb-30 px-4`}>
+          <View style={tw`flex w-full mb-4 px-4`}>
             <Text style={tw`text-xl font-bold mb-4`}>Endereço</Text>
             <Adress />
+          </View>
+          <View style={tw`w-full px-4 mb-30`}>
+          <Text style={tw`text-xl font-bold mb-4`}>Método de envio</Text>
+            <ShippingMethod />
           </View>
         </View>
       </ScrollView>
