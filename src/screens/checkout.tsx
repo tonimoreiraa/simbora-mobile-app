@@ -9,10 +9,12 @@ import tw from 'twrnc';
 import CartProduct from '../components/cart_product';
 import ProductCard from '../components/product_card';
 import Discount from '../components/discount';
+import Price from '../components/price';
+import Adress from '../components/adress';
 
 function Checkout() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tw``}>
       <ScrollView>
         <View style={tw`flex flex-col items-center justify-start py-6 h-full`}>
           <View>
@@ -24,9 +26,9 @@ function Checkout() {
             <CartProduct />
           </View>
           <View
-            style={tw`flex flex-row items-center justify-start w-full px-4 py-4`}>
+            style={tw`flex flex-row items-center justify-start w-full py-4`}>
             <View>
-              <Text style={tw`text-xl font-bold`}>Produtos Recomendados</Text>
+              <Text style={tw`text-xl font-bold ml-4`}>Produtos Recomendados</Text>
             </View>
             <View style={tw`border border-blue-400 p-1 rounded-lg ml-2`}>
               <Text style={tw`text-stone-500`}>Relacionados</Text>
@@ -37,8 +39,15 @@ function Checkout() {
             <ProductCard />
             <ProductCard />
           </View>
-          <View style={tw`flex w-full px-4 mb-30`}>
+          <View style={tw`flex w-full mb-4 px-4`}>
             <Discount />
+          </View>
+          <View style={tw`w-full mb-4 px-4`}>
+            <Price />
+          </View>
+          <View style={tw`mb-30 px-4`}>
+            <Text style={tw`text-xl font-bold mb-4`}>Endereço</Text>
+            <Adress />
           </View>
         </View>
       </ScrollView>
