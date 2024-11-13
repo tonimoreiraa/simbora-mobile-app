@@ -8,6 +8,7 @@ import {
 import tw from 'twrnc';
 import CartProduct from '../components/cart_product';
 import ProductCard from '../components/product_card';
+import Discount from '../components/discount';
 
 function Checkout() {
   return (
@@ -32,9 +33,12 @@ function Checkout() {
             </View>
           </View>
           <View
-            style={tw`flex flex-row flex-wrap items-center justify-between w-full px-4 mb-22`}>
+            style={tw`flex flex-row flex-wrap items-center justify-between w-full px-4 mb-4`}>
             <ProductCard />
             <ProductCard />
+          </View>
+          <View style={tw`flex w-full px-4 mb-30`}>
+            <Discount />
           </View>
         </View>
       </ScrollView>
