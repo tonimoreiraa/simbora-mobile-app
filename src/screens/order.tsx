@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView} from "react-native";
 import tw from "twrnc"
 import Price from "../components/price";
-import Delivery from "../components/delivery";
+import ShippingMethod from "../components/shipping_method";
 
 function Order() {
     return (
@@ -11,13 +11,13 @@ function Order() {
                     <View>
                         <Text style={tw`text-2xl font-bold text-center`}>Resumo do pedido</Text>
                     </View>
-                    <View style={tw`w-full mt-4`}>
+                    <View style={tw`w-full mt-2`}>
                         <Price />
                     </View>
-                    <View style={tw`mt-6`}>
-                        <Delivery />
+                    <View style={tw`mt-4`}>
+                        <ShippingMethod />
                     </View>
-                    <View style={tw`w-full mt-8`}>
+                    <View style={tw`w-full mt-4`}>
                         <Text style={tw`text-xl font-bold`}>Encaminhar Pedido</Text>
                         <TextInput style={tw`bg-stone-100 rounded p-4 mt-4`} placeholder="Digite o ID do profissional"></TextInput>
                     </View>
