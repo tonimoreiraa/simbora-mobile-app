@@ -6,8 +6,8 @@ import ProductForecast from '../components/product_forecast';
 function MyOrder() {
     return (
         <ScrollView>
-            <View style={tw`flex flex-col items-center justify-center w-full py-10`}>
-                <Text style={tw`text-2xl font-bold text-center mb-6`}>Meus Pedidos</Text>
+            <View style={tw`flex flex-col items-center justify-center w-full mt-2`}>
+                <Text style={tw`text-2xl font-bold text-center mb-2`}>Meus Pedidos</Text>
                 <View style={tw`w-full px-4`}>
                     <InputSearch />
                 </View>
