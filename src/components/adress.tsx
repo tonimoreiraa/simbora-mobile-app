@@ -7,21 +7,21 @@ export default function Adress() {
       <View>
         <Text style={tw`mb-1`}>CEP da sua casa</Text>
         <TextInput
-          style={tw`flex px-2 py-4 rounded bg-stone-200 w-full`}
+          style={tw`flex px-2 py-4 rounded bg-stone-100 w-full`}
           placeholder="00.000-00"
         />
       </View>
       <View>
         <Text style={tw`mb-1`}>Nome da rua</Text>
         <TextInput
-          style={tw`flex px-2 py-4 rounded bg-stone-200 w-full`}
+          style={tw`flex px-2 py-4 rounded bg-stone-100 w-full`}
           placeholder="Nome da rua"
         />
       </View>
       <View>
         <Text style={tw`mb-1`}>Número</Text>
         <TextInput
-          style={tw`flex px-2 py-4 rounded bg-stone-200 w-full`}
+          style={tw`flex px-2 py-4 rounded bg-stone-100 w-full`}
           placeholder="Número da casa ou apartamento"
         />
       </View>
@@ -29,14 +29,14 @@ export default function Adress() {
         <View style={tw`w-46`}>
           <Text style={tw`mb-1`}>Cidade</Text>
           <TextInput
-            style={tw`fl px-2 py-4 rounded-2 bg-stone-200 w-full`}
+            style={tw`fl px-2 py-4 rounded-2 bg-stone-100 w-full`}
             placeholder="Cidade"
           />
         </View>
         <View style={tw`w-46`}>
           <Text style={tw`mb-1`}>Estado</Text>
           <TextInput
-            style={tw`fl px-2 py-4 rounded-2 bg-stone-200 w-full`}
+            style={tw`fl px-2 py-4 rounded-2 bg-stone-100 w-full`}
             placeholder="Estado"
           />
         </View>
