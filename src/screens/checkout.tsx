@@ -53,7 +53,7 @@ function Checkout() {
             <Adress />
           </View>
           <View style={tw`w-full px-4 mb-30`}>
-            <Text style={tw`text-xl font-bold mb-4`}>Método de envio</Text>
+            <Text style={tw`text-xl font-bold `}>Método de envio</Text>
             <ShippingMethod />
           </View>
         </View>
