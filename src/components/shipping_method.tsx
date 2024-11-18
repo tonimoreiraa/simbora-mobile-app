@@ -5,7 +5,7 @@ import CheckBox from './check_box';
 export default function ShippingMethod() {
   return (
     <View
-      style={tw`flex flex-row items-center justify-between w-full p-4 rounded-lg border border-black`}>
+      style={tw`flex flex-row items-center justify-between w-full p-4 rounded-lg border border-black mt-4`}>
       <View style={tw`flex flex-row items-center`}>
         <CheckBox />
         <View style={tw`flex flex-col`}>

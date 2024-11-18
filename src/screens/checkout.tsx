@@ -29,7 +29,9 @@ function Checkout() {
           <View
             style={tw`flex flex-row items-center justify-start w-full py-4`}>
             <View>
-              <Text style={tw`text-xl font-bold ml-4`}>Produtos Recomendados</Text>
+              <Text style={tw`text-xl font-bold ml-4`}>
+                Produtos Recomendados
+              </Text>
             </View>
             <View style={tw`border border-blue-400 p-1 rounded-lg ml-2`}>
               <Text style={tw`text-stone-500`}>Relacionados</Text>
@@ -51,7 +53,7 @@ function Checkout() {
             <Adress />
           </View>
           <View style={tw`w-full px-4 mb-30`}>
-          <Text style={tw`text-xl font-bold mb-4`}>Método de envio</Text>
+            <Text style={tw`text-xl font-bold mb-4`}>Método de envio</Text>
             <ShippingMethod />
           </View>
         </View>

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const userRoles = z.enum(['customer', 'admin', 'professional', 'supplier'])
+const userRoles = z.enum(['customer', 'admin', 'professional', 'supplier'], { message: "Selecione seu perfil"})
 
 export type UserRoles = z.infer<typeof userRoles>
 

@@ -25,7 +25,7 @@ function SignUp() {
 
   return (
     <SafeAreaView
-      style={tw`flex flex-col items-center justify-between h-full w-full px-4 mt-2 relative`}>
+      style={tw`flex flex-col items-center justify-between h-full w-full px-4 mt-2 relative bg-white`}>
       <Logo style={tw`top-2`} width={100} height={60}/>
       <View>
         <Text style={tw`text-stone-500 text-center mb-1`}>

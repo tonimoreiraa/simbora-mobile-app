@@ -6,7 +6,7 @@ export default function terms() {
     <View>
       <View style={tw`flex items-center justify-center w-full`}>
         <View style={tw`flex-row flex-wrap justify-center`}>
-          6<Text>Ao entrar, você concorda com os </Text>
+          <Text>Ao entrar, você concorda com os </Text>
           <TouchableOpacity>
             <Text style={tw`underline`}>termos de uso</Text>
           </TouchableOpacity>

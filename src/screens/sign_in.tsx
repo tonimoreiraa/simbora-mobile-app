@@ -41,7 +41,7 @@ function SignIn() {
 
   return (
     <View
-      style={tw`flex items-center justify-between h-full w-full px-4 relative py-2`}>
+      style={tw`flex items-center justify-between h-full w-full px-4 relative py-2 bg-white`}>
       <Logo style={tw`mt-18`} />
       <Text style={tw`text-stone-500 text-center`}>
         Crie sua conta ou entre agora mesmo
