@@ -12,19 +12,11 @@ import SocialLogin from '../components/social_login';
 import Terms from '../components/terms';
 import CheckBox from '../components/check_box';
 
-async function signIn({email, password}: SignInPayload) {
-  await new Promise(r => setTimeout(r, 1000));
-
-  if (Math.random() > 0.5) {
-    throw new Error('Simulando erro: Email invalido: ' + email);
-  } else {
-    return {message: 'Deu certo.', email, password};
-  }
-}
-
 function SignIn() {
   const navigation = useNavigation();
   const auth = useAuth();
+
+  const signIn = async ({ email, password }: SignInPayload) => await auth.signIn(email, password)
   const mutation = useMutation(signIn);
   console.log(mutation.error);
 
@@ -32,9 +24,8 @@ function SignIn() {
     resolver: zodResolver(signInSchema),
   });
 
-  async function handleSubmit({email, password}: SignInPayload) {
-    mutation.mutate({email, password});
-    console.log(1);
+  async function handleSubmit(payload: SignInPayload) {
+    mutation.mutate(payload)
   }
 
   const handleSignUp = () => navigation.navigate('SignUp');
