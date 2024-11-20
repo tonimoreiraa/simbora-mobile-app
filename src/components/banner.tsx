@@ -5,7 +5,7 @@ export default function Banner() {
   return (
     <View>
       <TouchableOpacity
-        style={tw`w-68 h-36 rounded-xl mr-2 bg-stone-200`}></TouchableOpacity>
+        style={tw`w-68 h-36 rounded-2xl mr-2 bg-stone-200`}></TouchableOpacity>
     </View>
   );
 }

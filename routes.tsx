@@ -10,6 +10,7 @@ import SignIn from './src/screens/sign_in';
 import MyAccount from './src/screens/my_account';
 import Order from './src/screens/order';
 import Checkout from './src/screens/checkout';
+import Categories from './src/screens/categories';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -139,7 +140,7 @@ function BottomTab() {
 export default function Routes() {
   const {signed} = useAuth();
 
-  if (!signed) {
+  if (signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}
@@ -153,8 +154,21 @@ export default function Routes() {
   return (
     <Stack.Navigator
       initialRouteName={'BottomTab'}
-      screenOptions={{headerShown: false}}>
-      <Stack.Screen name="BottomTab" component={BottomTab} />
+      screenOptions={{
+        headerBackground: () => (
+          <View style={{flex: 1, backgroundColor: 'transparent'}} />
+        ),
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerTitleAlign: 'center',
+      }}>
+      <Stack.Screen
+        name="BottomTab"
+        component={BottomTab}
+        options={{headerShown: false, headerTransparent: true}}
+      />
+      <Stack.Screen name="Categorias" component={Categories} />
     </Stack.Navigator>
   );
 }

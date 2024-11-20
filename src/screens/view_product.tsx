@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import Fio from '../assets/Fio.svg';
 import Carousel from '../components/carousel';
-import Categories from '../components/categories';
+import Category from '../components/category';
 import Tags from '../components/tags';
 import ColorSelect from '../components/color_select';
 import ProductCard from '../components/product_card';
