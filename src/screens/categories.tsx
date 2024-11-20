@@ -16,7 +16,6 @@ export default function Categories() {
   const {
     data,
     isLoading,
-    isSuccess
   } = useQuery('@categories', getCategories)
 
   const {

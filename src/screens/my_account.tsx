@@ -7,7 +7,6 @@ import {
     SafeAreaView,
   } from 'react-native';
   import tw from 'twrnc';
-  import AccountInput from '../components/create_account_input';
   import Icon from 'react-native-vector-icons/Ionicons';
   
   function MyAccount() {
