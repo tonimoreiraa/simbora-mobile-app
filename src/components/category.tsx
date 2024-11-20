@@ -2,8 +2,7 @@ import { Image } from "react-native";
 import { Text } from "react-native";
 import { TouchableOpacity } from "react-native";
 import tw from "twrnc";
-
-interface Category {
+export interface Category {
     name: string
     categoryId: number
     image: string

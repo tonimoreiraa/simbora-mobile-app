@@ -3,9 +3,12 @@ import tw from 'twrnc';
 import InputSearch from '../components/input_search';
 import { api } from '../services/api';
 import { useQuery } from 'react-query';
+import { useState } from 'react';
+import { useSearch } from '../helpers/search';
+import { Category } from '../components/category';
 
 const getCategories = async () => {
-  const { data } = await api.get('/categories')
+  const { data } = await api.get<Category[]>('/categories')
   return data
 }
 
@@ -16,12 +19,22 @@ export default function Categories() {
     isSuccess
   } = useQuery('@categories', getCategories)
 
+  const {
+    setSearchTerm,
+    searchTerm,
+    filteredResults
+  } = useSearch(data, 'name')
+
   return (
     <ScrollView style={tw`px-4`}>
-      <InputSearch />
+      <InputSearch
+        hideImageScanner
+        onChangeText={(value) => setSearchTerm(value)}
+        value={searchTerm}
+      />
       <View style={tw`mt-4 flex-wrap flex-row flex-1`}>
-        {isSuccess && data.map((category: any) => (
-          <View style={tw`p-1 w-1/2`}>
+        {filteredResults && filteredResults.map((category: any) => (
+          <View style={tw`p-1 w-1/2`} key={category.id}>
              <View style={tw`bg-neutral-200 flex-row rounded-xl p-2 px-3 items-center gap-4`}>
               <Image
                 source={{ uri: category.image }}
@@ -33,6 +46,11 @@ export default function Categories() {
                 {category.name}
               </Text>
             </View>
+          </View>
+        ))}
+        {isLoading && [...Array(10).keys()].map(c => (
+          <View style={tw`p-1 w-1/2`} key={c}>
+            <View style={tw`bg-neutral-200 flex-row rounded-xl p-2 px-3 items-center gap-4`} />
           </View>
         ))}
       </View>

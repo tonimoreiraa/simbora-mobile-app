@@ -12,7 +12,7 @@ import Logo from '../assets/LOGO.svg';
 import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import Location from '../components/location';
-import { MapPin, SealPercent } from 'phosphor-react-native';
+import { SealPercent } from 'phosphor-react-native';
 import { api } from '../services/api';
 import { useQuery } from 'react-query';
 import Category from '../components/category';
@@ -74,7 +74,7 @@ function Home() {
               <Text style={tw`font-bold text-xl`}>Categorias</Text>
               <View style={tw`flex flex-row items-center`}>
                 {/* @ts-ignore */}
-                <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.navigate("Categorias")}>
+                <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.navigate("Categories")}>
                   <Text style={tw`text-stone-400`}>Ver todas</Text>
                   <Icon
                     name="chevron-forward-outline"

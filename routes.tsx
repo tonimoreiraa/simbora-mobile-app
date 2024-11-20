@@ -167,7 +167,11 @@ export default function Routes() {
         component={BottomTab}
         options={{ headerShown: false, headerTransparent: true }}
       />
-      <Stack.Screen name="Categorias" component={Categories} />
+      <Stack.Screen
+        name="Categories"
+        component={Categories}
+        options={{ title: 'Categorias' }}
+      />
     </Stack.Navigator>
   );
 }
