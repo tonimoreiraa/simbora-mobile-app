@@ -11,7 +11,7 @@ import Price from '../components/price';
 import ShippingMethod from '../components/shipping_method';
 import DropDown from '../components/dropdown';
 
-function Order() {
+function OrderResume() {
   return (
     <SafeAreaView>
       <ScrollView>
@@ -66,4 +66,4 @@ function Order() {
   );
 }
 
-export default Order;
+export default OrderResume;

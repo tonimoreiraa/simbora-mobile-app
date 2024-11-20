@@ -17,6 +17,7 @@ import { api } from '../services/api';
 import { useQuery } from 'react-query';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 const getCategories = async () => {
   const { data } = await api.get('/categories')
@@ -49,6 +50,10 @@ function Categories()
 function Home() {
   const navigation = useNavigation();
 
+  useEffect(() => {
+  navigation.navigate('MyOrders')
+
+  }, [])
   return (
     <SafeAreaView>
       <ScrollView>
@@ -58,7 +63,7 @@ function Home() {
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
-            <InputSearch />
+            <InputSearch onPress={() => navigation.navigate('ProductsSearch')} />
           </View>
           <ScrollView
             style={tw`mt-4`}

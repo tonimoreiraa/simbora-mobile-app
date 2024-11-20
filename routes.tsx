@@ -5,12 +5,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
-import {useAuth} from './src/contexts/auth_provider';
+import { useAuth } from './src/contexts/auth_provider';
 import SignIn from './src/screens/sign_in';
 import MyAccount from './src/screens/my_account';
-import Order from './src/screens/order';
+import OrderResume from './src/screens/order_resume';
 import Cart from './src/screens/cart';
 import Categories from './src/screens/categories';
+import { ProductsSearch } from './src/screens/products_search';
+import MyOrders from './src/screens/my_orders';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,8 +92,8 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="order"
-        component={Order}
+        name="OrderResume"
+        component={OrderResume}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
@@ -152,7 +154,7 @@ export default function Routes() {
 
   return (
     <Stack.Navigator
-      initialRouteName={'BottomTab'}
+      initialRouteName={'MyOrders'}
       screenOptions={{
         headerBackground: () => (
           <View style={{flex: 1, backgroundColor: 'transparent'}} />
@@ -171,6 +173,16 @@ export default function Routes() {
         name="Categories"
         component={Categories}
         options={{ title: 'Categorias' }}
+      />
+      <Stack.Screen
+        name="ProductsSearch"
+        options={{ title: 'Pesquisa' }}
+        component={ProductsSearch}
+      />
+      <Stack.Screen
+        name="MyOrders"
+        options={{ title: 'Meus pedidos' }}
+        component={MyOrders}
       />
     </Stack.Navigator>
   );
