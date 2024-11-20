@@ -29,6 +29,7 @@ const Product: React.FC = () => {
           <TouchableOpacity>
             <Icon name="chevron-back" size={28} style={tw`mr-2`} />
           </TouchableOpacity>
+          <View></View>
           <InputSearch />
           <View>
             <Icon name="bag-handle" size={28} style={tw`ml-2`} />

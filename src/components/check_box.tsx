@@ -7,7 +7,7 @@ export default function CheckBox() {
       <BouncyCheckbox 
       size={16}
       fillColor='#d3d3d3'
-      onPress={(isChecked: boolean) => {}} 
+      onPress={(isChecked: boolean) => {}}
       />
     </View>
   );

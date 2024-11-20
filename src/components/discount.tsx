@@ -8,7 +8,7 @@ export default function Discount() {
 
   return (
     <View
-      style={tw`flex flex-row w-full items-center justify-between bg-stone-200 p-2 rounded-lg`}>
+      style={tw`flex flex-row w-full items-center justify-between bg-stone-100 p-2 rounded-lg`}>
       <View>
         <TextInput
           placeholder="Digite o cupom de desconto"

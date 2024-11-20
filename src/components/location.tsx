@@ -1,11 +1,12 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
+import { MapPin } from "phosphor-react-native";
 
 export default function Location() {
   return (
     <View style={tw`flex flex-row items-center py-4`}>
-      <Icon name="location-sharp" size={26} color='gray' />
+      <MapPin size={26} color='gray' weight='fill' />
       <View style={tw`flex flex-row items-center px-2`}>
         <Text style={tw`text-stone-300`}>Enviar para </Text>
         <TouchableOpacity>

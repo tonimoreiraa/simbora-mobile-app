@@ -10,7 +10,7 @@ import CartProduct from '../components/cart_product';
 import ProductCard from '../components/product_card';
 import Discount from '../components/discount';
 import Price from '../components/price';
-import Adress from '../components/adress';
+import Adress from '../components/address';
 import ShippingMethod from '../components/shipping_method';
 
 function Cart() {
@@ -21,7 +21,7 @@ function Cart() {
           <View>
             <Text style={tw`text-2xl font-bold`}>Meu carrinho</Text>
           </View>
-          <View style={tw`mt-4`}>
+          <View style={tw`mt-4 w-full px-4`}>
             <CartProduct />
             <CartProduct />
             <CartProduct />
@@ -30,19 +30,19 @@ function Cart() {
             <TouchableOpacity
               style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}>
               <Text style={tw`font-bold text-lg text-white`}>
-                Continuar
+                Método de pagamento
               </Text>
             </TouchableOpacity>
           </View>
           <View
-            style={tw`flex flex-row items-center justify-start w-full py-4`}>
+            style={tw`flex flex-row items-center justify-start w-full py-2`}>
             <View>
               <Text style={tw`text-xl font-bold ml-4`}>
                 Produtos Recomendados
               </Text>
             </View>
-            <View style={tw`border border-blue-400 p-1 rounded-lg ml-2`}>
-              <Text style={tw`text-stone-500`}>Relacionados</Text>
+            <View style={tw`border border-blue-400 p-2 rounded-lg ml-2`}>
+              <Text style={tw`text-xs text-stone-500`}>Relacionados</Text>
             </View>
           </View>
           <View
@@ -60,7 +60,7 @@ function Cart() {
             <Text style={tw`text-xl font-bold mb-4`}>Endereço</Text>
             <Adress />
           </View>
-          <View style={tw`w-full px-4 mb-30`}>
+          <View style={tw`w-full px-4 mb-18`}>
             <Text style={tw`text-xl font-bold `}>Método de envio</Text>
             <ShippingMethod />
           </View>

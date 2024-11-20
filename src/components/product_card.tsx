@@ -16,7 +16,7 @@ const ProductCard = () => {
                     </Text>
                 </View>
                 <View style={tw`flex flex-row items-center justify-between`}>
-                    <Text style={tw`text-stone-600 font-light text-base`}>
+                    <Text style={tw`text-stone-600 text-base`}>
                         R$189,90
                     </Text>
                     <View style={tw`flex-row items-center border border-stone-200 rounded-lg p-2 gap-1`}>
