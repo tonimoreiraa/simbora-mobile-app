@@ -9,13 +9,45 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/LOGO.svg';
-import MyCarousel from '../components/carousel';
 import Category from '../components/category';
-import Tags from '../components/tags';
 import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import { useNavigation } from '@react-navigation/native';
+<<<<<<< HEAD
 import Location from '../components/location';
+=======
+import { MapPin, SealPercent } from 'phosphor-react-native';
+import { api } from '../services/api';
+import { useQuery } from 'react-query';
+
+const getCategories = async () => {
+  const { data } = await api.get('/categories')
+  return data
+}
+
+function Categories()
+{
+  const {
+    data,
+    isLoading,
+    isSuccess
+  } = useQuery('@categories', getCategories)
+
+  return <ScrollView
+    horizontal={true}
+    style={tw`py-4`}
+    showsHorizontalScrollIndicator={false}>
+    {isLoading && <>
+      {[...Array(4).keys()].map(c => (
+        <View style={tw`w-[106px] h-[106px] items-center justify-center rounded-2xl mr-2 bg-stone-200 mt-2 gap-2`} />
+      ))}
+    </>}
+    {isSuccess && data.map((category: any) => (
+      <Category {...category} key={category.id} />
+    ))}
+  </ScrollView>
+}
+>>>>>>> 87aa61fef8ee7b131718ef6b2625c77e1019471c
 
 function Home() {
   const navigation = useNavigation();
@@ -25,7 +57,17 @@ function Home() {
       <ScrollView>
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
+<<<<<<< HEAD
             <Location />
+=======
+            <View style={tw`flex flex-row items-center py-4`}>
+              <MapPin color="#696969" weight='fill' />
+              <View style={tw`flex flex-row items-center px-2`}>
+                <Text style={tw`text-zinc-400`}>Enviar para </Text>
+                <Text style={tw`underline`}>Av. Marechal Deodoro, 256</Text>
+              </View>
+            </View>
+>>>>>>> 87aa61fef8ee7b131718ef6b2625c77e1019471c
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
@@ -55,30 +97,27 @@ function Home() {
                 </TouchableOpacity>
               </View>
             </View>
-            <ScrollView
-              horizontal={true}
-              style={tw`py-4`}
-              showsHorizontalScrollIndicator={false}>
-              <Category />
-              <Category />
-              <Category />
-              <Category />
-            </ScrollView>
+            <Categories />
           </View>
-          <View style={tw`mt-4`}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-            </ScrollView>
-          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            >
+              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
+                <Icon name="heart" color="#FFFF" size={18} />
+                <Text style={tw`text-white text-lg`}>Para você</Text>
+              </View>
+              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-200 flex-row ml-2`}>
+                <SealPercent
+                  weight="fill"
+                  color='#3C6EEF'
+                  size={18}
+                />
+                <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
+              </View>
+          </ScrollView>
           <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-4`}>
+            style={tw`flex flex-row flex-wrap items-center justify-between mt-2`}>
             <ProductCard />
             <ProductCard />
             <ProductCard />

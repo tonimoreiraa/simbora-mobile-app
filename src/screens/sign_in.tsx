@@ -15,15 +15,14 @@ import CheckBox from '../components/check_box';
 function SignIn() {
   const navigation = useNavigation();
   const auth = useAuth();
-
+  
   const signIn = async ({email, password}: SignInPayload) =>
     await auth.signIn(email, password);
-  const mutation = useMutation(signIn);
-  console.log(mutation.error);
-
+  
   const form = useForm<SignInPayload>({
     resolver: zodResolver(signInSchema),
   });
+  const mutation = useMutation(signIn);
 
   async function handleSubmit(payload: SignInPayload) {
     mutation.mutate(payload);

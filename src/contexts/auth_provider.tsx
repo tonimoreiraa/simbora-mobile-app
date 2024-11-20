@@ -58,6 +58,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       const { token, user: userData } = response.data;
 
       api.defaults.headers.Authorization = `Bearer ${token.token}`;
+      setUser(user)
 
       await AsyncStorage.setItem('@simbora-user', JSON.stringify(userData));
       await AsyncStorage.setItem('@simbora-token', token.token);

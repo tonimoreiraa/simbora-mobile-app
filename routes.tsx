@@ -9,7 +9,7 @@ import {useAuth} from './src/contexts/auth_provider';
 import SignIn from './src/screens/sign_in';
 import MyAccount from './src/screens/my_account';
 import Order from './src/screens/order';
-import Checkout from './src/screens/checkout';
+import Cart from './src/screens/cart';
 import Categories from './src/screens/categories';
 
 const Stack = createNativeStackNavigator();
@@ -69,10 +69,10 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="Checkout"
-        component={Checkout}
+        name="Cart"
+        component={Cart}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
@@ -87,14 +87,13 @@ function BottomTab() {
               />
             </View>
           ),
-          tabBarStyle: {display: 'none'},
         }}
       />
       <Tab.Screen
         name="order"
         component={Order}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
@@ -140,7 +139,7 @@ function BottomTab() {
 export default function Routes() {
   const {signed} = useAuth();
 
-  if (signed) {
+  if (!signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}
@@ -166,7 +165,7 @@ export default function Routes() {
       <Stack.Screen
         name="BottomTab"
         component={BottomTab}
-        options={{headerShown: false, headerTransparent: true}}
+        options={{ headerShown: false, headerTransparent: true }}
       />
       <Stack.Screen name="Categorias" component={Categories} />
     </Stack.Navigator>

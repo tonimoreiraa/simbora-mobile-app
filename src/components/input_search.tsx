@@ -5,14 +5,14 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 function InputSearch() {
   return (
-    <View style={tw`flex-row items-center bg-stone-200 rounded-lg px-4 ios:py-2`}>
-      <Icon name="search-outline" size={20} />
+    <View style={tw`flex-row items-center justify-center bg-stone-200 rounded-lg px-4 h-12`}>
+      <Icon name="search-outline" size={16} color="#696969" />
       <TextInput
         style={tw`flex-1 ml-2 text-base text-stone-900`}
-        placeholder="Search"
+        placeholder="Buscar"
         placeholderTextColor="#666"
       />
-      <View style={tw`flex-row gap-2`}>
+      <View style={tw`flex-row gap-4`}>
         <TouchableOpacity>
           <Icon name="mic" size={20}/>
         </TouchableOpacity>

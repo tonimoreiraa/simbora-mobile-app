@@ -13,9 +13,9 @@ import Price from '../components/price';
 import Adress from '../components/adress';
 import ShippingMethod from '../components/shipping_method';
 
-function Checkout() {
+function Cart() {
   return (
-    <SafeAreaView style={tw``}>
+    <SafeAreaView style={tw`bg-white`}>
       <ScrollView>
         <View style={tw`flex flex-col items-center justify-start py-6 h-full`}>
           <View>
@@ -25,6 +25,14 @@ function Checkout() {
             <CartProduct />
             <CartProduct />
             <CartProduct />
+          </View>
+          <View style={tw`w-full px-4`}>
+            <TouchableOpacity
+              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}>
+              <Text style={tw`font-bold text-lg text-white`}>
+                Continuar
+              </Text>
+            </TouchableOpacity>
           </View>
           <View
             style={tw`flex flex-row items-center justify-start w-full py-4`}>
@@ -58,17 +66,8 @@ function Checkout() {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={tw`absolute bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
-        <TouchableOpacity
-          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl`}>
-          <Text style={tw`font-bold text-lg text-white`}>
-            Método de pagamento
-          </Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
 
-export default Checkout;
+export default Cart;
