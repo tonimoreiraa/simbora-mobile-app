@@ -4,17 +4,24 @@ import {
   View,
   Text,
   ScrollView,
+  TextInput
 } from 'react-native';
-import InputSearch from '../components/input_search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
-import Category from '../components/category';
-// import Tags from '../components/tags';
 import ColorSelect from '../components/color_select';
 import ProductCard from '../components/product_card';
+import {ShoppingBagOpen} from 'phosphor-react-native';
+import { SealPercent } from 'phosphor-react-native';
+import { FireSimple } from 'phosphor-react-native';
+import { LightbulbFilament } from 'phosphor-react-native';
+interface InputSearchProps {
+  hideMicrophone?: boolean
+  hideImageScanner?: boolean
+}
 
-const Product: React.FC = () => {
+
+const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone }) => {
   const items = [
     'https://avatars.githubusercontent.com/u/59844592?v=4',
     'https://avatars.githubusercontent.com/u/59844592?v=4',
@@ -29,10 +36,31 @@ const Product: React.FC = () => {
           <TouchableOpacity>
             <Icon name="chevron-back" size={28} style={tw`mr-2`} />
           </TouchableOpacity>
-          <View></View>
-          <InputSearch />
+          <View style={tw`w-full`}>
+            <View
+              style={tw`flex-row items-center justify-center bg-black rounded-lg px-4 h-12`}>
+              <Icon name="search-outline" size={16} color="white" />
+              <TextInput
+                style={tw`flex-1 ml-2 text-base text-stone-900`}
+                placeholder="Buscar"
+                placeholderTextColor="white"
+              />
+              <View style={tw`flex-row gap-4`}>
+                {!hideMicrophone && (
+                  <TouchableOpacity>
+                    <Icon name="mic" size={20} color="white"/>
+                  </TouchableOpacity>
+                )}
+                {!hideImageScanner && (
+                  <TouchableOpacity>
+                    <Icon name="scan" size={20} color="white"/>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </View>
           <View>
-            <Icon name="bag-handle" size={28} style={tw`ml-2`} />
+            <ShoppingBagOpen size={28} style={tw`ml-2`} weight="fill" />
           </View>
         </View>
         <View style={tw`mt-4`}>
@@ -43,14 +71,25 @@ const Product: React.FC = () => {
             Fio Cabo Flexível 2.5mm SIL | 100M
           </Text>
         </View>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {/* <Tags />
-          <Tags />
-          <Tags />
-          <Tags /> */}
-        </ScrollView>
+        <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            >
+              <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row`}>
+                <FireSimple color="black" size={18} weight='fill'/>
+                <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
+              </View>
+              <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row ml-2`}>
+                <LightbulbFilament
+                  weight="fill"
+                  color='black'
+                  size={18}
+                />
+                <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
+              </View>
+          </ScrollView>
         <View>
-          <Text style={tw`font-bold text-base text-stone-300 mt-4`}>
+          <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
             Selecione a cor
           </Text>
           <ScrollView
@@ -64,10 +103,10 @@ const Product: React.FC = () => {
           </ScrollView>
         </View>
         <View>
-          <Text style={tw`font-bold text-base text-stone-300 mt-2`}>
+          <Text style={tw`font-bold text-base text-stone-600 mt-2`}>
             Descrição
           </Text>
-          <Text>
+          <Text style={tw`text-stone-500`}>
             Usando o material e o tipo de cabo certos, é possível transportar
             energia de um ponto para outro sem dificuldade, de forma segura,
             confiável e sem complicações.
@@ -76,7 +115,7 @@ const Product: React.FC = () => {
         <View>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
           <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-6`}>
+            style={tw`flex flex-row flex-wrap items-center justify-between mt-2 mb-24`}>
             <ProductCard />
             <ProductCard />
             <ProductCard />
@@ -91,7 +130,9 @@ const Product: React.FC = () => {
             <Text style={tw`text-lg font-semibold`}>R$</Text>
             <Text style={tw`text-lg font-semibold`}>214,99</Text>
           </View>
-          <Text style={tw`font-semibold text-stone-200 mt-1`}>12 x de R$20,80</Text>
+          <Text style={tw`font-semibold text-stone-200 mt-1`}>
+            12 x de R$20,80
+          </Text>
         </View>
         <TouchableOpacity
           style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl w-2/3`}>

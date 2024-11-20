@@ -7,10 +7,10 @@ export default function ColorSelect() {
 
   return (
     <TouchableOpacity
-      style={tw`flex flex-col items-center justify-center border border-stone-200 py-2 px-8 rounded-lg mr-2 
-      ${press === 1 ? 'bg-black text-white' : ''}`}
+      style={tw`flex flex-col items-center justify-center border border-stone-600 py-2 px-6 rounded-lg mr-2 
+      ${press === 1 ? 'bg-black' : ''}`}
       onPress={() => setPress(press === 1 ? 0 : 1)}>
-      <Text style={tw`text-stone-200`}>Para você</Text>
+      <Text style={tw`text-stone-600 ${press === 1 ? 'text-white' : ''}`}>Preto</Text>
     </TouchableOpacity>
   );
 }
