@@ -140,7 +140,7 @@ function BottomTab() {
 export default function Routes() {
   const {signed} = useAuth();
 
-  if (signed) {
+  if (!signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}

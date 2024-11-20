@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { SealCheck } from 'phosphor-react-native';
 
 const ProductCard = () => {
     return (
@@ -15,14 +16,14 @@ const ProductCard = () => {
                     </Text>
                 </View>
                 <View style={tw`flex flex-row items-center justify-between`}>
-                    <Text style={tw`text-stone-600 text-lg`}>
+                    <Text style={tw`text-stone-600 font-light text-base`}>
                         R$189,90
                     </Text>
-                    <View style={tw`flex-row items-center border border-black rounded p-1`}>
-                        <Text style={tw`text-stone-500 text-xs`}>
+                    <View style={tw`flex-row items-center border border-stone-200 rounded-lg p-2 gap-1`}>
+                        <Text style={tw`text-stone-500 text-[10px]`}>
                             LuzExpress
                         </Text>
-                        <View style={tw`w-2 h-2 rounded-full bg-blue-500 ml-1`} />
+                        <SealCheck weight="fill" size={8} color="#3C6EEF" />
                     </View>
                 </View>
             </View>

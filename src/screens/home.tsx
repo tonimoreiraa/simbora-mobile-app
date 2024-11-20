@@ -9,12 +9,11 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/LOGO.svg';
-import MyCarousel from '../components/carousel';
 import Category from '../components/category';
-import Tags from '../components/tags';
 import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import { useNavigation } from '@react-navigation/native';
+import { MapPin, SealPercent } from 'phosphor-react-native';
 
 function Home() {
   const navigation = useNavigation();
@@ -25,10 +24,10 @@ function Home() {
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
             <View style={tw`flex flex-row items-center py-4`}>
-              <Icon name="location" size={26} />
+              <MapPin color="#696969" weight='fill' />
               <View style={tw`flex flex-row items-center px-2`}>
-                <Text>Enviar para </Text>
-                <Text>Av. Marechal Deodoro, 256</Text>
+                <Text style={tw`text-zinc-400`}>Enviar para </Text>
+                <Text style={tw`underline`}>Av. Marechal Deodoro, 256</Text>
               </View>
             </View>
             <Logo style={tw`flex`} width={40} height={40} />
@@ -70,20 +69,25 @@ function Home() {
               <Category />
             </ScrollView>
           </View>
-          <View style={tw`mt-4`}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-              <Tags />
-            </ScrollView>
-          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            >
+              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
+                <Icon name="heart" color="#FFFF" size={18} />
+                <Text style={tw`text-white text-lg`}>Para você</Text>
+              </View>
+              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-200 flex-row ml-2`}>
+                <SealPercent
+                  weight="fill"
+                  color='#3C6EEF'
+                  size={18}
+                />
+                <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
+              </View>
+          </ScrollView>
           <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-4`}>
+            style={tw`flex flex-row flex-wrap items-center justify-between mt-2`}>
             <ProductCard />
             <ProductCard />
             <ProductCard />
