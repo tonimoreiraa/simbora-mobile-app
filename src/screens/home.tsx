@@ -15,6 +15,7 @@ import Tags from '../components/tags';
 import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import { useNavigation } from '@react-navigation/native';
+import Location from '../components/location';
 
 function Home() {
   const navigation = useNavigation();
@@ -24,13 +25,7 @@ function Home() {
       <ScrollView>
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
-            <View style={tw`flex flex-row items-center py-4`}>
-              <Icon name="location" size={26} />
-              <View style={tw`flex flex-row items-center px-2`}>
-                <Text>Enviar para </Text>
-                <Text>Av. Marechal Deodoro, 256</Text>
-              </View>
-            </View>
+            <Location />
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
