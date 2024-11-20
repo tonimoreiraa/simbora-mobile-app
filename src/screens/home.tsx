@@ -9,16 +9,14 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/LOGO.svg';
-import Category from '../components/category';
 import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
-import { useNavigation } from '@react-navigation/native';
-<<<<<<< HEAD
 import Location from '../components/location';
-=======
 import { MapPin, SealPercent } from 'phosphor-react-native';
 import { api } from '../services/api';
 import { useQuery } from 'react-query';
+import Category from '../components/category';
+import { useNavigation } from '@react-navigation/native';
 
 const getCategories = async () => {
   const { data } = await api.get('/categories')
@@ -47,7 +45,6 @@ function Categories()
     ))}
   </ScrollView>
 }
->>>>>>> 87aa61fef8ee7b131718ef6b2625c77e1019471c
 
 function Home() {
   const navigation = useNavigation();
@@ -57,17 +54,7 @@ function Home() {
       <ScrollView>
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
-<<<<<<< HEAD
             <Location />
-=======
-            <View style={tw`flex flex-row items-center py-4`}>
-              <MapPin color="#696969" weight='fill' />
-              <View style={tw`flex flex-row items-center px-2`}>
-                <Text style={tw`text-zinc-400`}>Enviar para </Text>
-                <Text style={tw`underline`}>Av. Marechal Deodoro, 256</Text>
-              </View>
-            </View>
->>>>>>> 87aa61fef8ee7b131718ef6b2625c77e1019471c
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>

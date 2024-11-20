@@ -10,7 +10,6 @@ interface Category {
 }
 
 function Category({ image, name }: Category) {
-    console.log(image)
     return (
         <TouchableOpacity style={tw`w-[106px] h-[106px] items-center justify-center rounded-2xl mr-2 bg-stone-200 mt-2 gap-2`}>
             <Image
