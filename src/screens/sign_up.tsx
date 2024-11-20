@@ -3,24 +3,37 @@ import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg';
 import AccountInput from '../components/create_account_input';
 import {useForm} from 'react-hook-form';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {SignUpPayload, signUpSchema} from '../validators/auth';
 import {UserRoleSelector} from '../components/user_role_selector';
 import {api} from '../services/api';
 import Terms from '../components/terms';
 import SocialLogin from '../components/social_login';
+import { useAuth } from '../contexts/auth_provider';
+import { useMutation } from 'react-query';
+
+async function signUp(payload: SignUpPayload)
+{
+  const { data } = await api.post('/auth/sign-up', payload);
+  return data
+}
 
 function SignUp() {
-  const navigation = useNavigation();
+  const auth = useAuth();
+  const mutation = useMutation(signUp, {
+    onSuccess: ({ user, token }) => {
+      auth.signInWithToken(token.token, user)
+    }
+  })
+  // const navigation = useNavigation();
   const form = useForm<SignUpPayload>({
     resolver: zodResolver(signUpSchema),
   });
-  const handleSignIn = () => navigation.navigate('SignIn');
+  // const handleSignIn = () => navigation.navigate('SignIn');
 
   async function handleSubmit(payload: SignUpPayload) {
-    const {data} = await api.post('/sign-up', payload);
-    console.log(data);
+    mutation.mutate(payload)
   }
 
   return (
@@ -86,6 +99,10 @@ function SignUp() {
           </Text>
           <View style={tw`border border-stone-200 w-24`}></View>
         </View>
+        {mutation.isError && <Text style={tw`text-red-500 text-xs mt-0.5`}>
+          {/* @ts-ignore */}
+          {mutation.error.message}
+        </Text>}
         <View>
           <SocialLogin />
         </View>

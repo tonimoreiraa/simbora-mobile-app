@@ -15,6 +15,7 @@ export interface AuthContextData {
   signed: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  signInWithToken: (token: string, userData: User) => void;
 }
 
 export interface AuthProviderProps {
@@ -22,7 +23,7 @@ export interface AuthProviderProps {
 }
 
 export interface AuthResponse {
-  token: string;
+  token: { token: string };
   user: User;
 }
 
@@ -50,16 +51,16 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   async function signIn(email: string, password: string) {
     try {
-      const response = await api.post<AuthResponse>('/auth/login', {
+      const response = await api.post<AuthResponse>('/auth/sign-in', {
         email,
         password,
       });
       const { token, user: userData } = response.data;
 
-      api.defaults.headers.Authorization = `Bearer ${token}`;
+      api.defaults.headers.Authorization = `Bearer ${token.token}`;
 
       await AsyncStorage.setItem('@simbora-user', JSON.stringify(userData));
-      await AsyncStorage.setItem('@simbora-token', token);
+      await AsyncStorage.setItem('@simbora-token', token.token);
 
       setUser(userData);
     } catch (error: any) {
@@ -92,6 +93,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         loading,
         signIn,
         signOut,
+        signInWithToken
       }}
     >
       {children}
