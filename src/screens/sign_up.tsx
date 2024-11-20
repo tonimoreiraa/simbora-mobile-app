@@ -40,7 +40,7 @@ function SignUp() {
         name="name"
         label="Seu nome"
         autoComplete="name"
-        placeholder="Erivaldo Cavalcante"
+        placeholder="Nome e Sobrenome"
       />
       <AccountInput
         control={form.control}
@@ -49,7 +49,7 @@ function SignUp() {
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
-        placeholder="erivaldo@dpibrasil.com"
+        placeholder="email@example.com"
       />
       <AccountInput
         control={form.control}
@@ -57,14 +57,14 @@ function SignUp() {
         label="Seu id person"
         autoCapitalize="none"
         autoComplete="username"
-        placeholder="@erivaldocavalcante"
+        placeholder="@seuUser"
       />
       <AccountInput
         control={form.control}
         name="password"
         label="Sua senha"
         autoComplete="password"
-        placeholder="*********"
+        placeholder="••••••••••••"
         secureTextEntry
       />
       <View style={tw`w-full`}>

@@ -10,7 +10,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <NavigationContainer>
-          <MyOrderDelivery />
+          <Routes />
         </NavigationContainer>
       </AuthProvider>
     </QueryClientProvider>

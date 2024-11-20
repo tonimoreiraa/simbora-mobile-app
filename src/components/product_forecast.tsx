@@ -3,6 +3,7 @@ import Fio from '../assets/Fio.svg';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Forecast from './forecast';
+import { OrderStatusBadge } from './order_status_badge';
 
 function ProductForecast() {
   return (
@@ -19,11 +20,7 @@ function ProductForecast() {
               #431243214141324
             </Text>
           </View>
-          <View
-            style={tw`flex flex-row items-center justify-center rounded-2xl border border-orange-300 w-26 mt-2`}>
-            <Icon name="cube" size={14} />
-            <Text style={tw`ml-1 text-orange-300 text-lg`}>Retirada</Text>
-          </View>
+          <OrderStatusBadge />
         </View>
       </View>
       <Forecast />

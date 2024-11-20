@@ -18,7 +18,8 @@ export function UserRoleSelector<T extends FieldValues>({
   control,
 }: InputProps<T>) {
   return (
-    <View style={tw`flex-col items-center justify-between w-full py-2`}>
+    <View style={tw`flex-col justify-between w-full py-2`}>
+      <Text style={tw`mb-0.5 text-xs`}>Selecione se</Text>
       <Controller
         name={name}
         control={control}
@@ -27,7 +28,7 @@ export function UserRoleSelector<T extends FieldValues>({
             <>
               <View style={tw`flex-row justify-between w-full`}>
                 <TouchableOpacity
-                  style={tw`flex items-center justify-center border border-black py-5 w-46 rounded-lg ${
+                  style={tw`flex items-center justify-center border border-blue-500 py-5 w-46 rounded-lg ${
                     field.value === 'customer'
                       ? 'bg-blue-500 border-transparent'
                       : ''
@@ -41,7 +42,7 @@ export function UserRoleSelector<T extends FieldValues>({
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={tw`flex items-center justify-center border border-black py-5 w-46 rounded-lg ${
+                  style={tw`flex items-center justify-center border border-blue-500 py-5 w-46 rounded-lg ${
                     field.value === 'professional'
                       ? 'bg-blue-500 border-transparent'
                       : ''
