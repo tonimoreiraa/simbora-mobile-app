@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import { SealCheck } from 'phosphor-react-native';
 
 const ProductCard = () => {
