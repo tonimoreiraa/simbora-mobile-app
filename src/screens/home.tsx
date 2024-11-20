@@ -14,6 +14,36 @@ import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import { useNavigation } from '@react-navigation/native';
 import { MapPin, SealPercent } from 'phosphor-react-native';
+import { api } from '../services/api';
+import { useQuery } from 'react-query';
+
+const getCategories = async () => {
+  const { data } = await api.get('/categories')
+  return data
+}
+
+function Categories()
+{
+  const {
+    data,
+    isLoading,
+    isSuccess
+  } = useQuery('@categories', getCategories)
+
+  return <ScrollView
+    horizontal={true}
+    style={tw`py-4`}
+    showsHorizontalScrollIndicator={false}>
+    {isLoading && <>
+      {[...Array(4).keys()].map(c => (
+        <View style={tw`w-[106px] h-[106px] items-center justify-center rounded-2xl mr-2 bg-stone-200 mt-2 gap-2`} />
+      ))}
+    </>}
+    {isSuccess && data.map((category: any) => (
+      <Category {...category} key={category.id} />
+    ))}
+  </ScrollView>
+}
 
 function Home() {
   const navigation = useNavigation();
@@ -59,15 +89,7 @@ function Home() {
                 </TouchableOpacity>
               </View>
             </View>
-            <ScrollView
-              horizontal={true}
-              style={tw`py-4`}
-              showsHorizontalScrollIndicator={false}>
-              <Category />
-              <Category />
-              <Category />
-              <Category />
-            </ScrollView>
+            <Categories />
           </View>
           <ScrollView
             horizontal={true}
