@@ -13,6 +13,7 @@ import Cart from './src/screens/cart';
 import Categories from './src/screens/categories';
 import { ProductsSearch } from './src/screens/products_search';
 import MyOrders from './src/screens/my_orders';
+import Product from './src/screens/product';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -154,7 +155,7 @@ export default function Routes() {
 
   return (
     <Stack.Navigator
-      initialRouteName={'MyOrders'}
+      initialRouteName={'BottomTab'}
       screenOptions={{
         headerBackground: () => (
           <View style={{flex: 1, backgroundColor: 'transparent'}} />
@@ -183,6 +184,11 @@ export default function Routes() {
         name="MyOrders"
         options={{ title: 'Meus pedidos' }}
         component={MyOrders}
+      />
+      <Stack.Screen
+        name="Product"
+        options={{ title: 'Produto' }}
+        component={Product}
       />
     </Stack.Navigator>
   );

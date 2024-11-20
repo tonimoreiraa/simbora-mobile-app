@@ -49,11 +49,7 @@ function Categories()
 
 function Home() {
   const navigation = useNavigation();
-
-  useEffect(() => {
-  navigation.navigate('MyOrders')
-
-  }, [])
+  
   return (
     <SafeAreaView>
       <ScrollView>

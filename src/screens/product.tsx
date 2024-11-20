@@ -8,14 +8,13 @@ import {
 import InputSearch from '../components/input_search';
 import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
-import Fio from '../assets/Fio.svg';
 import Carousel from '../components/carousel';
 import Category from '../components/category';
-import Tags from '../components/tags';
+// import Tags from '../components/tags';
 import ColorSelect from '../components/color_select';
 import ProductCard from '../components/product_card';
 
-const ViewProduct: React.FC = () => {
+const Product: React.FC = () => {
   const items = [
     'https://avatars.githubusercontent.com/u/59844592?v=4',
     'https://avatars.githubusercontent.com/u/59844592?v=4',
@@ -44,10 +43,10 @@ const ViewProduct: React.FC = () => {
           </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          {/* <Tags />
           <Tags />
           <Tags />
-          <Tags />
-          <Tags />
+          <Tags /> */}
         </ScrollView>
         <View>
           <Text style={tw`font-bold text-base text-stone-300 mt-4`}>
@@ -104,4 +103,4 @@ const ViewProduct: React.FC = () => {
   );
 };
 
-export default ViewProduct;
+export default Product;
