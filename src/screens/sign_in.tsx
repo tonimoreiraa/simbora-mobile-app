@@ -16,7 +16,8 @@ function SignIn() {
   const navigation = useNavigation();
   const auth = useAuth();
 
-  const signIn = async ({ email, password }: SignInPayload) => await auth.signIn(email, password)
+  const signIn = async ({email, password}: SignInPayload) =>
+    await auth.signIn(email, password);
   const mutation = useMutation(signIn);
   console.log(mutation.error);
 
@@ -25,19 +26,22 @@ function SignIn() {
   });
 
   async function handleSubmit(payload: SignInPayload) {
-    mutation.mutate(payload)
+    mutation.mutate(payload);
   }
 
+  {/* @ts-ignore */}
   const handleSignUp = () => navigation.navigate('SignUp');
 
   return (
     <View
       style={tw`flex items-center justify-between h-full w-full px-4 relative py-2 bg-white`}>
-      <Logo style={tw`mt-18`} />
-      <Text style={tw`text-stone-500 text-center`}>
-        Crie sua conta ou entre agora mesmo
-      </Text>
-      <View style={tw`w-full`}>
+      <View style={tw`w-full mt-20`}>
+        <View style={tw`flex flex-col items-center justify-center w-full`}>
+        <Logo />
+        <Text style={tw`text-stone-500 text-center mt-10`}>
+          Crie sua conta ou entre agora mesmo
+        </Text>
+        </View>
         <AccountInput
           control={form.control}
           name="email"
@@ -62,7 +66,7 @@ function SignIn() {
         <View style={tw`flex-row justify-between w-full py-2`}>
           <View style={tw`flex flex-row items-center`}>
             <CheckBox />
-            <Text>Lembrar login</Text>
+            <Text style={tw`text-gray-300`}>Lembrar login</Text>
           </View>
           <TouchableOpacity>
             <Text style={tw`text-red-500`}>Esqueci a senha</Text>
@@ -78,8 +82,8 @@ function SignIn() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSignUp}
-            style={tw`bg-stone-100 w-full py-4 rounded-md`}>
-            <Text style={tw`text-stone-400 text-center`}>Criar conta</Text>
+            style={tw`border border-stone-300 w-full py-4 rounded-md`}>
+            <Text style={tw`text-stone-600 text-center`}>Criar conta</Text>
           </TouchableOpacity>
         </View>
         <View
