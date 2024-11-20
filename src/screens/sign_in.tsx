@@ -35,12 +35,12 @@ function SignIn() {
   return (
     <View
       style={tw`flex items-center justify-between h-full w-full px-4 relative py-2 bg-white`}>
-      <View style={tw`w-full mt-20`}>
+      <View style={tw`w-full mt-22`}>
         <View style={tw`flex flex-col items-center justify-center w-full`}>
-        <Logo />
-        <Text style={tw`text-stone-500 text-center mt-10`}>
-          Crie sua conta ou entre agora mesmo
-        </Text>
+          <Logo />
+          <Text style={tw`text-stone-500 text-center mt-10`}>
+            Crie sua conta ou entre agora mesmo
+          </Text>
         </View>
         <AccountInput
           control={form.control}
@@ -50,13 +50,13 @@ function SignIn() {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <AccountInput
-          control={form.control}
-          label="Sua Senha"
-          name="password"
-          placeholder="••••••••"
-          secureTextEntry
-        />
+          <AccountInput
+            control={form.control}
+            label="Sua Senha"
+            name="password"
+            placeholder="••••••••"
+            isPassword
+          />
         {mutation.isError && (
           <Text style={tw`text-red-500 mt-2`}>
             {/* @ts-ignore */}

@@ -1,11 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
-import { useAuth } from './src/contexts/auth_provider';
+import {useAuth} from './src/contexts/auth_provider';
 import SignIn from './src/screens/sign_in';
 import MyAccount from './src/screens/my_account';
 import Order from './src/screens/order';
@@ -45,20 +45,24 @@ function BottomTab() {
           height: 64,
           paddingBottom: 0,
         },
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginTop: 26,
-              height: '100%',
-            }}>
-              <Icon name="home-outline" color={focused ? "white" : "gray"} size={24} />
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 26,
+                height: '100%',
+              }}>
+              <Icon
+                name="home-outline"
+                color={focused ? 'white' : 'gray'}
+                size={24}
+              />
             </View>
           ),
         }}
@@ -67,48 +71,63 @@ function BottomTab() {
         name="Checkout"
         component={Checkout}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginTop: 26,
-              height: '100%',
-            }}>
-              <Icon name="bag-outline" color={focused ? "white" : "gray"} size={24} />
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 26,
+                height: '100%',
+              }}>
+              <Icon
+                name="bag-outline"
+                color={focused ? 'white' : 'gray'}
+                size={24}
+              />
             </View>
           ),
-          tabBarStyle: { display: 'none' },
+          tabBarStyle: {display: 'none'},
         }}
       />
       <Tab.Screen
         name="order"
         component={Order}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginTop: 26,
-              height: '100%',
-            }}>
-              <Icon name="download-outline" color={focused ? "white" : "gray"} size={24} />
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 26,
+                height: '100%',
+              }}>
+              <Icon
+                name="download-outline"
+                color={focused ? 'white' : 'gray'}
+                size={24}
+              />
             </View>
           ),
-          tabBarStyle: { display: 'none' },
+          tabBarStyle: {display: 'none'},
         }}
       />
       <Tab.Screen
         name="MyAccount"
         component={MyAccount}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginTop: 26,
-              height: '100%',
-            }}>
-              <Icon name="person-outline" color={focused ? "white" : "gray"} size={24} />
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 26,
+                height: '100%',
+              }}>
+              <Icon
+                name="person-outline"
+                color={focused ? 'white' : 'gray'}
+                size={24}
+              />
             </View>
           ),
         }}
@@ -118,25 +137,23 @@ function BottomTab() {
 }
 
 export default function Routes() {
-  const { signed } = useAuth();
+  const {signed} = useAuth();
 
   if (!signed) {
     return (
       <Stack.Navigator
-      initialRouteName={'SignIn'}
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-    </Stack.Navigator>
-    )
+        initialRouteName={'SignIn'}
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+      </Stack.Navigator>
+    );
   }
 
   return (
     <Stack.Navigator
       initialRouteName={'BottomTab'}
-      screenOptions={{ headerShown: false }}
-    >
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="BottomTab" component={BottomTab} />
     </Stack.Navigator>
   );
