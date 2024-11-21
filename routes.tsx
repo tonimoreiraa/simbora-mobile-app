@@ -1,8 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {View} from 'react-native';
+import {ActivityIndicator, SafeAreaView, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import tw from 'twrnc'
 import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
 import { useAuth } from './src/contexts/auth_provider';
@@ -14,6 +14,7 @@ import Categories from './src/screens/categories';
 import { ProductsSearch } from './src/screens/products_search';
 import MyOrders from './src/screens/my_orders';
 import Product from './src/screens/product';
+import Logo from './src/assets/LOGO.svg'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -139,7 +140,15 @@ function BottomTab() {
 }
 
 export default function Routes() {
-  const {signed} = useAuth();
+  const { signed, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <SafeAreaView style={tw`flex-1 items-center justify-center`}>
+        <Logo width={100} />
+      </SafeAreaView>
+    )
+  }
 
   if (!signed) {
     return (
@@ -186,8 +195,13 @@ export default function Routes() {
       />
       <Stack.Screen
         name="Product"
-        options={{ title: 'Produto' }}
+        options={{ title: 'Produto', headerShown: false, }}
         component={Product}
+      />
+      <Stack.Screen
+        name="Cart"
+        options={{ title: 'Carrinho', headerShown: false, }}
+        component={Cart}
       />
     </Stack.Navigator>
   );

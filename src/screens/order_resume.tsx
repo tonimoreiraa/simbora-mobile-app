@@ -14,6 +14,7 @@ function OrderResume() {
 
   const translateY = useSharedValue(400);
 
+  // Define pan gesture handler
   const onGestureEvent = (event: any) => {
     translateY.value = event.translationY;
   };
@@ -23,6 +24,7 @@ function OrderResume() {
       transform: [{ translateY: translateY.value }],
     };
   });
+
   const toggleDrawer = () => {
     if (isEnabled) {
       translateY.value = withSpring(0, {
@@ -40,6 +42,7 @@ function OrderResume() {
       });
     }
   };
+
   React.useEffect(() => {
     toggleDrawer();
   }, [isEnabled]);
@@ -53,7 +56,7 @@ function OrderResume() {
               <Text style={tw`text-2xl font-bold text-center`}>Resumo do pedido</Text>
             </View>
             <View style={tw`w-full mt-2`}>
-              <Price />
+              <Price subTotal={39} discount={3} shipping={1} total={2} />
             </View>
             <View style={tw`mt-4`}>
               <ShippingMethod />
@@ -117,12 +120,21 @@ function OrderResume() {
             animatedStyle,
           ]}
         >
-          <View style={tw`rounded-xl`}>
+          <View style={tw`p-4`}>
+            <Text>Conteúdo do Bottom Drawer</Text>
+            {/* Add the SendRequest component inside the drawer */}
             <SendRequest />
           </View>
         </Animated.View>
       </PanGestureHandler>
 
+      {/* Button to toggle drawer manually */}
+      <TouchableOpacity
+        onPress={toggleDrawer}
+        style={tw`absolute bottom-10 left-4`}
+      >
+        <Text style={tw`text-blue-500 font-bold`}>Abrir Drawer</Text>
+      </TouchableOpacity>
     </GestureHandlerRootView>
   );
 }
