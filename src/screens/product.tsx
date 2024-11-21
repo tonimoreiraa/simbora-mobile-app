@@ -14,9 +14,11 @@ import ColorSelect from '../components/color_select';
 import { ShoppingBagOpen } from 'phosphor-react-native';
 import { FireSimple } from 'phosphor-react-native';
 import { LightbulbFilament } from 'phosphor-react-native';
-import { StaticScreenProps } from '@react-navigation/native';
+import { StaticScreenProps, useNavigation } from '@react-navigation/native';
 import { useQuery } from 'react-query';
 import { api } from '../services/api';
+import { useCart } from '../contexts/cart_provider';
+import Toast from 'react-native-toast-message';
 
 interface Product {
   category: {
@@ -61,12 +63,31 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
     isLoading,
   } = useQuery(['@product', productId], () => fetchProduct(productId))
 
+  const cart = useCart()
+  const navigation = useNavigation()
+
   if (isLoading || !data) {
     return (
       <SafeAreaView style={tw`items-center justify-center flex-1`}>
         <ActivityIndicator />
       </SafeAreaView>
     )
+  }
+
+  const handleAddCart = () => {
+    cart.push({
+      id: data.id,
+      name: data.name,
+      price: Number(data.price),
+      quantity: 1,
+      image: data.images[0].path
+    })
+    Toast.show({
+      type: 'success',
+      text1: `${data.name} foi adicionado ao carrinho`,
+      text2: 'Toque para ver seu carrinho.',
+      onPress: () => navigation.navigate('Cart')
+    });
   }
 
   return (
@@ -173,7 +194,9 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
           </Text>
         </View>
         <TouchableOpacity
-          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl w-2/3`}>
+          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl w-2/3`}
+          onPress={handleAddCart}
+        >
           <Text style={tw`font-bold text-lg text-white`}>
             Adicionar a sacola
           </Text>

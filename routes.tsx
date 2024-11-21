@@ -198,6 +198,11 @@ export default function Routes() {
         options={{ title: 'Produto', headerShown: false, }}
         component={Product}
       />
+      <Stack.Screen
+        name="Cart"
+        options={{ title: 'Carrinho', headerShown: false, }}
+        component={Cart}
+      />
     </Stack.Navigator>
   );
 }

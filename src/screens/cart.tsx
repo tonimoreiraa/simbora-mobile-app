@@ -7,13 +7,15 @@ import {
 } from 'react-native';
 import tw from 'twrnc';
 import CartProduct from '../components/cart_product';
-import ProductCard from '../components/product_card';
 import Discount from '../components/discount';
 import Price from '../components/price';
 import Adress from '../components/address';
 import ShippingMethod from '../components/shipping_method';
+import { useCart } from '../contexts/cart_provider';
 
 function Cart() {
+  const cart = useCart()
+
   return (
     <SafeAreaView style={tw`bg-white`}>
       <ScrollView>
@@ -22,9 +24,12 @@ function Cart() {
             <Text style={tw`text-2xl font-bold`}>Meu carrinho</Text>
           </View>
           <View style={tw`mt-4 w-full px-4`}>
-            <CartProduct />
-            <CartProduct />
-            <CartProduct />
+            {cart.items.map(item => (
+              <CartProduct
+                key={item.id}
+                {...item}
+              />
+            ))}
           </View>
           <View style={tw`w-full px-4`}>
             <TouchableOpacity

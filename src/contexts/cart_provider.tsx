@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PropsWithChildren, createContext, useContext, useEffect } from "react";
 import { useList } from 'react-use'
 
-export interface Product {
+export interface CartItem {
     id: number
     name: string
     image?: string
@@ -10,15 +10,15 @@ export interface Product {
     price: number
 }
 export interface CartContext {
-    items: Product[]
+    items: CartItem[]
     total: number
     subTotal: number
     quantity: number
     discounts: number
 
-    push: (product: Product) => void
+    push: (product: CartItem) => void
     remove: (id: number) => void
-    update: (skuId: number, data: Product) => void
+    update: (itemId: number, data: CartItem) => void
     clear: () => void
 }
 
@@ -26,7 +26,7 @@ const CartContext = createContext({} as CartContext)
 
 export default function CartProvider({ children }: PropsWithChildren)
 {
-    const [items, { push: pushItem, clear, removeAt: removeItem, updateAt, set }] = useList<Product>()
+    const [items, { push: pushItem, clear, removeAt: removeItem, updateAt, set }] = useList<CartItem>()
     const quantity = items.map(item => item.quantity).reduce((x, y) => x + y, 0)
     const subTotal = items.map(item => item.quantity * item.price).reduce((x, y) => x + y, 0)
     const total = subTotal
@@ -50,7 +50,7 @@ export default function CartProvider({ children }: PropsWithChildren)
         removeItem(indexOf)
     }
 
-    function push(product: Product) {
+    function push(product: CartItem) {
         const currentItemIndex = items.findIndex(i => i.id == product.id)
         if (currentItemIndex >= 0) {
             const currentItem = items[currentItemIndex]
@@ -61,8 +61,13 @@ export default function CartProvider({ children }: PropsWithChildren)
         }
     }
 
+    const update = (itemId: number, item: CartItem) => {
+        const currentItemIndex = items.findIndex(i => i.id == item.id)
+        return updateAt(currentItemIndex, item)
+    }
+
     return <CartContext.Provider value={{
-        items, push, clear, remove, update: updateAt, quantity, total, subTotal, discounts: 0
+        items, push, clear, remove, update, quantity, total, subTotal, discounts: 0
     }}>
         {children}
     </CartContext.Provider>
@@ -75,4 +80,37 @@ export const useCart = () => {
         throw new Error('useCart must be used within a CartProvider')
 
     return context
+}
+
+export const useCartItemQuantity = (itemId: number) => {
+    const context = useContext(CartContext)
+
+    if (!context.items)
+        throw new Error('useCart must be used within a CartProvider')
+
+    const item = context.items.find(i => i.id == itemId)
+
+    if (!item)
+        throw new Error('Cart item does not exists.')
+
+    const add = () => context.update(itemId, {
+        ...item, quantity: item.quantity+1
+    })
+    const decrease = () => {
+        if (item.quantity == 1) {
+            context.remove(item.id)
+        } else {
+            context.update(itemId, {
+                ...item, quantity: item.quantity-1
+            })
+        }
+    }
+    const remove = () => context.remove(itemId)
+
+    return {
+        add,
+        decrease,
+        quantity: item.quantity,
+        remove
+    }
 }
