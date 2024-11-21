@@ -9,7 +9,6 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/LOGO.svg';
-import ProductCard from '../components/product_card';
 import Banner from '../components/banner';
 import Location from '../components/location';
 import { SealPercent } from 'phosphor-react-native';
@@ -17,7 +16,6 @@ import { api } from '../services/api';
 import { useQuery } from 'react-query';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
 
 const getCategories = async () => {
   const { data } = await api.get('/categories')
