@@ -15,6 +15,7 @@ import { ProductsSearch } from './src/screens/products_search';
 import MyOrders from './src/screens/my_orders';
 import Product from './src/screens/product';
 import Logo from './src/assets/LOGO.svg'
+import Checkout from './src/screens/checkout';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,8 +95,8 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="OrderResume"
-        component={OrderResume}
+        name="MyOrders"
+        component={MyOrders}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
@@ -150,7 +151,7 @@ export default function Routes() {
     )
   }
 
-  if (signed) {
+  if (!signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}
@@ -202,6 +203,11 @@ export default function Routes() {
         name="Cart"
         options={{ title: 'Carrinho', headerShown: false, }}
         component={Cart}
+      />
+      <Stack.Screen
+        name="Checkout"
+        options={{ title: 'Chechout' }}
+        component={Checkout}
       />
       <Stack.Screen 
       name='ResumeOrder'

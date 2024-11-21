@@ -10,6 +10,7 @@ import CartProduct from '../components/cart_product';
 import Price from '../components/price';
 import { useCart } from '../contexts/cart_provider';
 import { useNavigation } from '@react-navigation/native';
+import { ForYouProducts } from '../components/for_you_products';
 
 function Cart() {
   const cart = useCart()
@@ -69,11 +70,7 @@ function Cart() {
               <Text style={tw`text-xs text-stone-500`}>Relacionados</Text>
             </View>
           </View>
-          <View
-            style={tw`flex flex-row flex-wrap items-center justify-between w-full px-4 mb-4`}>
-            {/* <ProductCard />
-            <ProductCard /> */}
-          </View>
+          <ForYouProducts />
         </View>
       </ScrollView>
     </SafeAreaView>
