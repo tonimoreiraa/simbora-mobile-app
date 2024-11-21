@@ -150,7 +150,7 @@ export default function Routes() {
     )
   }
 
-  if (signed) {
+  if (!signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}
