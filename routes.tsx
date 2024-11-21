@@ -150,7 +150,7 @@ export default function Routes() {
     )
   }
 
-  if (!signed) {
+  if (signed) {
     return (
       <Stack.Navigator
         initialRouteName={'SignIn'}
@@ -203,11 +203,18 @@ export default function Routes() {
         options={{ title: 'Carrinho', headerShown: false, }}
         component={Cart}
       />
+<<<<<<< HEAD
       <Stack.Screen
         name="Checkout"
         options={{ title: 'Checkout' }}
         component={Cart}
       />
+=======
+      <Stack.Screen 
+      name='ResumeOrder'
+      options={{title: 'Apresente o QR Code'}}
+      component={OrderResume}/>
+>>>>>>> 158d1387dbd5c535c73509dc6b0a88c1cb15628a
     </Stack.Navigator>
   );
 }
