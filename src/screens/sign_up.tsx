@@ -36,83 +36,86 @@ function SignUp() {
   }
 
   return (
-    <SafeAreaView
-      style={tw`flex flex-col items-center justify-between h-full w-full mt-2 relative bg-white`}>
-      <View style={tw`flex flex-col items-center w-full px-4`}>
-        <Logo style={tw`top-2`} width={100} height={60} />
-        <Text style={tw`text-stone-500 text-center mb-1 mt-1`}>
-          Crie sua conta gratuitamente
-        </Text>
-        <Text style={tw`text-xl font-bold text-center px-8`}>
-          Preencha os seus dados abaixo e agilize sua rotina com a volevu.
-        </Text>
-      </View>
-      <View style={tw`px-4`}>
-        <AccountInput
-          control={form.control}
-          name="name"
-          label="Seu nome"
-          autoComplete="name"
-          placeholder="Nome e Sobrenome"
-        />
-        <AccountInput
-          control={form.control}
-          name="email"
-          label="Seu Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-          placeholder="email@example.com"
-        />
-        <AccountInput
-          control={form.control}
-          name="username"
-          label="Seu id person"
-          autoCapitalize="none"
-          autoComplete="username"
-          placeholder="@seuUser"
-        />
-        <AccountInput
-          control={form.control}
-          name="password"
-          label="Sua senha"
-          autoComplete="password"
-          placeholder="••••••••••••"
-          secureTextEntry
-          isPassword
-        />
+    <SafeAreaView style={tw`bg-white`}>
+      <View
+      style={tw`flex flex-col items-center justify-between px-4 h-full w-full mt-2 relative bg-white`}>
+        <View style={tw`flex flex-col items-center w-full`}>
+          <Logo style={tw`top-2`} width={100} height={60} />
+          <Text style={tw`text-stone-500 text-center mb-1 mt-5`}>
+            Crie sua conta gratuitamente
+          </Text>
+          <Text style={tw`text-xl font-bold text-center px-4`}>
+            Preencha os seus dados abaixo e agilize sua rotina com a Volevu.
+          </Text>
+        </View>
         <View style={tw`w-full`}>
-          <UserRoleSelector control={form.control} name="role" />
+          <AccountInput
+            control={form.control}
+            name="name"
+            label="Seu nome"
+            autoComplete="name"
+            placeholder="Nome e Sobrenome"
+          />
+          <AccountInput
+            control={form.control}
+            name="email"
+            label="Seu Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+            placeholder="email@example.com"
+          />
+          <AccountInput
+            control={form.control}
+            name="username"
+            label="Seu id person"
+            autoCapitalize="none"
+            autoComplete="username"
+            placeholder="@seuUser"
+          />
+          <AccountInput
+            control={form.control}
+            name="password"
+            label="Sua senha"
+            autoComplete="password"
+            placeholder="••••••••••••"
+            secureTextEntry
+            isPassword
+          />
           <View style={tw`w-full`}>
-            <TouchableOpacity
-              onPress={form.handleSubmit(handleSubmit)}
-              style={tw`bg-blue-500 w-full py-4 rounded-md`}>
-              <Text style={tw`text-white text-center font-semibold`}>
-                Criar conta
+            <UserRoleSelector control={form.control} name="role" />
+            <View style={tw`w-full`}>
+              <TouchableOpacity
+                onPress={form.handleSubmit(handleSubmit)}
+                style={tw`bg-blue-500 w-full py-4 rounded-md`}
+              >
+                <Text style={tw`text-white text-center font-semibold`}>
+                  Criar conta
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={tw`flex flex-row items-center justify-between w-full py-4`}>
+              <View style={tw`border border-stone-200 w-24`}></View>
+              <Text style={tw`text-xs text-stone-400`}>
+                Entre com uma rede social
               </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={tw`flex flex-row items-center justify-between w-full py-4`}>
-            <View style={tw`border border-stone-200 w-24`}></View>
-            <Text style={tw`text-xs text-stone-400`}>
-              Entre com uma rede social
-            </Text>
-            <View style={tw`border border-stone-200 w-24`}></View>
-          </View>
-          {mutation.isError && (
-            <Text style={tw`text-red-500 text-xs mt-0.5`}>
-              {/* @ts-ignore */}
-              {mutation.error.message}
-            </Text>
-          )}
-          <View>
-            <SocialLogin />
+              <View style={tw`border border-stone-200 w-24`}></View>
+            </View>
+            {mutation.isError && (
+              <Text style={tw`text-red-500 text-xs mt-0.5`}>
+                {/* @ts-ignore */}
+                {mutation.error.message}
+              </Text>
+            )}
+            <View>
+              <SocialLogin />
+            </View>
           </View>
         </View>
-      </View>
-      <View style={tw`py-4`}>
-        <Terms />
+        <View style={tw`py-4`}>
+          <Terms />
+        </View>
       </View>
     </SafeAreaView>
   );
