@@ -37,8 +37,8 @@ function SignUp() {
 
   return (
     <SafeAreaView
-      style={tw`flex flex-col items-center justify-between h-full w-full px-4 mt-2 relative bg-white`}>
-      <View style={tw`flex flex-col items-center w-full`}>
+      style={tw`flex flex-col items-center justify-between h-full w-full mt-2 relative bg-white`}>
+      <View style={tw`flex flex-col items-center w-full px-4`}>
         <Logo style={tw`top-2`} width={100} height={60} />
         <Text style={tw`text-stone-500 text-center mb-1 mt-1`}>
           Crie sua conta gratuitamente
@@ -47,7 +47,7 @@ function SignUp() {
           Preencha os seus dados abaixo e agilize sua rotina com a volevu.
         </Text>
       </View>
-      <View>
+      <View style={tw`px-4`}>
         <AccountInput
           control={form.control}
           name="name"
