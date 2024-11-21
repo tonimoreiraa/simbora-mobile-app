@@ -20,7 +20,7 @@ const SendRequest = () => {
         <TextInput
           placeholder="Digite o nome aqui"
           placeholderTextColor="white"
-          style={tw`flex-1 text-white pl-2`}
+          style={tw`flex-1 text-white pl-2 h-12`}
         />
       </View>
       <Text style={tw`text-stone-400 mb-2`}>Cliente recentes</Text>
@@ -30,13 +30,15 @@ const SendRequest = () => {
           showsHorizontalScrollIndicator={false}
           style={tw`mb-4`}>
           {[
-            '/placeholder.svg?height=60&width=60',
-            '/placeholder.svg?height=60&width=60',
-            '/placeholder.svg?height=60&width=60',
+            'https://github.com/tonimoreiraa.png',
+            'https://github.com/SandroGabryel.png',
+            'https://github.com/natanielnfs.png',
           ].map((uri, index) => (
-            <View key={index} style={tw`items-center mr-4`}>
+            <View key={index} style={tw`items-center mr-5`}>
               <Image source={{uri}} style={tw`w-15 h-15 rounded-full`} />
-              <Text style={tw`text-white mt-2`}>@username{index + 1}</Text>
+              <Text style={tw`text-white mt-2`}>
+                @{uri.split('/').slice(-1)[0].slice(0, -4)}
+              </Text>
             </View>
           ))}
         </ScrollView>

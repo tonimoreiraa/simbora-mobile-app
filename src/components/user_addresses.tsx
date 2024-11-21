@@ -4,6 +4,7 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native"
 import tw from 'twrnc'
 import Icon from "react-native-vector-icons/Ionicons"
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useNavigation } from "@react-navigation/native"
 
 interface Address {
     id: number
@@ -27,6 +28,7 @@ export function UserAddresses()
         isLoading,
         isSuccess
     } = useQuery('@addresses', fetchAddresses)
+    const navigation = useNavigation()
 
     return (
         <>
@@ -55,6 +57,11 @@ export function UserAddresses()
                 <Icon size={20} name="add" color="#ffffff"/>
                 <Text style={tw`text-lg text-white`}>
                     Novo endereço
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('ResumeOrder')} style={tw`bg-blue-500 rounded-2xl py-2 px-3 flex-row items-center justify-center gap-1 mt-2`}>
+                <Text style={tw`text-lg text-white`}>
+                    Continuar
                 </Text>
             </TouchableOpacity>
         </>

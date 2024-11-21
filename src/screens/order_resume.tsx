@@ -51,10 +51,7 @@ function OrderResume() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={tw`flex-1 bg-white`}>
         <ScrollView>
-          <View style={tw`flex flex-col items-center justify-center px-4 mt-6 h-full w-full`}>
-            <View>
-              <Text style={tw`text-2xl font-bold text-center`}>Resumo do pedido</Text>
-            </View>
+          <View style={tw`flex flex-col items-center justify-center px-4 h-full w-full`}>
             <View style={tw`w-full mt-2`}>
               <Price subTotal={39} discount={3} shipping={1} total={2} />
             </View>
@@ -121,20 +118,10 @@ function OrderResume() {
           ]}
         >
           <View style={tw`p-4`}>
-            <Text>Conteúdo do Bottom Drawer</Text>
-            {/* Add the SendRequest component inside the drawer */}
             <SendRequest />
           </View>
         </Animated.View>
       </PanGestureHandler>
-
-      {/* Button to toggle drawer manually */}
-      <TouchableOpacity
-        onPress={toggleDrawer}
-        style={tw`absolute bottom-10 left-4`}
-      >
-        <Text style={tw`text-blue-500 font-bold`}>Abrir Drawer</Text>
-      </TouchableOpacity>
     </GestureHandlerRootView>
   );
 }

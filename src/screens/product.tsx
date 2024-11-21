@@ -94,7 +94,7 @@ const Product: React.FC<InputSearchProps> = ({route}) => {
       <ScrollView style={tw`mb-26`}>
         <View
           style={tw`flex flex-row items-center justify-center w-full px-14`}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="chevron-back" size={28} style={tw`mr-2`} />
           </TouchableOpacity>
           <View style={tw`w-full`}>

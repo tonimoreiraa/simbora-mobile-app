@@ -1,4 +1,4 @@
-import { ScrollView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text } from "react-native";
 import InputSearch from "../components/input_search";
 import tw from 'twrnc'
 import { useDebouncedState } from "../helpers/debounced-state";
@@ -31,17 +31,19 @@ export function ProductsSearch()
     }) 
 
     return (
-        <ScrollView style={tw`px-4 pt-4 bg-white`}>
-            <InputSearch
-                onChangeText={(value) => setInputValue(value)}
-                value={inputValue}
-                autoFocus
-            />
-            <View style={tw`flex-wrap flex-row gap-4 justify-between`}>
-                {data?.data.map((product: any) => (
-                    <ProductCard {...product} />
-                ))}
-            </View>
-        </ScrollView>
+        <SafeAreaView style={tw`bg-white flex-1`}>
+            <ScrollView style={tw`px-4 pt-4 bg-white`}>
+                <InputSearch
+                    onChangeText={(value) => setInputValue(value)}
+                    value={inputValue}
+                    autoFocus
+                />
+                <View style={tw`flex-wrap flex-row gap-4 justify-between`}>
+                    {data?.data.map((product: any) => (
+                        <ProductCard {...product} />
+                    ))}
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }

@@ -187,7 +187,7 @@ export default function Routes() {
       />
       <Stack.Screen
         name="ProductsSearch"
-        options={{ title: 'Pesquisa', headerShown: false }}
+        options={{ title: '', headerShown: true, headerStyle: tw`bg-white` }}
         component={ProductsSearch}
       />
       <Stack.Screen
@@ -212,7 +212,7 @@ export default function Routes() {
       />
       <Stack.Screen 
         name='ResumeOrder'
-        options={{title: 'Resumo do pedido'}}
+        options={{title: 'Resumo do pedido', headerTitleStyle: tw`text-xl font-bold`, headerStyle: tw`bg-white`}}
         component={OrderResume}
       />
       <Stack.Screen 
