@@ -27,7 +27,7 @@ function MyAccount() {
             <Text style={tw`text-2xl font-bold text-center`}>Minha conta</Text>
           </View>
           <View
-            style={tw`flex flex-row items-center justify-between bg-stone-100 w-full p-2 mt-4`}>
+            style={tw`flex flex-row items-center justify-between bg-stone-100 w-full p-2 mt-4 rounded-xl`}>
             <View style={tw`flex flex-row items-center justify-center`}>
               <View style={tw`w-14 h-14 bg-stone-200 rounded-lg`}></View>
               <View style={tw`ml-4`}>
