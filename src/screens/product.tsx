@@ -112,7 +112,7 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         >
-          <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row mr-2`}>
+          <View style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row mr-2`}>
             <LightbulbFilament
               weight="fill"
               color='black'
@@ -122,7 +122,7 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
               {data.category.name}
             </Text>
           </View>
-          <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row`}>
+          <View style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row`}>
             <FireSimple color="black" size={18} weight='fill'/>
             <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
           </View>
@@ -145,7 +145,7 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
           <Text style={tw`font-bold text-base text-stone-600 mt-2`}>
             Descrição
           </Text>
-          <Text style={tw`text-stone-500`}>
+          <Text style={tw`text-stone-500 text-base`}>
             {data.description}
           </Text>
         </View>
