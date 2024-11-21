@@ -79,7 +79,6 @@ function SignUp() {
             label="Sua senha"
             autoComplete="password"
             placeholder="••••••••••••"
-            secureTextEntry
             isPassword
           />
           <View style={tw`w-full`}>
