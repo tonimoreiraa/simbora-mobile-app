@@ -203,6 +203,11 @@ export default function Routes() {
         options={{ title: 'Carrinho', headerShown: false, }}
         component={Cart}
       />
+      <Stack.Screen
+        name="Checkout"
+        options={{ title: 'Checkout' }}
+        component={Cart}
+      />
     </Stack.Navigator>
   );
 }
