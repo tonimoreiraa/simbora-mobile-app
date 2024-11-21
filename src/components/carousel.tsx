@@ -20,10 +20,10 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
         showPagination
         data={items}
         renderItem={({ item }) => (
-          <View style={[tw`h-96`, { width }]}>
+          <View style={[tw`h-96 w-full`,  { width }]}>
             <Image
               source={{ uri: item }}
-              style={[tw`h-96`, { width }]}
+              style={[tw`h-96 w-full`, { width }]}
               resizeMode="cover"
             />
           </View>

@@ -5,74 +5,72 @@ import {
   Text,
   ScrollView,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
 import ColorSelect from '../components/color_select';
-import { ShoppingBagOpen } from 'phosphor-react-native';
-import { FireSimple } from 'phosphor-react-native';
-import { LightbulbFilament } from 'phosphor-react-native';
-import { StaticScreenProps, useNavigation } from '@react-navigation/native';
-import { useQuery } from 'react-query';
-import { api } from '../services/api';
-import { useCart } from '../contexts/cart_provider';
+import {ShoppingBagOpen} from 'phosphor-react-native';
+import {FireSimple} from 'phosphor-react-native';
+import {LightbulbFilament} from 'phosphor-react-native';
+import {StaticScreenProps, useNavigation} from '@react-navigation/native';
+import {useQuery} from 'react-query';
+import {api} from '../services/api';
+import {useCart} from '../contexts/cart_provider';
 import Toast from 'react-native-toast-message';
-import { ForYouProducts } from '../components/for_you_products';
+import {ForYouProducts} from '../components/for_you_products';
 
 interface Product {
   category: {
-    id: number
-    name: string
-  }
-  categoryId: number
-  createdAt: string
-  description: string
-  id: number
+    id: number;
+    name: string;
+  };
+  categoryId: number;
+  createdAt: string;
+  description: string;
+  id: number;
   images: Array<{
-    id: number
-    path: string
-    productId: number
-  }>
-  name: string
-  price: string
-  stock: number
+    id: number;
+    path: string;
+    productId: number;
+  }>;
+  name: string;
+  price: string;
+  stock: number;
   supplier: {
-    id: number
-    name: string
-  }
-  supplierId: number
-  tags: Array<string>
-  updatedAt: string
-  variants: Array<any>
+    id: number;
+    name: string;
+  };
+  supplierId: number;
+  tags: Array<string>;
+  updatedAt: string;
+  variants: Array<any>;
 }
-
 
 const fetchProduct = async (productId: number) => {
-  const { data } = await api.get<Product>('/products/' + productId)
+  const {data} = await api.get<Product>('/products/' + productId);
   return data;
-}
+};
 
 type InputSearchProps = StaticScreenProps<{id: number}>;
 
-const Product: React.FC<InputSearchProps> = ({ route }) => {
-  const productId = route.params.id
+const Product: React.FC<InputSearchProps> = ({route}) => {
+  const productId = route.params.id;
 
-  const {
-    data,
-    isLoading,
-  } = useQuery(['@product', productId], () => fetchProduct(productId))
+  const {data, isLoading} = useQuery(['@product', productId], () =>
+    fetchProduct(productId),
+  );
 
-  const cart = useCart()
-  const navigation = useNavigation()
+  const cart = useCart();
+  const navigation = useNavigation();
 
   if (isLoading || !data) {
     return (
       <SafeAreaView style={tw`items-center justify-center flex-1`}>
         <ActivityIndicator />
       </SafeAreaView>
-    )
+    );
   }
 
   const handleAddCart = () => {
@@ -81,21 +79,21 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
       name: data.name,
       price: Number(data.price),
       quantity: 1,
-      image: data.images[0].path
-    })
+      image: data.images[0].path,
+    });
     Toast.show({
       type: 'success',
       text1: `${data.name} foi adicionado ao carrinho`,
       text2: 'Toque para ver seu carrinho.',
-      onPress: () => navigation.navigate('Cart')
+      onPress: () => navigation.navigate('Cart'),
     });
-  }
+  };
 
   return (
     <SafeAreaView style={tw`py-4 bg-white`}>
-      <ScrollView style={tw`px-4 mb-32`}>
+      <ScrollView style={tw`mb-26`}>
         <View
-          style={tw`flex flex-row items-center justify-center w-full px-12`}>
+          style={tw`flex flex-row items-center justify-center w-full px-14`}>
           <TouchableOpacity>
             <Icon name="chevron-back" size={28} style={tw`mr-2`} />
           </TouchableOpacity>
@@ -110,10 +108,10 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
               />
               <View style={tw`flex-row gap-4`}>
                 <TouchableOpacity>
-                  <Icon name="mic" size={20} color="white"/>
+                  <Icon name="mic" size={20} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                  <Icon name="scan" size={20} color="white"/>
+                  <Icon name="scan" size={20} color="white" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -125,31 +123,26 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
         <View style={tw`mt-4`}>
           <Carousel items={data.images.map(image => image.path)} />
         </View>
-        <View style={tw`py-4`}>
-          <Text style={tw`text-xl font-bold`}>
-            {data.name}
-          </Text>
+        <View style={tw`p-4`}>
+          <Text style={tw`text-xl font-bold`}>{data.name}</Text>
         </View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          <View style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row mr-2`}>
-            <LightbulbFilament
-              weight="fill"
-              color='black'
-              size={18}
-            />
-            <Text style={tw`text-lg text-stone-600`}>
-              {data.category.name}
-            </Text>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={tw`px-4`}>
+            <View
+              style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row mr-2`}>
+              <LightbulbFilament weight="fill" color="black" size={18} />
+              <Text style={tw`text-lg text-stone-600`}>
+                {data.category.name}
+              </Text>
+            </View>
           </View>
-          <View style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row`}>
-            <FireSimple color="black" size={18} weight='fill'/>
+          <View
+            style={tw`px-5 py-1 border-[0.5px] border-[#696969] rounded-full items-center gap-1 flex-row`}>
+            <FireSimple color="black" size={18} weight="fill" />
             <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
           </View>
         </ScrollView>
-        <View>
+        <View style={tw`px-4`}>
           <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
             Selecione a cor
           </Text>
@@ -163,15 +156,13 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
             <ColorSelect />
           </ScrollView>
         </View>
-        <View>
+        <View style={tw`px-4`}>
           <Text style={tw`font-bold text-base text-stone-600 mt-2`}>
             Descrição
           </Text>
-          <Text style={tw`text-stone-500 text-base`}>
-            {data.description}
-          </Text>
+          <Text style={tw`text-stone-500 text-base`}>{data.description}</Text>
         </View>
-        <View>
+        <View style={tw`px-4`}>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
           <ForYouProducts />
         </View>
@@ -181,17 +172,17 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
         <View style={tw`w-1/3`}>
           <View style={tw`flex flex-row items-center`}>
             <Text style={tw`text-lg font-semibold`}>
-              {Number(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'})}
+              {Number(data.price).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
             </Text>
           </View>
-          <Text style={tw`font-semibold text-stone-300 mt-1`}>
-            Em até 12x
-          </Text>
+          <Text style={tw`font-semibold text-stone-300 mt-1`}>Em até 12x</Text>
         </View>
         <TouchableOpacity
           style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl w-2/3`}
-          onPress={handleAddCart}
-        >
+          onPress={handleAddCart}>
           <Text style={tw`font-bold text-lg text-white`}>
             Adicionar a sacola
           </Text>
