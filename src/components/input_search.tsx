@@ -10,7 +10,7 @@ interface InputSearchProps extends ComponentProps<typeof TextInput> {
 
 function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearchProps) {
   return (
-    <View style={tw`flex-row items-center justify-center bg-stone-200 rounded-lg px-4 h-12`}>
+    <View style={tw`flex-row items-center justify-center bg-stone-100 rounded-lg px-4 h-12`}>
       <Icon name="search-outline" size={16} color="#696969" />
       <TextInput
         style={tw`flex-1 ml-2 text-base text-stone-900`}

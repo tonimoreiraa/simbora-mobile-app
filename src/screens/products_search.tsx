@@ -31,7 +31,7 @@ export function ProductsSearch()
     }) 
 
     return (
-        <ScrollView style={tw`px-4`}>
+        <ScrollView style={tw`px-4 pt-4 bg-white`}>
             <InputSearch
                 onChangeText={(value) => setInputValue(value)}
                 value={inputValue}

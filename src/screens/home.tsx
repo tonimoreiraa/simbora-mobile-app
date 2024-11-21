@@ -50,7 +50,7 @@ function Home() {
   const navigation = useNavigation();
   
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tw`bg-white`}>
       <ScrollView style={tw`mb-20`}>
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
@@ -95,7 +95,7 @@ function Home() {
                 <Icon name="heart" color="#FFFF" size={18} />
                 <Text style={tw`text-white text-lg`}>Para você</Text>
               </View>
-              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-200 flex-row ml-2`}>
+              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-100 flex-row ml-2`}>
                 <SealPercent
                   weight="fill"
                   color='#3C6EEF'

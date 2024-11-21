@@ -44,7 +44,7 @@ const ProductCard = ({
 
     return (
         <TouchableOpacity onPress={handlePressProduct} style={tw`py-4 w-44`}>
-            <View style={tw`rounded-lg p-4 h-40 bg-stone-200 items-center justify-center`}>
+            <View style={tw`rounded-lg p-4 h-40 bg-stone-100 items-center justify-center`}>
                 <Image
                     source={{uri: images[0]?.path}}
                     width={140}

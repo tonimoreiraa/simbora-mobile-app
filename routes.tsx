@@ -186,7 +186,7 @@ export default function Routes() {
       />
       <Stack.Screen
         name="ProductsSearch"
-        options={{ title: 'Pesquisa' }}
+        options={{ title: 'Pesquisa', headerShown: false }}
         component={ProductsSearch}
       />
       <Stack.Screen
