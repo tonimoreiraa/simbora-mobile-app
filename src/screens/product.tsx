@@ -19,6 +19,7 @@ import { useQuery } from 'react-query';
 import { api } from '../services/api';
 import { useCart } from '../contexts/cart_provider';
 import Toast from 'react-native-toast-message';
+import { ForYouProducts } from '../components/for_you_products';
 
 interface Product {
   category: {
@@ -92,7 +93,7 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
 
   return (
     <SafeAreaView style={tw`py-4 bg-white`}>
-      <ScrollView style={tw`px-4`}>
+      <ScrollView style={tw`px-4 mb-32`}>
         <View
           style={tw`flex flex-row items-center justify-center w-full px-12`}>
           <TouchableOpacity>
@@ -172,13 +173,7 @@ const Product: React.FC<InputSearchProps> = ({ route }) => {
         </View>
         <View>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
-          <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-2 mb-24`}>
-            {/* <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard /> */}
-          </View>
+          <ForYouProducts />
         </View>
       </ScrollView>
       <View

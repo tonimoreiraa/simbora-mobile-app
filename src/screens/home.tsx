@@ -16,6 +16,7 @@ import { api } from '../services/api';
 import { useQuery } from 'react-query';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
+import { ForYouProducts } from '../components/for_you_products';
 
 const getCategories = async () => {
   const { data } = await api.get('/categories')
@@ -103,17 +104,7 @@ function Home() {
                 <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
               </View>
           </ScrollView>
-          <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-2`}>
-            {/* <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard /> */}
-          </View>
+          <ForYouProducts />
         </View>
       </ScrollView>
     </SafeAreaView>

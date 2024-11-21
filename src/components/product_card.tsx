@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import { SealCheck } from 'phosphor-react-native';
 import { useNavigation } from '@react-navigation/native';
 
-interface Product {
+export interface Product {
     categoryId: number
     createdAt: string
     description: string
