@@ -52,13 +52,14 @@ function Home() {
   
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={tw`mb-20`}>
         <View style={tw`px-4`}>
           <View style={tw`flex flex-row items-center justify-between`}>
             <Location />
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
+            {/* @ts-ignore */}
             <InputSearch onPress={() => navigation.navigate('ProductsSearch')} />
           </View>
           <ScrollView

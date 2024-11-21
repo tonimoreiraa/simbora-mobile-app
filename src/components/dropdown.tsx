@@ -21,7 +21,7 @@ const DropDown = () => {
       setValue={setValue}
       setItems={setItems}
       placeholder="Cartão de crédito"
-      style={tw`order-stone-300 rounded-lg border border-transparent bg-stone-100 mt-4`}
+      style={tw`border-stone-300 rounded-lg border border-transparent bg-stone-100 mt-4`}
       dropDownContainerStyle={tw`border-transparent bg-stone-100 rounded-lg`}
       placeholderStyle={tw`text-gray-400`}
       selectedItemContainerStyle={tw`bg-blue-50`}

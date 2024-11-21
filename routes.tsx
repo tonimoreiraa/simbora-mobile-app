@@ -110,8 +110,7 @@ function BottomTab() {
                 size={24}
               />
             </View>
-          ),
-          tabBarStyle: {display: 'none'},
+          )
         }}
       />
       <Tab.Screen

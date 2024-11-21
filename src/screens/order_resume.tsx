@@ -13,7 +13,7 @@ import DropDown from '../components/dropdown';
 
 function OrderResume() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tw`bg-white`}>
       <ScrollView>
         <View
           style={tw`flex flex-col items-center justify-center px-4 mt-06 h-full w-full`}>
@@ -34,7 +34,7 @@ function OrderResume() {
               style={tw`bg-stone-100 rounded p-4 mt-4`}
               placeholder="Digite o ID do profissional"></TextInput>
           </View>
-          <View style={tw` mt-6 w-full mb-36`}>
+          <View style={tw` mt-6 w-full`}>
             <Text style={tw`text-xl font-bold`}>Pagamento</Text>
             <DropDown />
             <TextInput
@@ -53,15 +53,16 @@ function OrderResume() {
             </View>
             <DropDown />
           </View>
+          <View style={tw`mb-26 w-full mt-4`}>
+            <TouchableOpacity
+              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl`}>
+              <Text style={tw`font-bold text-lg text-white`}>
+                Finalizar pedido
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
-      <View
-        style={tw`absolute bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
-        <TouchableOpacity
-          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl`}>
-          <Text style={tw`font-bold text-lg text-white`}>Finalizar pedido</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }

@@ -21,7 +21,7 @@ function AccountInput<TFieldValues extends FieldValues>({
   const [hiddenPassword, setHiddenPassword] = useState(true);
   
   return (
-    <View style={tw`w-full mt-2`}>
+    <View style={tw`w-full`}>
       <Text style={tw`text-xs mb-1`}>
         {label}
       </Text>
