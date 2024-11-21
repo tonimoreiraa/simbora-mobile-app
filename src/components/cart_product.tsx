@@ -51,7 +51,7 @@ function CartProduct({ quantity, name, image, price, id }: CartItem) {
                         </TouchableOpacity>
                     </View>
                     <Text style={tw`text-lg text-stone-900 font-medium`}>
-                        {price.toLocaleString('pt-BR', {
+                        {(price*quantity).toLocaleString('pt-BR', {
                             style: 'currency', currency: 'BRL'
                         })}
                     </Text>

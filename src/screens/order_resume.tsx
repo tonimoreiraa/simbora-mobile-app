@@ -23,7 +23,7 @@ function OrderResume() {
             </Text>
           </View>
           <View style={tw`w-full mt-2`}>
-            <Price />
+            {/* <Price /> */}
           </View>
           <View style={tw`mt-4`}>
             <ShippingMethod />
