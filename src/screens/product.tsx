@@ -4,32 +4,73 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput
+  TextInput,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
 import ColorSelect from '../components/color_select';
-import ProductCard from '../components/product_card';
-import {ShoppingBagOpen} from 'phosphor-react-native';
-import { SealPercent } from 'phosphor-react-native';
+import { ShoppingBagOpen } from 'phosphor-react-native';
 import { FireSimple } from 'phosphor-react-native';
 import { LightbulbFilament } from 'phosphor-react-native';
-interface InputSearchProps {
-  hideMicrophone?: boolean
-  hideImageScanner?: boolean
+import { StaticScreenProps } from '@react-navigation/native';
+import { useQuery } from 'react-query';
+import { api } from '../services/api';
+
+interface Product {
+  category: {
+    id: number
+    name: string
+  }
+  categoryId: number
+  createdAt: string
+  description: string
+  id: number
+  images: Array<{
+    id: number
+    path: string
+    productId: number
+  }>
+  name: string
+  price: string
+  stock: number
+  supplier: {
+    id: number
+    name: string
+  }
+  supplierId: number
+  tags: Array<string>
+  updatedAt: string
+  variants: Array<any>
 }
 
 
-const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone }) => {
-  const items = [
-    'https://avatars.githubusercontent.com/u/59844592?v=4',
-    'https://avatars.githubusercontent.com/u/59844592?v=4',
-    'https://avatars.githubusercontent.com/u/59844592?v=4',
-  ];
+const fetchProduct = async (productId: number) => {
+  const { data } = await api.get<Product>('/products/' + productId)
+  return data;
+}
+
+type InputSearchProps = StaticScreenProps<{id: number}>;
+
+const Product: React.FC<InputSearchProps> = ({ route }) => {
+  const productId = route.params.id
+
+  const {
+    data,
+    isLoading,
+  } = useQuery(['@product', productId], () => fetchProduct(productId))
+
+  if (isLoading || !data) {
+    return (
+      <SafeAreaView style={tw`items-center justify-center flex-1`}>
+        <ActivityIndicator />
+      </SafeAreaView>
+    )
+  }
 
   return (
-    <SafeAreaView style={tw`py-4`}>
+    <SafeAreaView style={tw`py-4 bg-white`}>
       <ScrollView style={tw`px-4`}>
         <View
           style={tw`flex flex-row items-center justify-center w-full px-12`}>
@@ -46,16 +87,12 @@ const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone 
                 placeholderTextColor="white"
               />
               <View style={tw`flex-row gap-4`}>
-                {!hideMicrophone && (
-                  <TouchableOpacity>
-                    <Icon name="mic" size={20} color="white"/>
-                  </TouchableOpacity>
-                )}
-                {!hideImageScanner && (
-                  <TouchableOpacity>
-                    <Icon name="scan" size={20} color="white"/>
-                  </TouchableOpacity>
-                )}
+                <TouchableOpacity>
+                  <Icon name="mic" size={20} color="white"/>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Icon name="scan" size={20} color="white"/>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -64,30 +101,32 @@ const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone 
           </View>
         </View>
         <View style={tw`mt-4`}>
-          <Carousel items={items} />
+          <Carousel items={data.images.map(image => image.path)} />
         </View>
         <View style={tw`py-4`}>
           <Text style={tw`text-xl font-bold`}>
-            Fio Cabo Flexível 2.5mm SIL | 100M
+            {data.name}
           </Text>
         </View>
         <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            >
-              <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row`}>
-                <FireSimple color="black" size={18} weight='fill'/>
-                <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
-              </View>
-              <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row ml-2`}>
-                <LightbulbFilament
-                  weight="fill"
-                  color='black'
-                  size={18}
-                />
-                <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
-              </View>
-          </ScrollView>
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row mr-2`}>
+            <LightbulbFilament
+              weight="fill"
+              color='black'
+              size={18}
+            />
+            <Text style={tw`text-lg text-stone-600`}>
+              {data.category.name}
+            </Text>
+          </View>
+          <View style={tw`px-6 py-2 border border-black rounded-full items-center gap-1 flex-row`}>
+            <FireSimple color="black" size={18} weight='fill'/>
+            <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
+          </View>
+        </ScrollView>
         <View>
           <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
             Selecione a cor
@@ -107,19 +146,17 @@ const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone 
             Descrição
           </Text>
           <Text style={tw`text-stone-500`}>
-            Usando o material e o tipo de cabo certos, é possível transportar
-            energia de um ponto para outro sem dificuldade, de forma segura,
-            confiável e sem complicações.
+            {data.description}
           </Text>
         </View>
         <View>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
           <View
             style={tw`flex flex-row flex-wrap items-center justify-between mt-2 mb-24`}>
+            {/* <ProductCard />
             <ProductCard />
             <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            <ProductCard /> */}
           </View>
         </View>
       </ScrollView>
@@ -127,11 +164,12 @@ const Product: React.FC<InputSearchProps> = ({ hideImageScanner, hideMicrophone 
         style={tw`absolute flex-row items-center bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
         <View style={tw`w-1/3`}>
           <View style={tw`flex flex-row items-center`}>
-            <Text style={tw`text-lg font-semibold`}>R$</Text>
-            <Text style={tw`text-lg font-semibold`}>214,99</Text>
+            <Text style={tw`text-lg font-semibold`}>
+              {Number(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'})}
+            </Text>
           </View>
-          <Text style={tw`font-semibold text-stone-200 mt-1`}>
-            12 x de R$20,80
+          <Text style={tw`font-semibold text-stone-300 mt-1`}>
+            Em até 12x
           </Text>
         </View>
         <TouchableOpacity

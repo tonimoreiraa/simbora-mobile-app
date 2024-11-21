@@ -47,8 +47,8 @@ function Cart() {
           </View>
           <View
             style={tw`flex flex-row flex-wrap items-center justify-between w-full px-4 mb-4`}>
-            <ProductCard />
-            <ProductCard />
+            {/* <ProductCard />
+            <ProductCard /> */}
           </View>
           <View style={tw`flex w-full mb-4 px-4`}>
             <Discount />

@@ -107,14 +107,14 @@ function Home() {
           </ScrollView>
           <View
             style={tw`flex flex-row flex-wrap items-center justify-between mt-2`}>
+            {/* <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            <ProductCard /> */}
           </View>
         </View>
       </ScrollView>

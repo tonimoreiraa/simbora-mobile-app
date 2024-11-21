@@ -186,7 +186,7 @@ export default function Routes() {
       />
       <Stack.Screen
         name="Product"
-        options={{ title: 'Produto' }}
+        options={{ title: 'Produto', headerShown: false, }}
         component={Product}
       />
     </Stack.Navigator>
