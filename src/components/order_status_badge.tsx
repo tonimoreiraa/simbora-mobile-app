@@ -5,9 +5,11 @@ import tw from "twrnc";
 export function OrderStatusBadge() {
   return (
     <View
-      style={tw`flex flex-row items-center justify-center rounded-3xl border border-orange-300 mt-2 py-1 w-36`}>
-      <Icon name="cube" size={14} color="#ffa500"/>
-      <Text style={tw`ml-1 text-orange-300 text-lg`}>Retirada</Text>
+      style={tw`flex flex-row items-center justify-center rounded-3xl border-[0.5px] border-orange-300 mt-2 py-1 w-36`}>
+      <Icon name="cube" size={18} color="#ffa500"/>
+      <Text style={tw`ml-1 text-orange-300 font-semibold text-lg`}>
+        Retirada
+      </Text>
     </View>
   );
 }
