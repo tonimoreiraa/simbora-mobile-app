@@ -70,7 +70,9 @@ function Cart() {
               <Text style={tw`text-xs text-stone-500`}>Relacionados</Text>
             </View>
           </View>
-          <ForYouProducts />
+          <View style={tw`px-4`}>
+            <ForYouProducts />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -117,7 +117,7 @@ function OrderResume() {
             animatedStyle,
           ]}
         >
-          <View style={tw`p-4`}>
+          <View style={tw``}>
             <SendRequest />
           </View>
         </Animated.View>

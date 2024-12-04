@@ -30,7 +30,7 @@ export interface AuthResponse {
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User|null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -69,8 +69,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function signInWithToken(token: string, userData: User)
-  {
+  async function signInWithToken(token: string, userData: User) {
     await AsyncStorage.setItem('@simbora-user', JSON.stringify(userData));
     await AsyncStorage.setItem('@simbora-token', token);
     api.defaults.headers.Authorization = `Bearer ${token}`;

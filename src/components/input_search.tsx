@@ -20,10 +20,10 @@ function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearch
       />
       <View style={tw`flex-row gap-4`}>
         {!hideMicrophone && <TouchableOpacity>
-          <Icon name="mic" size={20}/>
+          <Icon name="mic" size={20} />
         </TouchableOpacity>}
         {!hideImageScanner && <TouchableOpacity>
-          <Icon name="scan" size={20}/>
+          <Icon name="scan" size={20} />
         </TouchableOpacity>}
       </View>
     </View>

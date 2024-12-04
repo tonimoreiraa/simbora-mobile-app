@@ -21,7 +21,7 @@ export function ForYouProducts()
 
     return (
         <View
-            style={tw`flex flex-row flex-wrap items-center justify-between mt-2`}>
+            style={tw`flex flex-row flex-wrap items-center justify-between mt-2 gap-2`}>
             {data && data.data.map(product => (
                 <ProductCard
                     {...product}

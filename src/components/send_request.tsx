@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const SendRequest = () => {
   return (
-    <View style={tw`rounded-t-3xl bg-[#1E1E1E] p-4`}>
+    <View style={tw`rounded-t-3xl bg-[#1E1E1E] px-4 py-8`}>
       <View
         style={tw`flex flex-row items-center bg-black text-white rounded-lg mb-4 w-full`}>
         <Icon name="search" color="white" size={14} style={tw`pl-2`} />
@@ -23,7 +23,9 @@ const SendRequest = () => {
           style={tw`flex-1 text-white pl-2 h-12`}
         />
       </View>
-      <Text style={tw`text-stone-400 mb-2`}>Cliente recentes</Text>
+      <Text style={tw`text-stone-400 mb-2`}>
+        Cliente recentes
+      </Text>
       <View style={tw`mb-4 border-b border-b-stone-400 w-full`}>
         <ScrollView
           horizontal

@@ -11,15 +11,15 @@ interface InputProps<TFieldValues extends FieldValues> extends ComponentProps<ty
   isPassword?: boolean;
 }
 
-function AccountInput<TFieldValues extends FieldValues>({ 
-  label, 
-  name, 
-  control, 
+function AccountInput<TFieldValues extends FieldValues>({
+  label,
+  name,
+  control,
   isPassword = false,
-  ...props 
+  ...props
 }: InputProps<TFieldValues>) {
   const [hiddenPassword, setHiddenPassword] = useState(true);
-  
+
   return (
     <View style={tw`w-full`}>
       <Text style={tw`text-xs mb-1`}>
@@ -40,14 +40,14 @@ function AccountInput<TFieldValues extends FieldValues>({
                   value={field.value}
                 />
                 {isPassword && (
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => setHiddenPassword(!hiddenPassword)}
                     style={tw`absolute right-3`}
                   >
                     {hiddenPassword ? (
                       <Icon name='eye-off' size={24} />
                     ) : (
-                     <Icon name='eye' size={24}/>
+                      <Icon name='eye' size={24} />
                     )}
                   </TouchableOpacity>
                 )}
