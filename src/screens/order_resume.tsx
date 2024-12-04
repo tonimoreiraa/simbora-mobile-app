@@ -7,6 +7,7 @@ import DropDown from '../components/dropdown';
 import SendRequest from '../components/send_request';
 import Animated, { withSpring, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function OrderResume() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -78,23 +79,39 @@ function OrderResume() {
             <View style={tw` mt-6 w-full`}>
               <Text style={tw`text-xl font-bold`}>Pagamento</Text>
               <DropDown />
-              <TextInput
-                style={tw`bg-stone-100 rounded p-4 mt-4`}
-                placeholder="Número do cartão"
-              />
-              <TextInput
-                style={tw`bg-stone-100 rounded p-4 mt-4`}
-                placeholder="Nome do titular"
-              />
-              <View style={tw`flex flex-row items-center justify-between w-full`}>
-                <TextInput
-                  style={tw`bg-stone-100 rounded p-4 mt-4 w-46`}
-                  placeholder="Vencimento"
-                />
-                <TextInput
-                  style={tw`bg-stone-100 rounded p-4 mt-4 w-46`}
-                  placeholder="CVV"
-                />
+              <View>
+                <Text style={tw`text-xs mt-2`}>Número do cartão</Text>
+                <View
+                  style={tw`flex flex-row items-center justify-between bg-gray-100 rounded p-2 mt-0.5`}>
+                  <Icon name="card" size={16} style={tw`mr-2`} />
+                  <TextInput
+                    placeholder="Número do cartão"
+                    style={tw`flex-1`}
+                  />
+                </View>
+              </View>
+              <View>
+                <Text style={tw`text-xs mt-2`}>Nome do titular</Text>
+                <View
+                  style={tw`flex flex-row items-center justify-between bg-gray-100 rounded p-2 mt-0.5`}>
+                  <TextInput placeholder="Nome do titular" style={tw`flex-1`} />
+                </View>
+              </View>
+              <View
+                style={tw`flex flex-row items-center justify-between w-full`}>
+                <View style={tw`mt-2`}>
+                  <Text style={tw`text-xs`}>Vencimento</Text>
+                  <View style={tw`flex flex-row items-center justify-between bg-stone-100 p-2 rounded mt-0.5 w-46`}>
+                    <Icon name="calendar-clear" size={16}/>
+                    <TextInput placeholder="Vencimento" style={tw`flex-1`}/>
+                  </View>
+                </View>
+                <View style={tw`mt-2`}>
+                  <Text style={tw`text-xs`}>CVV</Text>
+                  <View style={tw`flex flex-row items-center justify-between bg-stone-100 p-2 rounded mt-0.5 w-46`}>
+                    <TextInput placeholder="CVV" style={tw`flex-1`}/>
+                  </View>
+                </View>
               </View>
               <DropDown />
             </View>
