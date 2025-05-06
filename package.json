@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "commit": "git cz"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -23,12 +24,16 @@
     "@react-navigation/stack": "^7.0.0",
     "@types/react-native-snap-carousel": "^3.8.11",
     "axios": "^1.7.7",
+    "expo-haptics": "^14.1.4",
+    "expo-linear-gradient": "^14.1.4",
+    "lottie-react-native": "^7.2.2",
     "nativewind": "^4.1.21",
     "phosphor-react-native": "^2.2.1",
     "react": "18.3.1",
     "react-hook-form": "^7.53.2",
     "react-native": "0.76.1",
     "react-native-bouncy-checkbox": "^4.1.2",
+    "react-native-css-interop": "^0.1.22",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-gesture-handler": "^2.20.2",
     "react-native-reanimated": "^3.16.1",
@@ -55,6 +60,8 @@
     "@react-native-community/cli-platform-ios": "15.0.0",
     "@react-native/babel-preset": "0.76.1",
     "@react-native/eslint-config": "0.76.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "commitizen": "^4.3.1",
     "@react-native/metro-config": "0.76.1",
     "@react-native/typescript-config": "0.76.1",
     "@types/node": "^22.8.7",
@@ -69,6 +76,11 @@
     "react-test-renderer": "18.3.1",
     "typescript": "5.0.4"
   },
+  "config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
   "engines": {
     "node": ">=18"
   }
