@@ -12,42 +12,69 @@ import Logo from '../assets/LOGO.svg';
 import Banner from '../components/banner';
 import Location from '../components/location';
 import { SealPercent } from 'phosphor-react-native';
-import { api } from '../services/api';
-import { useQuery } from 'react-query';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
 import { ForYouProducts } from '../components/for_you_products';
+import { useGetAllCategories } from '../services/category/useCategories';
 
-const getCategories = async () => {
-  const { data } = await api.get('/categories')
-  return data
+function useAppNavigation() {
+  return useNavigation<any>();
 }
 
-function Categories()
-{
+function Categories() {
   const {
-    data,
+    data: categories = [],
     isLoading,
-    isSuccess
-  } = useQuery('@categories', getCategories)
-
-  return <ScrollView
-    horizontal={true}
-    style={tw`py-4`}
-    showsHorizontalScrollIndicator={false}>
-    {isLoading && <>
-      {[...Array(4).keys()].map(c => (
-        <View style={tw`w-[106px] h-[106px] items-center justify-center rounded-2xl mr-2 bg-stone-200 mt-2 gap-2`} />
+    isError,
+    refetch
+  } = useGetAllCategories();
+  
+  const navigation = useAppNavigation();
+  
+  if (isError) {
+    return (
+      <View style={tw`py-3 flex-row items-center`}>
+        <Text style={tw`text-red-500 text-xs mr-2`}>Falha ao carregar categorias</Text>
+        <TouchableOpacity 
+          style={tw`bg-neutral-200 py-1 px-2 rounded-full`} 
+          onPress={() => refetch()}
+        >
+          <Text style={tw`text-xs`}>Recarregar</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  
+  return (
+    <ScrollView
+      horizontal={true}
+      style={tw`py-4`}
+      showsHorizontalScrollIndicator={false}
+    >
+      {isLoading && (
+        <>
+          {[...Array(4).keys()].map(c => (
+            <View 
+              key={`skeleton-${c}`}
+              style={tw`w-[106px] h-[106px] items-center justify-center rounded-2xl mr-2 bg-stone-200 mt-2 gap-2`} 
+            />
+          ))}
+        </>
+      )}
+      
+      {!isLoading && categories.map((category) => (
+        <Category 
+          {...category} 
+          key={`category-${category.id}`}
+          onPress={() => navigation.navigate('CategoryProducts', { categoryId: category.id })}
+        />
       ))}
-    </>}
-    {isSuccess && data.map((category: any) => (
-      <Category {...category} key={category.id} />
-    ))}
-  </ScrollView>
+    </ScrollView>
+  );
 }
 
 function Home() {
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   
   return (
     <SafeAreaView style={tw`bg-white`}>
@@ -58,7 +85,7 @@ function Home() {
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
-            {/* @ts-ignore */}
+
             <InputSearch onPress={() => navigation.navigate('ProductsSearch')} />
           </View>
           <ScrollView
@@ -74,8 +101,11 @@ function Home() {
             <View style={tw`flex flex-row items-center justify-between mt-5`}>
               <Text style={tw`font-bold text-xl`}>Categorias</Text>
               <View style={tw`flex flex-row items-center`}>
-                {/* @ts-ignore */}
-                <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.navigate("Categories")}>
+    
+                <TouchableOpacity 
+                  style={tw`flex flex-row items-center`} 
+                  onPress={() => navigation.navigate('Categories')}
+                >
                   <Text style={tw`text-stone-400`}>Ver todas</Text>
                   <Icon
                     name="chevron-forward-outline"
@@ -90,19 +120,19 @@ function Home() {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            >
-              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
-                <Icon name="heart" color="#FFFF" size={18} />
-                <Text style={tw`text-white text-lg`}>Para você</Text>
-              </View>
-              <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-100 flex-row ml-2`}>
-                <SealPercent
-                  weight="fill"
-                  color='#3C6EEF'
-                  size={18}
-                />
-                <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
-              </View>
+          >
+            <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
+              <Icon name="heart" color="#FFFF" size={18} />
+              <Text style={tw`text-white text-lg`}>Para você</Text>
+            </View>
+            <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-100 flex-row ml-2`}>
+              <SealPercent
+                weight="fill"
+                color='#3C6EEF'
+                size={18}
+              />
+              <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
+            </View>
           </ScrollView>
           <ForYouProducts />
         </View>
