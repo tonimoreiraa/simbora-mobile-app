@@ -9,13 +9,14 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/LOGO.svg';
-import Banner from '../components/banner';
 import Location from '../components/location';
 import { SealPercent } from 'phosphor-react-native';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
 import { ForYouProducts } from '../components/for_you_products';
 import { useGetAllCategories } from '../services/category/useCategories';
+import Banner1 from '../assets/banner1.svg';
+import Banner2 from '../assets/banner2.svg';
 
 function useAppNavigation() {
   return useNavigation<any>();
@@ -85,23 +86,19 @@ function Home() {
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
           <View>
-
             <InputSearch onPress={() => navigation.navigate('ProductsSearch')} />
           </View>
           <ScrollView
             style={tw`mt-4`}
             horizontal={true}
             showsHorizontalScrollIndicator={false}>
-            <Banner />
-            <Banner />
-            <Banner />
-            <Banner />
+            <Banner1 style={tw`mr-2`} />
+            <Banner2 /> 
           </ScrollView>
           <View>
             <View style={tw`flex flex-row items-center justify-between mt-5`}>
               <Text style={tw`font-bold text-xl`}>Categorias</Text>
               <View style={tw`flex flex-row items-center`}>
-    
                 <TouchableOpacity 
                   style={tw`flex flex-row items-center`} 
                   onPress={() => navigation.navigate('Categories')}
@@ -117,23 +114,34 @@ function Home() {
             </View>
             <Categories />
           </View>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
-              <Icon name="heart" color="#FFFF" size={18} />
-              <Text style={tw`text-white text-lg`}>Para você</Text>
+          
+          {/* Cabeçalho da seção de Produtos */}
+          <View style={tw`flex flex-row items-center justify-between mt-5`}>
+            <Text style={tw`font-bold text-xl`}>Produtos</Text>
+          </View>
+          
+          {/* Botões de filtro e Ver tudo na mesma linha */}
+          <View style={tw`flex-row justify-between items-center mt-2`}>
+            <View style={tw`flex-row flex-1`}>
+              <TouchableOpacity style={tw`px-4 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
+                <Icon name="heart" color="#FFFF" size={16} />
+                <Text style={tw`text-white text-base`}>Para você</Text>
+              </TouchableOpacity>
             </View>
-            <View style={tw`px-6 py-2 rounded-full items-center gap-1 bg-neutral-100 flex-row ml-2`}>
-              <SealPercent
-                weight="fill"
-                color='#3C6EEF'
-                size={18}
+            
+            <TouchableOpacity 
+              style={tw`flex flex-row items-center ml-2`} 
+              onPress={() => navigation.navigate('AllProducts')}
+            >
+              <Text style={tw`text-stone-400 text-base`}>Ver tudo</Text>
+              <Icon
+                name="chevron-forward-outline"
+                size={14}
+                style={tw`text-stone-400`}
               />
-              <Text style={tw`text-lg text-stone-600`}>Em promo</Text>
-            </View>
-          </ScrollView>
+            </TouchableOpacity>
+          </View>
+          
           <ForYouProducts />
         </View>
       </ScrollView>

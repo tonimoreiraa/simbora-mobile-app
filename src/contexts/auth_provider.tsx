@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, PropsWithChildren } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../services/api';
-import { AxiosError } from 'axios';
 
 export interface User {
   id: string;

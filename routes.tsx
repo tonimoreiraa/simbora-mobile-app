@@ -17,6 +17,7 @@ import Product from './src/screens/product';
 import Logo from './src/assets/LOGO.svg'
 import Checkout from './src/screens/checkout';
 import RemoveOrder from './src/screens/remove_order';
+import AllProducts from './src/screens/all-products';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -219,6 +220,14 @@ export default function Routes() {
         name='WithdrawOrder'
         options={{title: 'Apresente o QR Code', headerTitleStyle: tw`text-xl font-bold`, headerStyle: tw`bg-white` }}
         component={RemoveOrder}
+      />
+      <Stack.Screen 
+        name="AllProducts"
+        options={{ 
+          title: 'Todos os Produtos',
+          headerShown: false,
+        }}
+        component={AllProducts}
       />
     </Stack.Navigator>
   );

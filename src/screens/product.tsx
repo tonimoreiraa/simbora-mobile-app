@@ -14,12 +14,22 @@ import ColorSelect from '../components/color_select';
 import {ShoppingBagOpen} from 'phosphor-react-native';
 import {FireSimple} from 'phosphor-react-native';
 import {LightbulbFilament} from 'phosphor-react-native';
-import {StaticScreenProps, useNavigation} from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  RouteProp,
+  NavigationProp,
+} from '@react-navigation/native';
 import {useQuery} from 'react-query';
 import {api} from '../services/api';
 import {useCart} from '../contexts/cart_provider';
 import Toast from 'react-native-toast-message';
 import {ForYouProducts} from '../components/for_you_products';
+
+type RootStackParamList = {
+  Cart: undefined;
+  Product: { id: number };
+};
 
 interface Product {
   category: {
@@ -53,17 +63,17 @@ const fetchProduct = async (productId: number) => {
   return data;
 };
 
-type InputSearchProps = StaticScreenProps<{id: number}>;
-
-const Product: React.FC<InputSearchProps> = ({route}) => {
+const Product = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'Product'>>();
   const productId = route.params.id;
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const {data, isLoading} = useQuery(['@product', productId], () =>
     fetchProduct(productId),
   );
 
   const cart = useCart();
-  const navigation = useNavigation();
 
   if (isLoading || !data) {
     return (
