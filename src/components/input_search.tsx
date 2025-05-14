@@ -1,11 +1,11 @@
-import React, { ComponentProps } from 'react'
-import { View, TextInput, TouchableOpacity } from 'react-native'
-import tw from 'twrnc'
-import Icon from 'react-native-vector-icons/Ionicons'
+import React, { ComponentProps } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
+import tw from 'twrnc';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface InputSearchProps extends ComponentProps<typeof TextInput> {
-  hideMicrophone?: boolean
-  hideImageScanner?: boolean
+  hideMicrophone?: boolean;
+  hideImageScanner?: boolean;
 }
 
 function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearchProps) {
@@ -19,15 +19,19 @@ function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearch
         {...props}
       />
       <View style={tw`flex-row gap-4`}>
-        {!hideMicrophone && <TouchableOpacity>
-          <Icon name="mic" size={20} />
-        </TouchableOpacity>}
-        {!hideImageScanner && <TouchableOpacity>
-          <Icon name="scan" size={20} />
-        </TouchableOpacity>}
+        {!hideMicrophone && (
+          <TouchableOpacity>
+            <Icon name="mic" size={20} color="#333" />
+          </TouchableOpacity>
+        )}
+        {!hideImageScanner && (
+          <TouchableOpacity>
+            <Icon name="scan" size={20} color="#333" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
-  )
+  );
 }
 
 export default InputSearch;
