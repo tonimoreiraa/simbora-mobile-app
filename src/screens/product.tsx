@@ -7,13 +7,18 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  ShoppingBagOpen,
+  FireSimple,
+  LightbulbFilament,
+  CaretLeft,
+  MagnifyingGlass,
+  Microphone,
+  QrCode
+} from 'phosphor-react-native';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
 import ColorSelect from '../components/color_select';
-import {ShoppingBagOpen} from 'phosphor-react-native';
-import {FireSimple} from 'phosphor-react-native';
-import {LightbulbFilament} from 'phosphor-react-native';
 import {
   useNavigation,
   useRoute,
@@ -105,12 +110,12 @@ const Product = () => {
         <View
           style={tw`flex flex-row items-center justify-center w-full px-14`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="chevron-back" size={28} style={tw`mr-2`} />
+            <CaretLeft size={28} color="#000000" weight="regular" style={tw`mr-2`} />
           </TouchableOpacity>
           <View style={tw`w-full`}>
             <View
               style={tw`flex-row items-center justify-center bg-black rounded-lg px-4 h-12`}>
-              <Icon name="search-outline" size={16} color="white" />
+              <MagnifyingGlass size={16} color="white" weight="regular" />
               <TextInput
                 style={tw`flex-1 ml-2 text-base text-stone-900`}
                 placeholder="Buscar"
@@ -118,16 +123,16 @@ const Product = () => {
               />
               <View style={tw`flex-row gap-4`}>
                 <TouchableOpacity>
-                  <Icon name="mic" size={20} color="white" />
+                  <Microphone size={20} color="white" weight="regular" />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                  <Icon name="scan" size={20} color="white" />
+                  <QrCode size={20} color="white" weight="regular" />
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           <View>
-            <ShoppingBagOpen size={28} style={tw`ml-2`} weight="fill" />
+            <ShoppingBagOpen size={28} style={tw`ml-2`} weight="fill" color="#000000" />
           </View>
         </View>
         <View style={tw`mt-4`}>

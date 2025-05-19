@@ -7,25 +7,24 @@ import DropDown from '../components/dropdown';
 import SendRequest from '../components/send_request';
 import Animated, { withSpring, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Ionicons';
+
+import { CreditCard, Calendar } from 'phosphor-react-native';
 
 function OrderResume() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
   const translateY = useSharedValue(400);
-
-  // Define pan gesture handler
+  
   const onGestureEvent = (event: any) => {
     translateY.value = event.translationY;
   };
-
+  
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: translateY.value }],
     };
   });
-
+  
   const toggleDrawer = () => {
     if (isEnabled) {
       translateY.value = withSpring(0, {
@@ -43,11 +42,11 @@ function OrderResume() {
       });
     }
   };
-
+  
   React.useEffect(() => {
     toggleDrawer();
   }, [isEnabled]);
-
+  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={tw`flex-1 bg-white`}>
@@ -83,7 +82,7 @@ function OrderResume() {
                 <Text style={tw`text-xs mt-2`}>Número do cartão</Text>
                 <View
                   style={tw`flex flex-row items-center justify-between bg-gray-100 rounded p-2 mt-0.5`}>
-                  <Icon name="card" size={16} style={tw`mr-2`} />
+                  <CreditCard size={16} color="#000000" weight="regular" style={tw`mr-2`} />
                   <TextInput
                     placeholder="Número do cartão"
                     style={tw`flex-1`}
@@ -102,7 +101,7 @@ function OrderResume() {
                 <View style={tw`mt-2`}>
                   <Text style={tw`text-xs`}>Vencimento</Text>
                   <View style={tw`flex flex-row items-center justify-between bg-stone-100 p-2 rounded mt-0.5 w-46`}>
-                    <Icon name="calendar-clear" size={16}/>
+                    <Calendar size={16} color="#000000" weight="regular" />
                     <TextInput placeholder="Vencimento" style={tw`flex-1`}/>
                   </View>
                 </View>
@@ -125,8 +124,7 @@ function OrderResume() {
           </View>
         </ScrollView>
       </SafeAreaView>
-
-      {/* Bottom Drawer */}
+      {/** Bottom Drawer **/}
       <PanGestureHandler onGestureEvent={onGestureEvent}>
         <Animated.View
           style={[

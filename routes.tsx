@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {ActivityIndicator, SafeAreaView, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView, View} from 'react-native';
+import { House, ShoppingBag, DownloadSimple, User } from 'phosphor-react-native';
 import tw from 'twrnc'
 import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
@@ -66,10 +66,10 @@ function BottomTab() {
                 marginTop: 26,
                 height: '100%',
               }}>
-              <Icon
-                name="home-outline"
+              <House
                 color={focused ? 'white' : 'gray'}
                 size={24}
+                weight="thin"
               />
             </View>
           ),
@@ -87,10 +87,10 @@ function BottomTab() {
                 marginTop: 26,
                 height: '100%',
               }}>
-              <Icon
-                name="bag-outline"
+              <ShoppingBag
                 color={focused ? 'white' : 'gray'}
                 size={24}
+                weight="thin"
               />
             </View>
           ),
@@ -108,10 +108,10 @@ function BottomTab() {
                 marginTop: 26,
                 height: '100%',
               }}>
-              <Icon
-                name="download-outline"
+              <DownloadSimple
                 color={focused ? 'white' : 'gray'}
                 size={24}
+                weight="thin"
               />
             </View>
           )
@@ -129,10 +129,10 @@ function BottomTab() {
                 marginTop: 26,
                 height: '100%',
               }}>
-              <Icon
-                name="person-outline"
+              <User
                 color={focused ? 'white' : 'gray'}
                 size={24}
+                weight="thin"
               />
             </View>
           ),

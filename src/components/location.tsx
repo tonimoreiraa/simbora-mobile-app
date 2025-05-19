@@ -1,5 +1,4 @@
 import {View, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import { MapPin } from "phosphor-react-native";
 

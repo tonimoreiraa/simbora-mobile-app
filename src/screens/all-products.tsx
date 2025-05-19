@@ -12,7 +12,14 @@ import tw from 'twrnc';
 import InputSearch from '../components/input_search';
 import { useNavigation } from '@react-navigation/native';
 import { useProducts } from '../services/products/useProducts';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { 
+  ArrowLeft, 
+  Microphone, 
+  XCircle, 
+  WarningCircle, 
+  MagnifyingGlass,
+  ShoppingBag
+} from 'phosphor-react-native';
 import ProductCard, { Product as ProductCardProps } from '../components/product_card';
 
 const AllProducts = () => {
@@ -82,7 +89,7 @@ const AllProducts = () => {
     <SafeAreaView style={tw`flex-1 bg-white`}>
       <View style={tw`flex-row items-center px-4 py-2 border-b border-gray-200`}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={tw`mr-3`}>
-          <Icon name="arrow-back" size={24} color="#000" />
+          <ArrowLeft size={24} color="#000" weight="regular" />
         </TouchableOpacity>
         <Text style={tw`text-xl font-bold`}>Todos os Produtos</Text>
       </View>
@@ -101,10 +108,10 @@ const AllProducts = () => {
           style={tw`absolute right-12 top-6`}
           disabled={isListening}
         >
-          <Icon 
-            name={isListening ? "mic" : "mic-outline"} 
+          <Microphone 
             size={20} 
             color={isListening ? "#3b82f6" : "#666"} 
+            weight={isListening ? "fill" : "regular"} 
           />
         </TouchableOpacity>
         
@@ -113,7 +120,7 @@ const AllProducts = () => {
             onPress={clearSearch} 
             style={tw`absolute right-6 top-6`}
           >
-            <Icon name="close-circle" size={20} color="#666" />
+            <XCircle size={20} color="#666" weight="regular" />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -126,7 +133,7 @@ const AllProducts = () => {
         <View style={tw`flex-1 justify-center items-center bg-black bg-opacity-50`}>
           <View style={tw`bg-white p-6 rounded-2xl w-4/5 items-center`}>
             <View style={tw`w-20 h-20 rounded-full bg-blue-100 items-center justify-center mb-4`}>
-              <Icon name="mic" size={40} color="#3b82f6" />
+              <Microphone size={40} color="#3b82f6" weight="fill" />
               <View style={[
                 tw`absolute w-full h-full rounded-full border-2 border-blue-400`,
                 { transform: [{ scale: 1.1 }] }
@@ -157,7 +164,7 @@ const AllProducts = () => {
             </View>
           ) : isError ? (
             <View style={tw`py-8 items-center`}>
-              <Icon name="alert-circle-outline" size={56} color="#f87171" />
+              <WarningCircle size={56} color="#f87171" weight="regular" />
               <Text style={tw`mt-4 text-lg text-red-500 font-semibold`}>
                 Oops! Algo deu errado.
               </Text>
@@ -173,7 +180,11 @@ const AllProducts = () => {
             </View>
           ) : products.length === 0 ? (
             <View style={tw`py-8 items-center`}>
-              <Icon name={searchTerm ? "search-outline" : "basket-outline"} size={56} color="#d1d5db" />
+              {searchTerm ? (
+                <MagnifyingGlass size={56} color="#d1d5db" weight="regular" />
+              ) : (
+                <ShoppingBag size={56} color="#d1d5db" weight="regular" />
+              )}
               <Text style={tw`mt-4 text-lg text-gray-500 text-center`}>
                 {searchTerm 
                   ? `Nenhum produto encontrado para "${searchTerm}"` 

@@ -7,10 +7,9 @@ import {
 } from 'react-native';
 import InputSearch from '../components/input_search';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { SealPercent, CaretRight, Heart } from 'phosphor-react-native';
 import Logo from '../assets/LOGO.svg';
 import Location from '../components/location';
-import { SealPercent } from 'phosphor-react-native';
 import Category from '../components/category';
 import { useNavigation } from '@react-navigation/native';
 import { ForYouProducts } from '../components/for_you_products';
@@ -104,10 +103,10 @@ function Home() {
                   onPress={() => navigation.navigate('Categories')}
                 >
                   <Text style={tw`text-stone-400`}>Ver todas</Text>
-                  <Icon
-                    name="chevron-forward-outline"
+                  <CaretRight
                     size={16}
-                    style={tw`text-stone-400`}
+                    color="#9ca3af"
+                    weight="regular"
                   />
                 </TouchableOpacity>
               </View>
@@ -124,7 +123,7 @@ function Home() {
           <View style={tw`flex-row justify-between items-center mt-2`}>
             <View style={tw`flex-row flex-1`}>
               <TouchableOpacity style={tw`px-4 py-2 rounded-full items-center gap-1 bg-black flex-row`}>
-                <Icon name="heart" color="#FFFF" size={16} />
+                <Heart color="#FFFFFF" size={16} weight="fill" />
                 <Text style={tw`text-white text-base`}>Para você</Text>
               </TouchableOpacity>
             </View>
@@ -134,10 +133,10 @@ function Home() {
               onPress={() => navigation.navigate('AllProducts')}
             >
               <Text style={tw`text-stone-400 text-base`}>Ver tudo</Text>
-              <Icon
-                name="chevron-forward-outline"
+              <CaretRight
                 size={14}
-                style={tw`text-stone-400`}
+                color="#9ca3af"
+                weight="regular"
               />
             </TouchableOpacity>
           </View>

@@ -1,8 +1,6 @@
 import {ScrollView, Text, View} from 'react-native';
 import tw from 'twrnc';
-import ProductForecast from '../components/product_forecast';
 import OrderForecast from '../components/order_forecast';
-import Icon from 'react-native-vector-icons/Ionicons';
 import OrderTimeline from '../components/order_timeline';
 import Forecast from '../components/forecast';
 
@@ -39,13 +37,7 @@ function MyOrderDelivery() {
           <OrderTimeline events={orderEvents} />
         </View>
         <View>
-          <ProductForecast />
-          <ProductForecast />
-          <ProductForecast />
-          <ProductForecast />
-          <ProductForecast />
-          <ProductForecast />
-          <ProductForecast />
+
         </View>
       </View>
     </ScrollView>
