@@ -1,7 +1,7 @@
 import { ComponentProps, useState } from 'react';
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Eye, EyeSlash } from 'phosphor-react-native';
 import tw from 'twrnc';
 
 interface InputProps<TFieldValues extends FieldValues> extends ComponentProps<typeof TextInput> {
@@ -19,7 +19,7 @@ function AccountInput<TFieldValues extends FieldValues>({
   ...props
 }: InputProps<TFieldValues>) {
   const [hiddenPassword, setHiddenPassword] = useState(true);
-
+  
   return (
     <View style={tw`w-full`}>
       <Text style={tw`text-xs mb-1`}>
@@ -45,9 +45,9 @@ function AccountInput<TFieldValues extends FieldValues>({
                     style={tw`absolute right-3`}
                   >
                     {hiddenPassword ? (
-                      <Icon name='eye-off' size={24} />
+                      <EyeSlash size={24} color="#000000" weight="regular" />
                     ) : (
-                      <Icon name='eye' size={24} />
+                      <Eye size={24} color="#000000" weight="regular" />
                     )}
                   </TouchableOpacity>
                 )}

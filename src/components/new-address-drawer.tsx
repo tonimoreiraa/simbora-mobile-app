@@ -1,7 +1,7 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/Ionicons'
+import { Plus, X } from 'phosphor-react-native';
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form';
 import axios from 'axios';
 
@@ -50,7 +50,7 @@ export function NewAddressDrawer() {
                     onPress={handlePressTrigger}
                     style={tw`bg-blue-500 rounded-2xl py-2 px-3 flex-row items-center justify-center gap-1 mt-2`}
                 >
-                    <Icon size={20} name="add" color="#ffffff" />
+                    <Plus size={20} color="#ffffff" weight="bold" />
                     <Text style={tw`text-lg text-white`}>
                         Novo endereço
                     </Text>
@@ -70,7 +70,7 @@ export function NewAddressDrawer() {
                                     Adicionando novo endereço
                                 </Text>
                                 <TouchableOpacity onPress={() => setIsEnabled(false)}>
-                                    <Icon name="close" size={24} />
+                                    <X size={24} color="#000000" weight="regular" />
                                 </TouchableOpacity>
                             </View>
                             <View>

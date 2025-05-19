@@ -8,15 +8,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import tw from 'twrnc';
-import {LinkSimple} from 'phosphor-react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+// Expandir a importação para incluir outros ícones do Phosphor
+import {
+  LinkSimple,
+  MagnifyingGlass,
+  WhatsappLogo,
+  Envelope,
+  ShareNetwork
+} from 'phosphor-react-native';
 
 const SendRequest = () => {
   return (
     <View style={tw`rounded-t-3xl bg-[#1E1E1E] px-4 py-8`}>
       <View
         style={tw`flex flex-row items-center bg-black text-white rounded-lg mb-4 w-full`}>
-        <Icon name="search" color="white" size={14} style={tw`pl-2`} />
+        <MagnifyingGlass color="white" size={14} style={tw`pl-2`} weight="regular" />
         <TextInput
           placeholder="Digite o nome aqui"
           placeholderTextColor="white"
@@ -47,19 +53,19 @@ const SendRequest = () => {
       </View>
       <View style={tw`flex-row justify-around`}>
         <ActionButton
-          icon={<LinkSimple size={24} color="white" />}
+          icon={<LinkSimple size={24} color="white" weight="regular" />}
           label="Copiar link"
         />
         <ActionButton
-          icon={<Icon name="logo-whatsapp" size={24} color="white" />}
+          icon={<WhatsappLogo size={24} color="white" weight="regular" />}
           label="WhatsApp"
         />
         <ActionButton
-          icon={<Icon name="mail-outline" size={24} color="white" />}
+          icon={<Envelope size={24} color="white" weight="regular" />}
           label="E-mail"
         />
         <ActionButton
-          icon={<Icon name="share-outline" size={24} color="white" />}
+          icon={<ShareNetwork size={24} color="white" weight="regular" />}
           label="Compartilhar"
         />
       </View>

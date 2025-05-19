@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { MagnifyingGlass, Microphone, QrCode } from 'phosphor-react-native';
 
 interface InputSearchProps extends ComponentProps<typeof TextInput> {
   hideMicrophone?: boolean;
@@ -11,7 +11,7 @@ interface InputSearchProps extends ComponentProps<typeof TextInput> {
 function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearchProps) {
   return (
     <View style={tw`flex-row items-center justify-center bg-stone-100 rounded-lg px-4 h-12`}>
-      <Icon name="search-outline" size={16} color="#696969" />
+      <MagnifyingGlass size={16} color="#696969" weight="regular" />
       <TextInput
         style={tw`flex-1 ml-2 text-base text-stone-900`}
         placeholder="Buscar"
@@ -21,12 +21,12 @@ function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearch
       <View style={tw`flex-row gap-4`}>
         {!hideMicrophone && (
           <TouchableOpacity>
-            <Icon name="mic" size={20} color="#333" />
+            <Microphone size={20} color="#333" weight="regular" />
           </TouchableOpacity>
         )}
         {!hideImageScanner && (
           <TouchableOpacity>
-            <Icon name="scan" size={20} color="#333" />
+            <QrCode size={20} color="#333" weight="regular" />
           </TouchableOpacity>
         )}
       </View>
