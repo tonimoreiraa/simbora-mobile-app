@@ -1,16 +1,21 @@
-import React, { ComponentProps } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import React, {ComponentProps} from 'react';
+import {View, TextInput, TouchableOpacity} from 'react-native';
 import tw from 'twrnc';
-import { MagnifyingGlass, Microphone, QrCode } from 'phosphor-react-native';
+import {MagnifyingGlass, Microphone, QrCode} from 'phosphor-react-native';
 
 interface InputSearchProps extends ComponentProps<typeof TextInput> {
   hideMicrophone?: boolean;
   hideImageScanner?: boolean;
 }
 
-function InputSearch({ hideMicrophone, hideImageScanner, ...props }: InputSearchProps) {
+function InputSearch({
+  hideMicrophone,
+  hideImageScanner,
+  ...props
+}: InputSearchProps) {
   return (
-    <View style={tw`flex-row items-center justify-center bg-stone-100 rounded-lg px-4 h-12`}>
+    <View
+      style={tw`flex-row items-center justify-center bg-stone-100 rounded-lg px-4 h-12`}>
       <MagnifyingGlass size={16} color="#696969" weight="regular" />
       <TextInput
         style={tw`flex-1 ml-2 text-base text-stone-900`}

@@ -1,24 +1,24 @@
 // schemas/orders-response.schema.ts
-import { z } from 'zod';
+import {z} from 'zod';
 
 export const OrderStatusEnum = z.enum([
-  "Pending",
-  "Confirmed",
-  "Processing",
-  "On Hold",
-  "Awaiting Payment",
-  "Payment Received",
-  "In Production",
-  "Shipped",
-  "Out for Delivery",
-  "Delivered",
-  "Completed",
-  "Cancelled",
-  "Refunded",
-  "Failed",
-  "Returned",
-  "Partially Shipped",
-  "Backordered"
+  'Pending',
+  'Confirmed',
+  'Processing',
+  'On Hold',
+  'Awaiting Payment',
+  'Payment Received',
+  'In Production',
+  'Shipped',
+  'Out for Delivery',
+  'Delivered',
+  'Completed',
+  'Cancelled',
+  'Refunded',
+  'Failed',
+  'Returned',
+  'Partially Shipped',
+  'Backordered',
 ]);
 export const OrderItemSchema = z.object({
   id: z.number(),
@@ -26,18 +26,22 @@ export const OrderItemSchema = z.object({
   productId: z.number(),
   quantity: z.number(),
   price: z.number(),
-  product: z.object({
-    id: z.number(),
-    name: z.string(),
-    price: z.number(),
-    description: z.string().optional(),
-    images: z.array(
-      z.object({
-        id: z.number(),
-        path: z.string()
-      })
-    ).optional()
-  }).optional()
+  product: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      price: z.number(),
+      description: z.string().optional(),
+      images: z
+        .array(
+          z.object({
+            id: z.number(),
+            path: z.string(),
+          }),
+        )
+        .optional(),
+    })
+    .optional(),
 });
 
 export const PaymentSchema = z.object({
@@ -46,7 +50,7 @@ export const PaymentSchema = z.object({
   method: z.string(),
   status: z.string(),
   amount: z.number(),
-  transactionId: z.string().optional()
+  transactionId: z.string().optional(),
 });
 
 export const ShippingSchema = z.object({
@@ -56,7 +60,7 @@ export const ShippingSchema = z.object({
   city: z.string(),
   state: z.string(),
   zipCode: z.string(),
-  trackingNumber: z.string().optional()
+  trackingNumber: z.string().optional(),
 });
 
 export const OrderUpdateSchema = z.object({
@@ -64,14 +68,14 @@ export const OrderUpdateSchema = z.object({
   orderId: z.number(),
   status: OrderStatusEnum,
   comment: z.string().optional(),
-  createdAt: z.string().or(z.date())
+  createdAt: z.string().or(z.date()),
 });
 
 export const CustomerSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.string().email(),
-  phone: z.string().optional()
+  phone: z.string().optional(),
 });
 
 export const OrderSchema = z.object({
@@ -84,7 +88,7 @@ export const OrderSchema = z.object({
   items: z.array(OrderItemSchema).optional(),
   payment: PaymentSchema.optional(),
   shipping: ShippingSchema.optional(),
-  updates: z.array(OrderUpdateSchema).optional()
+  updates: z.array(OrderUpdateSchema).optional(),
 });
 
 export const OrdersResponseSchema = z.object({
@@ -93,8 +97,8 @@ export const OrdersResponseSchema = z.object({
     total: z.number(),
     current_page: z.number(),
     per_page: z.number(),
-    last_page: z.number()
-  })
+    last_page: z.number(),
+  }),
 });
 
 export type Order = z.infer<typeof OrderSchema>;

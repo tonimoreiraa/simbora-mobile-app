@@ -14,7 +14,7 @@ import {
   CaretLeft,
   MagnifyingGlass,
   Microphone,
-  QrCode
+  QrCode,
 } from 'phosphor-react-native';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
@@ -33,7 +33,7 @@ import {ForYouProducts} from '../components/for_you_products';
 
 type RootStackParamList = {
   Cart: undefined;
-  Product: { id: number };
+  Product: {id: number};
 };
 
 interface Product {
@@ -110,7 +110,12 @@ const Product = () => {
         <View
           style={tw`flex flex-row items-center justify-center w-full px-14`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <CaretLeft size={28} color="#000000" weight="regular" style={tw`mr-2`} />
+            <CaretLeft
+              size={28}
+              color="#000000"
+              weight="regular"
+              style={tw`mr-2`}
+            />
           </TouchableOpacity>
           <View style={tw`w-full`}>
             <View
@@ -132,7 +137,12 @@ const Product = () => {
             </View>
           </View>
           <View>
-            <ShoppingBagOpen size={28} style={tw`ml-2`} weight="fill" color="#000000" />
+            <ShoppingBagOpen
+              size={28}
+              style={tw`ml-2`}
+              weight="fill"
+              color="#000000"
+            />
           </View>
         </View>
         <View style={tw`mt-4`}>

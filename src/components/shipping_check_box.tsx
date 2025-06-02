@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 export default function ShippingCheckBox() {

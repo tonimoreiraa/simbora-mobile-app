@@ -8,13 +8,13 @@ import {
 import tw from 'twrnc';
 import CartProduct from '../components/cart_product';
 import Price from '../components/price';
-import { useCart } from '../contexts/cart_provider';
-import { useNavigation } from '@react-navigation/native';
-import { ForYouProducts } from '../components/for_you_products';
+import {useCart} from '../contexts/cart_provider';
+import {useNavigation} from '@react-navigation/native';
+import {ForYouProducts} from '../components/for_you_products';
 
 function Cart() {
-  const cart = useCart()
-  const navigation = useNavigation()
+  const cart = useCart();
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
@@ -23,15 +23,14 @@ function Cart() {
           <View>
             <Text style={tw`text-2xl font-bold`}>Meu carrinho</Text>
           </View>
-          {!cart.items.length && <Text style={tw`text-center mt-4 text-stone-500`}>
-            Nenhum item foi adicionado ao carrinho.
-          </Text>}
+          {!cart.items.length && (
+            <Text style={tw`text-center mt-4 text-stone-500`}>
+              Nenhum item foi adicionado ao carrinho.
+            </Text>
+          )}
           <View style={tw`mt-4 w-full px-4`}>
             {cart.items.map(item => (
-              <CartProduct
-                key={item.id}
-                {...item}
-              />
+              <CartProduct key={item.id} {...item} />
             ))}
           </View>
           <View style={tw`flex w-full mb-4 px-4`}>
@@ -42,22 +41,22 @@ function Cart() {
             />
           </View>
           <View style={tw`w-full px-4`}>
-            {cart.items.length ? <TouchableOpacity
-              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
-              disabled={!cart.items.length}
-              onPress={() => navigation.navigate('Checkout')}
-            >
-              <Text style={tw`font-bold text-lg text-white`}>
-                Continuar
-              </Text>
-            </TouchableOpacity> : <TouchableOpacity
-              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
-              onPress={() => navigation.navigate('Search')}
-            >
-              <Text style={tw`font-bold text-lg text-white`}>
-                Buscar produtos
-              </Text>
-            </TouchableOpacity>}
+            {cart.items.length ? (
+              <TouchableOpacity
+                style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
+                disabled={!cart.items.length}
+                onPress={() => navigation.navigate('Checkout')}>
+                <Text style={tw`font-bold text-lg text-white`}>Continuar</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
+                onPress={() => navigation.navigate('Search')}>
+                <Text style={tw`font-bold text-lg text-white`}>
+                  Buscar produtos
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View
             style={tw`flex flex-row items-center justify-start w-full py-2`}>

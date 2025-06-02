@@ -1,20 +1,20 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { SafeAreaView, View} from 'react-native';
-import { House, ShoppingBag, DownloadSimple, User } from 'phosphor-react-native';
-import tw from 'twrnc'
+import {SafeAreaView, View} from 'react-native';
+import {House, ShoppingBag, DownloadSimple, User} from 'phosphor-react-native';
+import tw from 'twrnc';
 import SignUp from './src/screens/sign_up';
 import Home from './src/screens/home';
-import { useAuth } from './src/contexts/auth_provider';
+import {useAuth} from './src/contexts/auth_provider';
 import SignIn from './src/screens/sign_in';
 import MyAccount from './src/screens/my_account';
 import OrderResume from './src/screens/order_resume';
 import Cart from './src/screens/cart';
 import Categories from './src/screens/categories';
-import { ProductsSearch } from './src/screens/products_search';
+import {ProductsSearch} from './src/screens/products_search';
 import MyOrders from './src/screens/my_orders';
 import Product from './src/screens/product';
-import Logo from './src/assets/LOGO.svg'
+import Logo from './src/assets/LOGO.svg';
 import Checkout from './src/screens/checkout';
 import RemoveOrder from './src/screens/remove_order';
 import AllProducts from './src/screens/all-products';
@@ -79,7 +79,7 @@ function BottomTab() {
         name="Cart"
         component={Cart}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={{
                 alignItems: 'center',
@@ -100,7 +100,7 @@ function BottomTab() {
         name="MyOrders"
         component={MyOrders}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={{
                 alignItems: 'center',
@@ -114,7 +114,7 @@ function BottomTab() {
                 weight="thin"
               />
             </View>
-          )
+          ),
         }}
       />
       <Tab.Screen
@@ -143,14 +143,14 @@ function BottomTab() {
 }
 
 export default function Routes() {
-  const { signed, loading } = useAuth();
+  const {signed, loading} = useAuth();
 
   if (loading) {
     return (
       <SafeAreaView style={tw`flex-1 items-center justify-center`}>
         <Logo width={100} />
       </SafeAreaView>
-    )
+    );
   }
 
   if (!signed) {
@@ -179,51 +179,59 @@ export default function Routes() {
       <Stack.Screen
         name="BottomTab"
         component={BottomTab}
-        options={{ headerShown: false, headerTransparent: true }}
+        options={{headerShown: false, headerTransparent: true}}
       />
       <Stack.Screen
         name="Categories"
         component={Categories}
-        options={{ title: 'Categorias' }}
+        options={{title: 'Categorias'}}
       />
       <Stack.Screen
         name="ProductsSearch"
-        options={{ title: '', headerShown: true, headerStyle: tw`bg-white` }}
+        options={{title: '', headerShown: true, headerStyle: tw`bg-white`}}
         component={ProductsSearch}
       />
       <Stack.Screen
         name="MyOrders"
-        options={{ title: 'Meus pedidos' }}
+        options={{title: 'Meus pedidos'}}
         component={MyOrders}
       />
       <Stack.Screen
         name="Product"
-        options={{ title: 'Produto', headerShown: false, }}
+        options={{title: 'Produto', headerShown: false}}
         component={Product}
       />
       <Stack.Screen
         name="Cart"
-        options={{ title: 'Carrinho', headerShown: false, }}
+        options={{title: 'Carrinho', headerShown: false}}
         component={Cart}
       />
       <Stack.Screen
         name="Checkout"
-        options={{ title: 'Chechout' }}
+        options={{title: 'Chechout'}}
         component={Checkout}
       />
-      <Stack.Screen 
-        name='ResumeOrder'
-        options={{title: 'Resumo do pedido', headerTitleStyle: tw`text-xl font-bold`, headerStyle: tw`bg-white`}}
+      <Stack.Screen
+        name="ResumeOrder"
+        options={{
+          title: 'Resumo do pedido',
+          headerTitleStyle: tw`text-xl font-bold`,
+          headerStyle: tw`bg-white`,
+        }}
         component={OrderResume}
       />
-      <Stack.Screen 
-        name='WithdrawOrder'
-        options={{title: 'Apresente o QR Code', headerTitleStyle: tw`text-xl font-bold`, headerStyle: tw`bg-white` }}
+      <Stack.Screen
+        name="WithdrawOrder"
+        options={{
+          title: 'Apresente o QR Code',
+          headerTitleStyle: tw`text-xl font-bold`,
+          headerStyle: tw`bg-white`,
+        }}
         component={RemoveOrder}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name="AllProducts"
-        options={{ 
+        options={{
           title: 'Todos os Produtos',
           headerShown: false,
         }}

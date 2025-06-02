@@ -1,14 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View, Animated, Easing } from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  View,
+  Animated,
+  Easing,
+} from 'react-native';
 import tw from 'twrnc';
 import Logo from '../assets/LOGO.svg';
 import AccountInput from '../components/create_account_input';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SignInPayload, signInSchema } from '../validators/auth';
-import { useAuth } from '../contexts/auth_provider';
-import { useMutation } from 'react-query';
-import { useNavigation } from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {SignInPayload, signInSchema} from '../validators/auth';
+import {useAuth} from '../contexts/auth_provider';
+import {useMutation} from 'react-query';
+import {useNavigation} from '@react-navigation/native';
 import SocialLogin from '../components/social_login';
 import Terms from '../components/terms';
 import CheckBox from '../components/check_box';
@@ -16,7 +23,7 @@ import CheckBox from '../components/check_box';
 function SignIn() {
   const navigation = useNavigation();
   const auth = useAuth();
-  
+
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -25,37 +32,53 @@ function SignIn() {
   const buttonsAnim = useRef(new Animated.Value(0)).current;
   const socialAnim = useRef(new Animated.Value(0)).current;
   const errorAnim = useRef(new Animated.Value(0)).current;
-  
-  const signIn = async ({ email, password }: SignInPayload) =>
+
+  const signIn = async ({email, password}: SignInPayload) =>
     await auth.signIn(email, password);
-    
+
   const form = useForm<SignInPayload>({
     resolver: zodResolver(signInSchema),
   });
-  
+
   const mutation = useMutation(signIn, {
     onError: () => {
       // Shake animation for error
       Animated.sequence([
-        Animated.timing(errorAnim, { toValue: 10, duration: 50, useNativeDriver: true }),
-        Animated.timing(errorAnim, { toValue: -10, duration: 50, useNativeDriver: true }),
-        Animated.timing(errorAnim, { toValue: 10, duration: 50, useNativeDriver: true }),
-        Animated.timing(errorAnim, { toValue: 0, duration: 50, useNativeDriver: true }),
+        Animated.timing(errorAnim, {
+          toValue: 10,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(errorAnim, {
+          toValue: -10,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(errorAnim, {
+          toValue: 10,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(errorAnim, {
+          toValue: 0,
+          duration: 50,
+          useNativeDriver: true,
+        }),
       ]).start();
-    }
+    },
   });
-  
+
   async function handleSubmit(payload: SignInPayload) {
     mutation.mutate(payload);
   }
-  
+
   /** @ts-ignore **/
   const handleSignUp = () => navigation.navigate('SignUp');
-  
+
   // Button press animation
   const emailBtnScale = useRef(new Animated.Value(1)).current;
   const signUpBtnScale = useRef(new Animated.Value(1)).current;
-  
+
   const onPressIn = (anim: Animated.Value) => {
     Animated.spring(anim, {
       toValue: 0.95,
@@ -63,7 +86,7 @@ function SignIn() {
       friction: 8,
     }).start();
   };
-  
+
   const onPressOut = (anim: Animated.Value) => {
     Animated.spring(anim, {
       toValue: 1,
@@ -120,30 +143,25 @@ function SignIn() {
   }, []);
 
   return (
-    <View style={tw`flex items-center justify-between h-full w-full px-4 relative py-2 bg-white`}>
+    <View
+      style={tw`flex items-center justify-between h-full w-full px-4 relative py-2 bg-white`}>
       <View style={tw`w-full mt-22`}>
-        <Animated.View 
+        <Animated.View
           style={[
             tw`flex flex-col items-center justify-center w-full`,
-            { 
+            {
               opacity: fadeAnim,
-              transform: [
-                { translateY: slideAnim },
-                { scale: logoAnim }
-              ] 
-            }
+              transform: [{translateY: slideAnim}, {scale: logoAnim}],
+            },
           ]}>
           <Logo />
-          <Animated.Text 
-            style={[
-              tw`text-stone-500 text-center mt-10`,
-              { opacity: fadeAnim }
-            ]}>
+          <Animated.Text
+            style={[tw`text-stone-500 text-center mt-10`, {opacity: fadeAnim}]}>
             Crie sua conta ou entre agora mesmo
           </Animated.Text>
         </Animated.View>
-        
-        <Animated.View style={{ opacity: formAnim }}>
+
+        <Animated.View style={{opacity: formAnim}}>
           <AccountInput
             control={form.control}
             name="email"
@@ -159,18 +177,18 @@ function SignIn() {
             placeholder="••••••••"
             isPassword
           />
-          
+
           {mutation.isError && (
-            <Animated.Text 
+            <Animated.Text
               style={[
                 tw`text-red-500 mt-2`,
-                { transform: [{ translateX: errorAnim }] }
+                {transform: [{translateX: errorAnim}]},
               ]}>
               {/** @ts-ignore **/}
               {mutation.error?.message}
             </Animated.Text>
           )}
-          
+
           <View style={tw`flex-row justify-between w-full py-2`}>
             <View style={tw`flex flex-row items-center`}>
               {/* Using original CheckBox without props */}
@@ -182,9 +200,9 @@ function SignIn() {
             </TouchableOpacity>
           </View>
         </Animated.View>
-        
-        <Animated.View style={[tw`w-full gap-4`, { opacity: buttonsAnim }]}>
-          <Animated.View style={{ transform: [{ scale: emailBtnScale }] }}>
+
+        <Animated.View style={[tw`w-full gap-4`, {opacity: buttonsAnim}]}>
+          <Animated.View style={{transform: [{scale: emailBtnScale}]}}>
             <TouchableOpacity
               disabled={mutation.isLoading || mutation.isSuccess}
               onPress={form.handleSubmit(handleSubmit)}
@@ -195,8 +213,8 @@ function SignIn() {
               <Text style={tw`text-white text-center`}>Entre com e-mail</Text>
             </TouchableOpacity>
           </Animated.View>
-          
-          <Animated.View style={{ transform: [{ scale: signUpBtnScale }] }}>
+
+          <Animated.View style={{transform: [{scale: signUpBtnScale}]}}>
             <TouchableOpacity
               onPress={handleSignUp}
               onPressIn={() => onPressIn(signUpBtnScale)}
@@ -206,11 +224,11 @@ function SignIn() {
             </TouchableOpacity>
           </Animated.View>
         </Animated.View>
-        
+
         <Animated.View
           style={[
             tw`flex flex-row items-center justify-between w-full py-4`,
-            { opacity: socialAnim }
+            {opacity: socialAnim},
           ]}>
           <View style={tw`border border-stone-200 w-24`}></View>
           <Text style={tw`text-xs text-stone-400`}>
@@ -218,13 +236,13 @@ function SignIn() {
           </Text>
           <View style={tw`border border-stone-200 w-24`}></View>
         </Animated.View>
-        
-        <Animated.View style={{ opacity: socialAnim }}>
+
+        <Animated.View style={{opacity: socialAnim}}>
           <SocialLogin></SocialLogin>
         </Animated.View>
       </View>
-      
-      <Animated.View style={{ opacity: socialAnim }}>
+
+      <Animated.View style={{opacity: socialAnim}}>
         <Terms />
       </Animated.View>
     </View>

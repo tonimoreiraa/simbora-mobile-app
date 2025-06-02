@@ -27,24 +27,42 @@ export function UserRoleSelector<T extends FieldValues>({
             <>
               <View style={tw`flex-row justify-between w-full`}>
                 <TouchableOpacity
-                  style={tw`flex px-4 justify-center border border-blue-500 py-3 w-46 rounded-lg ${field.value === 'customer' ? 'bg-blue-500 border-transparent': ''}`}
+                  style={tw`flex px-4 justify-center border border-blue-500 py-3 w-46 rounded-lg ${
+                    field.value === 'customer'
+                      ? 'bg-blue-500 border-transparent'
+                      : ''
+                  }`}
                   onPress={() => field.onChange('customer')}>
-                  <Text style={tw`font-light text-xs ${field.value === 'customer' ? 'text-white' : ''}`}>
+                  <Text
+                    style={tw`font-light text-xs ${
+                      field.value === 'customer' ? 'text-white' : ''
+                    }`}>
                     Selecione se:
                   </Text>
                   <Text
-                    style={tw`text-base ${field.value === 'customer' ? 'text-white' : ''}`}>
+                    style={tw`text-base ${
+                      field.value === 'customer' ? 'text-white' : ''
+                    }`}>
                     Sou cliente
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={tw`flex px-4 justify-center border border-blue-500 py-3 w-46 rounded-lg ${field.value === 'professional' ? 'bg-blue-500 border-transparent': ''}`}
+                  style={tw`flex px-4 justify-center border border-blue-500 py-3 w-46 rounded-lg ${
+                    field.value === 'professional'
+                      ? 'bg-blue-500 border-transparent'
+                      : ''
+                  }`}
                   onPress={() => field.onChange('professional')}>
-                  <Text style={tw`font-light text-xs ${field.value === 'professional' ? 'text-white' : ''}`}>
+                  <Text
+                    style={tw`font-light text-xs ${
+                      field.value === 'professional' ? 'text-white' : ''
+                    }`}>
                     Selecione se:
                   </Text>
                   <Text
-                    style={tw`text-base ${field.value === 'professional' ? 'text-white' : ''}`}>
+                    style={tw`text-base ${
+                      field.value === 'professional' ? 'text-white' : ''
+                    }`}>
                     Sou eletricista
                   </Text>
                 </TouchableOpacity>

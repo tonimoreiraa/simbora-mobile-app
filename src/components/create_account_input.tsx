@@ -1,10 +1,11 @@
-import { ComponentProps, useState } from 'react';
-import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
-import { Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Eye, EyeSlash } from 'phosphor-react-native';
+import {ComponentProps, useState} from 'react';
+import {Control, Controller, FieldPath, FieldValues} from 'react-hook-form';
+import {Button, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Eye, EyeSlash} from 'phosphor-react-native';
 import tw from 'twrnc';
 
-interface InputProps<TFieldValues extends FieldValues> extends ComponentProps<typeof TextInput> {
+interface InputProps<TFieldValues extends FieldValues>
+  extends ComponentProps<typeof TextInput> {
   label?: string;
   name: FieldPath<TFieldValues>;
   control: Control<TFieldValues>;
@@ -19,21 +20,21 @@ function AccountInput<TFieldValues extends FieldValues>({
   ...props
 }: InputProps<TFieldValues>) {
   const [hiddenPassword, setHiddenPassword] = useState(true);
-  
+
   return (
     <View style={tw`w-full`}>
-      <Text style={tw`text-xs mb-1`}>
-        {label}
-      </Text>
+      <Text style={tw`text-xs mb-1`}>{label}</Text>
       <Controller
         control={control}
         name={name}
-        render={({ field, fieldState }) => {
+        render={({field, fieldState}) => {
           return (
             <>
               <View style={tw`relative flex-row items-center`}>
                 <TextInput
-                  style={tw`bg-stone-100 py-4 px-3 w-full rounded-md ${isPassword ? 'pr-12' : ''}`}
+                  style={tw`bg-stone-100 py-4 px-3 w-full rounded-md ${
+                    isPassword ? 'pr-12' : ''
+                  }`}
                   secureTextEntry={isPassword && hiddenPassword}
                   {...props}
                   onChangeText={field.onChange}
@@ -42,8 +43,7 @@ function AccountInput<TFieldValues extends FieldValues>({
                 {isPassword && (
                   <TouchableOpacity
                     onPress={() => setHiddenPassword(!hiddenPassword)}
-                    style={tw`absolute right-3`}
-                  >
+                    style={tw`absolute right-3`}>
                     {hiddenPassword ? (
                       <EyeSlash size={24} color="#000000" weight="regular" />
                     ) : (
