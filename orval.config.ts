@@ -1,7 +1,7 @@
 import {defineConfig} from 'orval';
 
 export default defineConfig({
-  doca: {
+  simbora: {
     hooks: {
       afterAllFilesWrite: 'prettier --write .',
     },
