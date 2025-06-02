@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named -- False positive
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 
 export const AXIOS_INSTANCE = axios.create({
