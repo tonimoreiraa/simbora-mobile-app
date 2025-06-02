@@ -23,19 +23,4 @@ export default defineConfig({
       target: './src/services/client',
     },
   },
-  // docaZod: {
-  // 	hooks: {
-  // 		afterAllFilesWrite: "prettier --write .",
-  // 	},
-  // 	input: {
-  // 		target: "./server/openapi.json",
-  // 		// validation: true,
-  // 	},
-  // 	output: {
-  // 		client: "zod",
-  // 		fileExtension: ".schema.ts",
-  // 		mode: "tags-split",
-  // 		target: "./server/client",
-  // 	},
-  // },
 });
