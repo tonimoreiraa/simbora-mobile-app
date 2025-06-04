@@ -7,6 +7,7 @@ import {
   NavigationProp,
   ParamListBase,
 } from '@react-navigation/native';
+import {getCorrectImageUrl} from '../utils/image';
 
 export interface Product {
   categoryId: number;
@@ -21,38 +22,37 @@ export interface Product {
   name: string;
   price: string | number;
   stock: number;
-  supplier: {
-    address: string;
-    description: string;
-    id: number;
-    name: string;
-    ownerId: number;
-    photo: string;
-  };
+  supplier: string;
   supplierId: number;
   tags: Array<string>;
-  updatedAt: string;
 }
 
-const ProductCard = ({id, name, price, supplier, images}: Product) => {
+const ProductCard = (product: Product) => {
+  const {id, name, price, supplier, images} = product;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-
+  
   const handlePressProduct = () => {
     navigation.navigate('Product', {id});
   };
-
+  
   const priceValue = typeof price === 'string' ? parseFloat(price) : price;
 
   return (
     <TouchableOpacity onPress={handlePressProduct} style={tw`py-4 w-44`}>
       <View
         style={tw`rounded-lg p-4 h-40 bg-stone-100 items-center justify-center`}>
-        <Image
-          source={{uri: images[0]?.path}}
-          width={140}
-          height={140}
-          resizeMode="contain"
-        />
+        {images && images.length > 0 ? (
+          <Image
+            source={{uri: getCorrectImageUrl(images[0]?.path || '')}}
+            width={140}
+            height={140}
+            resizeMode="contain"
+          />
+        ) : (
+          <View style={tw`w-35 h-35 items-center justify-center`}>
+            <Text style={tw`text-gray-400 text-sm`}>Sem imagem</Text>
+          </View>
+        )}
       </View>
       <View style={tw`py-2`}>
         <View>
@@ -69,7 +69,7 @@ const ProductCard = ({id, name, price, supplier, images}: Product) => {
           </Text>
           <View
             style={tw`flex-row items-center border border-stone-200 rounded-lg p-2 gap-1`}>
-            <Text style={tw`text-stone-500 text-[10px]`}>{supplier?.name}</Text>
+            <Text style={tw`text-stone-500 text-[10px]`}>{supplier}</Text>
             <SealCheck weight="fill" size={8} color="#3C6EEF" />
           </View>
         </View>
