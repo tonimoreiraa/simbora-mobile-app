@@ -15,15 +15,15 @@ function InputSearch({
 }: InputSearchProps) {
   return (
     <View
-      style={tw`flex-row items-center justify-center bg-stone-100 rounded-lg px-4 h-12`}>
+      style={tw`flex-row items-center bg-stone-100 rounded-lg px-4 h-12`}>
       <MagnifyingGlass size={16} color="#696969" weight="regular" />
       <TextInput
-        style={tw`flex-1 ml-2 text-base text-stone-900`}
+        style={[tw`flex-1 ml-2 text-base text-stone-900`, {lineHeight: 20}]}
         placeholder="Buscar"
         placeholderTextColor="#666"
         {...props}
       />
-      <View style={tw`flex-row gap-4`}>
+      <View style={tw`flex-row items-center gap-4`}>
         {!hideMicrophone && (
           <TouchableOpacity>
             <Microphone size={20} color="#333" weight="regular" />

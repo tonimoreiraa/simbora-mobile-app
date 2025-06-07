@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import InputSearch from '../components/input_search';
 import tw from 'twrnc';
@@ -13,7 +14,7 @@ import Location from '../components/location';
 import Category from '../components/category';
 import {useNavigation} from '@react-navigation/native';
 import {ForYouProducts} from '../components/for_you_products';
-import {useGetAllCategories} from '../services/category/useCategories';
+import {useGetCategories} from '../services/client/categories/categories'; // Usando a função da API gerada
 import Banner1 from '../assets/banner1.svg';
 import Banner2 from '../assets/banner2.svg';
 
@@ -22,13 +23,17 @@ function useAppNavigation() {
 }
 
 function Categories() {
+  // Usando a função da API gerada para categorias
   const {
-    data: categories = [],
+    data: categoriesResponse,
     isLoading,
     isError,
     refetch,
-  } = useGetAllCategories();
+  } = useGetCategories();
 
+  // Extrair categorias da resposta da API
+  const categories = categoriesResponse || [];
+  
   const navigation = useAppNavigation();
 
   if (isError) {
@@ -61,11 +66,14 @@ function Categories() {
           ))}
         </>
       )}
-
       {!isLoading &&
-        categories.map(category => (
+        categories.filter((category): category is { id: number; name: string; image: string } => 
+          typeof category.id === 'number' && typeof category.name === 'string' && typeof category.image === 'string'
+        ).map(category => (
           <Category
-            {...category}
+            id={category.id}
+            name={category.name}
+            image={category.image}
             key={`category-${category.id}`}
             onPress={() =>
               navigation.navigate('CategoryProducts', {categoryId: category.id})
@@ -92,6 +100,8 @@ function Home() {
               onPress={() => navigation.navigate('ProductsSearch')}
             />
           </View>
+          
+          {/* Banners */}
           <ScrollView
             style={tw`mt-4`}
             horizontal={true}
@@ -99,6 +109,8 @@ function Home() {
             <Banner1 style={tw`mr-2`} />
             <Banner2 />
           </ScrollView>
+
+          {/* Seção de Categorias */}
           <View>
             <View style={tw`flex flex-row items-center justify-between mt-5`}>
               <Text style={tw`font-bold text-xl`}>Categorias</Text>
@@ -128,7 +140,6 @@ function Home() {
                 <Text style={tw`text-white text-base`}>Para você</Text>
               </TouchableOpacity>
             </View>
-
             <TouchableOpacity
               style={tw`flex flex-row items-center ml-2`}
               onPress={() => navigation.navigate('AllProducts')}>
@@ -137,6 +148,7 @@ function Home() {
             </TouchableOpacity>
           </View>
 
+          {/* Componente de Produtos - precisa ser atualizado para usar getCorrectImageUrl */}
           <ForYouProducts />
         </View>
       </ScrollView>

@@ -1,38 +1,59 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import tw from 'twrnc';
+import {getCorrectImageUrl} from '../utils/image';
 
-export interface Category {
-  name: string;
+interface CategoryProps {
   id: number;
-  image: string;
+  name: string;
+  image?: string;
+  description?: string;
   onPress?: () => void;
 }
 
-function Category({image, name, onPress}: Category) {
+const Category: React.FC<CategoryProps> = ({
+  name,
+  image,
+  description,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
-        style={tw`w-[106px] h-[106px] rounded-2xl mr-2 mt-2 overflow-hidden relative`}>
-        <Image
-          source={{uri: image}}
-          style={tw`w-full h-full absolute`}
-          resizeMode="cover"
-        />
-
-        <View
-          style={tw`absolute bottom-0 left-0 right-0 h-8 bg-black bg-opacity-35`}
-        />
-
-        <View style={tw`absolute bottom-1.5 left-0 right-0 px-2`}>
-          <Text
-            style={tw`text-white text-center font-semibold text-xs`}
-            numberOfLines={2}>
-            {name}
-          </Text>
-        </View>
+    <TouchableOpacity
+      style={tw`w-[106px] items-center justify-center rounded-2xl mr-2 mt-2`}
+      onPress={onPress}>
+      
+      {/* Container da Imagem - Aumentado de w-20 h-20 para w-24 h-24 */}
+      <View style={tw`w-24 h-24 bg-gray-100 rounded-xl overflow-hidden mb-2`}>
+        {image ? (
+          <Image
+            source={{uri: getCorrectImageUrl(image)}}
+            style={tw`w-full h-full`}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={tw`w-full h-full items-center justify-center bg-gray-200`}>
+            <Text style={tw`text-gray-400 text-xs`}>IMG</Text>
+          </View>
+        )}
       </View>
+
+      {/* Nome da Categoria */}
+      <Text
+        style={tw`text-sm font-medium text-center text-gray-900`}
+        numberOfLines={2}>
+        {name}
+      </Text>
+
+      {/* Descrição (opcional) */}
+      {description && (
+        <Text
+          style={tw`text-xs text-gray-500 text-center mt-1`}
+          numberOfLines={1}>
+          {description}
+        </Text>
+      )}
     </TouchableOpacity>
   );
-}
+};
 
 export default Category;
