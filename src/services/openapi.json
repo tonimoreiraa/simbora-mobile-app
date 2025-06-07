@@ -1,0 +1,3352 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Simbora API",
+    "version": "1.0.0",
+    "description": "Documentação da API Simbora"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Servidor de desenvolvimento"
+    },
+    {"url": "https://api.simbora.com", "description": "Servidor de produção"}
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token de autenticação JWT"
+      }
+    }
+  },
+  "security": [{"BearerAuth": []}],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints relacionados à autenticação"
+    }
+  ],
+  "paths": {
+    "/auth/sign-in": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login do usuário",
+        "description": "Realiza o login do usuário utilizando email e senha, retornando o token de acesso",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email do usuário",
+                    "example": "joao@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 6,
+                    "description": "Senha do usuário",
+                    "example": "senha123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "ID único do usuário",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome completo do usuário",
+                          "example": "João Silva"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email do usuário",
+                          "example": "joao@email.com"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Nome de usuário único",
+                          "example": "joao.silva"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": ["customer", "professional"],
+                          "description": "Papel do usuário no sistema",
+                          "example": "customer"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Data de criação do usuário",
+                          "example": "2024-01-15T10:30:00.000Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Data da última atualização",
+                          "example": "2024-01-15T10:30:00.000Z"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do token",
+                          "example": "bearer"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do token",
+                          "example": "API Token"
+                        },
+                        "hash": {
+                          "type": "string",
+                          "description": "Hash do token para autenticação",
+                          "example": "oat_1.abc123def456ghi789"
+                        },
+                        "abilities": {
+                          "type": "array",
+                          "items": {"type": "string"},
+                          "description": "Permissões associadas ao token",
+                          "example": ["*"]
+                        },
+                        "lastUsedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "Data do último uso do token",
+                          "example": null
+                        },
+                        "expiresAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "Data de expiração do token",
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "email": ["O campo email é obrigatório"],
+                        "password": ["O campo senha é obrigatório"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_INVALID_CREDENTIALS: Invalid user credentials"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                      },
+                      "example": {
+                        "email": ["O email deve ter um formato válido"],
+                        "password": ["A senha deve ter no mínimo 6 caracteres"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-up": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Cadastro de novo usuário",
+        "description": "Cria uma nova conta de usuário no sistema com os dados fornecidos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "username", "password", "role"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100,
+                    "description": "Nome completo do usuário",
+                    "example": "João Silva"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email único do usuário",
+                    "example": "joao@email.com"
+                  },
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 50,
+                    "pattern": "^[a-zA-Z0-9._-]+$",
+                    "description": "Nome de usuário único (apenas letras, números, pontos, hífens e underscores)",
+                    "example": "joao.silva"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 8,
+                    "description": "Senha do usuário (mínimo 8 caracteres, deve conter ao menos uma letra maiúscula, uma minúscula, um número e um caractere especial)",
+                    "example": "MinhaSenh@123"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["customer", "professional"],
+                    "description": "Papel do usuário no sistema",
+                    "example": "customer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "ID único do usuário",
+                          "example": 2
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome completo do usuário",
+                          "example": "João Silva"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "Email do usuário",
+                          "example": "joao@email.com"
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Nome de usuário único",
+                          "example": "joao.silva"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": ["customer", "professional"],
+                          "description": "Papel do usuário no sistema",
+                          "example": "customer"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Data de criação do usuário",
+                          "example": "2024-01-15T11:45:00.000Z"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "Data da última atualização",
+                          "example": "2024-01-15T11:45:00.000Z"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "Tipo do token",
+                          "example": "bearer"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do token",
+                          "example": "API Token"
+                        },
+                        "hash": {
+                          "type": "string",
+                          "description": "Hash do token para autenticação",
+                          "example": "oat_2.xyz789abc123def456"
+                        },
+                        "abilities": {
+                          "type": "array",
+                          "items": {"type": "string"},
+                          "description": "Permissões associadas ao token",
+                          "example": ["*"]
+                        },
+                        "lastUsedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "Data do último uso do token",
+                          "example": null
+                        },
+                        "expiresAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "nullable": true,
+                          "description": "Data de expiração do token",
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "email": ["O campo email é obrigatório"],
+                        "password": ["O campo senha é obrigatório"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email ou username já existem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_DUPLICATE_KEY: UNIQUE constraint failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "email": ["Este email já está em uso"],
+                        "username": ["Este username já está em uso"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                      },
+                      "example": {
+                        "email": ["O email deve ter um formato válido"],
+                        "password": ["A senha deve ter no mínimo 8 caracteres"],
+                        "name": ["O nome deve ter no mínimo 2 caracteres"],
+                        "username": [
+                          "O username deve ter no mínimo 3 caracteres"
+                        ],
+                        "role": ["O role deve ser: customer ou professional"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Listar categorias",
+        "description": "Lista todas as categorias ou filtra por categoria pai",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "categoryId",
+            "schema": {"type": "integer"},
+            "description": "ID da categoria pai para filtrar subcategorias",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de categorias retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID único da categoria",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Nome da categoria",
+                        "example": "Eletrônicos"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Descrição da categoria",
+                        "example": "Produtos eletrônicos em geral"
+                      },
+                      "categoryId": {
+                        "type": "integer",
+                        "nullable": true,
+                        "description": "ID da categoria pai",
+                        "example": null
+                      },
+                      "image": {
+                        "type": "string",
+                        "description": "URL completa da imagem da categoria",
+                        "example": "https://api.simbora.com/uploads/clx123abc.jpg"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data de criação",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data da última atualização",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Criar nova categoria",
+        "description": "Cria uma nova categoria com upload de imagem",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "image"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "description": "Nome da categoria",
+                    "example": "Smartphones"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da categoria",
+                    "example": "Dispositivos móveis inteligentes"
+                  },
+                  "categoryId": {
+                    "type": "integer",
+                    "description": "ID da categoria pai (para subcategorias)",
+                    "example": 1
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem da categoria (PNG, JPG, JPEG - máx 4MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoria criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 5},
+                    "name": {"type": "string", "example": "Smartphones"},
+                    "description": {
+                      "type": "string",
+                      "example": "Dispositivos móveis inteligentes"
+                    },
+                    "categoryId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": 1
+                    },
+                    "image": {"type": "string", "example": "clx123abc.jpg"},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T11:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T11:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "name": ["O nome deve ter no mínimo 3 caracteres"],
+                        "image": ["A imagem é obrigatória"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria pai não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Buscar categoria por ID",
+        "description": "Retorna uma categoria específica com seus dados e categoria pai",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID da categoria",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria encontrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 1},
+                    "name": {"type": "string", "example": "Eletrônicos"},
+                    "description": {
+                      "type": "string",
+                      "example": "Produtos eletrônicos em geral"
+                    },
+                    "categoryId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://api.simbora.com/uploads/clx123abc.jpg"
+                    },
+                    "category": {
+                      "type": "object",
+                      "nullable": true,
+                      "description": "Categoria pai (se existir)",
+                      "properties": {
+                        "id": {"type": "integer", "example": 2},
+                        "name": {"type": "string", "example": "Categoria Pai"},
+                        "description": {
+                          "type": "string",
+                          "example": "Descrição da categoria pai"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Atualizar categoria",
+        "description": "Atualiza uma categoria existente",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID da categoria a ser atualizada",
+            "example": 1
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "image"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "description": "Nome da categoria",
+                    "example": "Smartphones Atualizados"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição da categoria",
+                    "example": "Nova descrição dos dispositivos móveis"
+                  },
+                  "categoryId": {
+                    "type": "integer",
+                    "description": "ID da categoria pai",
+                    "example": 2
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Nova imagem da categoria (PNG, JPG, JPEG - máx 4MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Categoria atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 1},
+                    "name": {
+                      "type": "string",
+                      "example": "Smartphones Atualizados"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Nova descrição dos dispositivos móveis"
+                    },
+                    "categoryId": {"type": "integer", "example": 2},
+                    "image": {"type": "string", "example": "clx456def.jpg"},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T12:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoria não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Deletar categoria",
+        "description": "Remove uma categoria do sistema",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID da categoria a ser deletada",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "204": {"description": "Categoria deletada com sucesso"},
+          "404": {
+            "description": "Categoria não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Listar notificações não visualizadas",
+        "description": "Retorna todas as notificações (pedidos compartilhados) não visualizadas do usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de notificações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderShares": {
+                      "type": "array",
+                      "description": "Lista de pedidos compartilhados não visualizados",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "ID único do compartilhamento",
+                            "example": 1
+                          },
+                          "orderId": {
+                            "type": "integer",
+                            "description": "ID do pedido compartilhado",
+                            "example": 25
+                          },
+                          "sharedByUserId": {
+                            "type": "integer",
+                            "description": "ID do usuário que compartilhou",
+                            "example": 10
+                          },
+                          "sharedWithUserId": {
+                            "type": "integer",
+                            "description": "ID do usuário que recebeu o compartilhamento",
+                            "example": 15
+                          },
+                          "viewed": {
+                            "type": "boolean",
+                            "description": "Se a notificação foi visualizada",
+                            "example": false
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "Mensagem do compartilhamento",
+                            "example": "João compartilhou um pedido com você"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data de criação da notificação",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data da última atualização",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "orderShares": [
+                    {
+                      "id": 1,
+                      "orderId": 25,
+                      "sharedByUserId": 10,
+                      "sharedWithUserId": 15,
+                      "viewed": false,
+                      "message": "João compartilhou um pedido com você",
+                      "createdAt": "2024-01-15T10:30:00.000Z",
+                      "updatedAt": "2024-01-15T10:30:00.000Z"
+                    },
+                    {
+                      "id": 2,
+                      "orderId": 30,
+                      "sharedByUserId": 12,
+                      "sharedWithUserId": 15,
+                      "viewed": false,
+                      "message": "Maria compartilhou um pedido com você",
+                      "createdAt": "2024-01-15T11:15:00.000Z",
+                      "updatedAt": "2024-01-15T11:15:00.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order-shares/share": {
+      "post": {
+        "tags": ["Order Shares"],
+        "summary": "Compartilhar pedido com outro usuário",
+        "description": "Permite que um usuário compartilhe um pedido com outro usuário, criando uma notificação",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["orderId", "sharedWithUserId"],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "ID do pedido a ser compartilhado",
+                    "example": 25
+                  },
+                  "sharedWithUserId": {
+                    "type": "integer",
+                    "description": "ID do usuário que receberá o compartilhamento",
+                    "example": 15
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pedido compartilhado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID único do compartilhamento (CUID)",
+                      "example": "clx123abc456def789"
+                    },
+                    "orderId": {
+                      "type": "integer",
+                      "description": "ID do pedido compartilhado",
+                      "example": 25
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "description": "ID do usuário que compartilhou (usuário autenticado)",
+                      "example": 10
+                    },
+                    "sharedWithUserId": {
+                      "type": "integer",
+                      "description": "ID do usuário que recebeu o compartilhamento",
+                      "example": 15
+                    },
+                    "viewed": {
+                      "type": "boolean",
+                      "description": "Se o compartilhamento foi visualizado",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do compartilhamento",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido ou usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order-shares/view": {
+      "patch": {
+        "tags": ["Order Shares"],
+        "summary": "Marcar compartilhamento como visualizado",
+        "description": "Marca uma notificação de compartilhamento como visualizada pelo usuário destinatário",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["orderShareId"],
+                "properties": {
+                  "orderShareId": {
+                    "type": "string",
+                    "description": "ID do compartilhamento a ser marcado como visualizado",
+                    "example": "clx123abc456def789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Compartilhamento marcado como visualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID único do compartilhamento",
+                      "example": "clx123abc456def789"
+                    },
+                    "orderId": {
+                      "type": "integer",
+                      "description": "ID do pedido compartilhado",
+                      "example": 25
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "description": "ID do usuário que compartilhou",
+                      "example": 10
+                    },
+                    "sharedWithUserId": {
+                      "type": "integer",
+                      "description": "ID do usuário que recebeu o compartilhamento",
+                      "example": 15
+                    },
+                    "viewed": {
+                      "type": "boolean",
+                      "description": "Status de visualização (sempre true após esta operação)",
+                      "example": true
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do compartilhamento",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-01-15T12:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "orderShareId é obrigatório"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compartilhamento não encontrado ou usuário não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order-updates": {
+      "post": {
+        "tags": ["Order Updates"],
+        "summary": "Criar atualização de pedido",
+        "description": "Cria uma nova atualização para um pedido, alterando seu status e adicionando informações",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["orderId", "status"],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "ID do pedido a ser atualizado",
+                    "example": 25
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Pending",
+                      "Confirmed",
+                      "Processing",
+                      "On Hold",
+                      "Awaiting Payment",
+                      "Payment Received",
+                      "In Production",
+                      "Shipped",
+                      "Out for Delivery",
+                      "Delivered",
+                      "Completed",
+                      "Cancelled",
+                      "Refunded",
+                      "Failed",
+                      "Returned",
+                      "Partially Shipped",
+                      "Backordered"
+                    ],
+                    "description": "Novo status do pedido",
+                    "example": "Shipped"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Título da atualização",
+                    "example": "Pedido enviado"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "Comentário adicional sobre a atualização",
+                    "example": "Pedido enviado via transportadora XYZ, código de rastreamento: BR123456789"
+                  },
+                  "private": {
+                    "type": "boolean",
+                    "description": "Se a atualização é privada (não visível para o cliente)",
+                    "example": false
+                  },
+                  "onlyMe": {
+                    "type": "boolean",
+                    "description": "Se a atualização é visível apenas para quem criou",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Atualização criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único da atualização",
+                      "example": 15
+                    },
+                    "orderId": {
+                      "type": "integer",
+                      "description": "ID do pedido atualizado",
+                      "example": 25
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status aplicado ao pedido",
+                      "example": "Shipped"
+                    },
+                    "title": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Título da atualização",
+                      "example": "Pedido enviado"
+                    },
+                    "comment": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Comentário da atualização",
+                      "example": "Pedido enviado via transportadora XYZ"
+                    },
+                    "private": {
+                      "type": "boolean",
+                      "nullable": true,
+                      "description": "Se é uma atualização privada",
+                      "example": false
+                    },
+                    "onlyMe": {
+                      "type": "boolean",
+                      "nullable": true,
+                      "description": "Se é visível apenas para o criador",
+                      "example": false
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação da atualização",
+                      "example": "2024-01-15T14:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-01-15T14:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "orderId": ["O pedido deve existir"],
+                        "status": ["Status deve ser um dos valores permitidos"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                      },
+                      "example": {
+                        "orderId": ["O campo orderId é obrigatório"],
+                        "status": [
+                          "O status deve ser um dos valores: Pending, Confirmed, Processing..."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Listar pedidos",
+        "description": "Lista pedidos do usuário (ou todos se for admin) com paginação e filtros",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {"type": "integer", "minimum": 1},
+            "description": "Número da página",
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {"type": "integer", "minimum": 1, "maximum": 100},
+            "description": "Itens por página (máximo 100)",
+            "example": 50
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Pending",
+                "Confirmed",
+                "Processing",
+                "On Hold",
+                "Awaiting Payment",
+                "Payment Received",
+                "In Production",
+                "Shipped",
+                "Out for Delivery",
+                "Delivered",
+                "Completed",
+                "Cancelled",
+                "Refunded",
+                "Failed",
+                "Returned",
+                "Partially Shipped",
+                "Backordered"
+              ]
+            },
+            "description": "Filtrar por status do pedido",
+            "example": "Processing"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 25},
+                          "customerId": {"type": "integer", "example": 10},
+                          "status": {"type": "string", "example": "Processing"},
+                          "total": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 299.99
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T12:45:00.000Z"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "description": "Total de registros",
+                          "example": 150
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "description": "Registros por página",
+                          "example": 50
+                        },
+                        "currentPage": {
+                          "type": "integer",
+                          "description": "Página atual",
+                          "example": 1
+                        },
+                        "lastPage": {
+                          "type": "integer",
+                          "description": "Última página",
+                          "example": 3
+                        },
+                        "firstPage": {
+                          "type": "integer",
+                          "description": "Primeira página",
+                          "example": 1
+                        },
+                        "firstPageUrl": {
+                          "type": "string",
+                          "example": "/?page=1"
+                        },
+                        "lastPageUrl": {
+                          "type": "string",
+                          "example": "/?page=3"
+                        },
+                        "nextPageUrl": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "/?page=2"
+                        },
+                        "previousPageUrl": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Criar novo pedido",
+        "description": "Cria um novo pedido para o usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["items"],
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "description": "Itens do pedido",
+                    "items": {
+                      "type": "object",
+                      "required": ["productId", "quantity", "price"],
+                      "properties": {
+                        "productId": {
+                          "type": "integer",
+                          "description": "ID do produto",
+                          "example": 15
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "Quantidade do produto",
+                          "example": 2
+                        },
+                        "price": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "Preço unitário do produto",
+                          "example": 149.99
+                        }
+                      }
+                    }
+                  },
+                  "payment": {
+                    "type": "object",
+                    "description": "Informações de pagamento",
+                    "properties": {
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "credit_card",
+                          "debit_card",
+                          "pix",
+                          "bank_transfer"
+                        ],
+                        "description": "Método de pagamento",
+                        "example": "credit_card"
+                      },
+                      "installments": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Número de parcelas",
+                        "example": 3
+                      }
+                    }
+                  },
+                  "shipping": {
+                    "type": "object",
+                    "description": "Informações de envio",
+                    "properties": {
+                      "address": {
+                        "type": "string",
+                        "description": "Endereço de entrega",
+                        "example": "Rua das Flores, 123"
+                      },
+                      "city": {
+                        "type": "string",
+                        "description": "Cidade",
+                        "example": "São Paulo"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "Estado",
+                        "example": "SP"
+                      },
+                      "zipCode": {
+                        "type": "string",
+                        "description": "CEP",
+                        "example": "01234-567"
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": ["standard", "express", "same_day"],
+                        "description": "Método de envio",
+                        "example": "standard"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pedido criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 26},
+                    "customerId": {"type": "integer", "example": 10},
+                    "status": {"type": "string", "example": "Pending"},
+                    "total": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 299.98
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {"type": "integer", "example": 15},
+                          "quantity": {"type": "integer", "example": 2},
+                          "price": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 149.99
+                          }
+                        }
+                      }
+                    },
+                    "payment": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": {"method": "credit_card", "installments": 3}
+                    },
+                    "shipping": {
+                      "type": "object",
+                      "nullable": true,
+                      "example": {
+                        "address": "Rua das Flores, 123",
+                        "city": "São Paulo",
+                        "method": "standard"
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T15:45:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T15:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Buscar pedido por ID",
+        "description": "Retorna detalhes completos de um pedido específico com itens, pagamento, envio e atualizações",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID do pedido",
+            "example": 25
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do pedido retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 25},
+                    "customerId": {"type": "integer", "example": 10},
+                    "status": {"type": "string", "example": "Processing"},
+                    "total": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 299.99
+                    },
+                    "customer": {
+                      "type": "object",
+                      "description": "Dados do cliente (apenas para admins)",
+                      "nullable": true,
+                      "properties": {
+                        "id": {"type": "integer", "example": 10},
+                        "name": {"type": "string", "example": "João Silva"},
+                        "email": {"type": "string", "example": "joao@email.com"}
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "Itens do pedido",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 1},
+                          "productId": {"type": "integer", "example": 15},
+                          "orderId": {"type": "integer", "example": 25},
+                          "quantity": {"type": "integer", "example": 2},
+                          "price": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 149.99
+                          },
+                          "product": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "integer", "example": 15},
+                              "name": {
+                                "type": "string",
+                                "example": "Smartphone XYZ"
+                              },
+                              "price": {
+                                "type": "number",
+                                "format": "decimal",
+                                "example": 149.99
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "payment": {
+                      "type": "object",
+                      "nullable": true,
+                      "description": "Informações de pagamento",
+                      "properties": {
+                        "id": {"type": "integer", "example": 5},
+                        "method": {"type": "string", "example": "credit_card"},
+                        "status": {"type": "string", "example": "paid"},
+                        "amount": {
+                          "type": "number",
+                          "format": "decimal",
+                          "example": 299.99
+                        }
+                      }
+                    },
+                    "shipping": {
+                      "type": "object",
+                      "nullable": true,
+                      "description": "Informações de envio",
+                      "properties": {
+                        "id": {"type": "integer", "example": 8},
+                        "address": {
+                          "type": "string",
+                          "example": "Rua das Flores, 123"
+                        },
+                        "city": {"type": "string", "example": "São Paulo"},
+                        "trackingCode": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "BR123456789"
+                        }
+                      }
+                    },
+                    "updates": {
+                      "type": "array",
+                      "description": "Histórico de atualizações do pedido",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 15},
+                          "status": {"type": "string", "example": "Shipped"},
+                          "title": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "Pedido enviado"
+                          },
+                          "comment": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "Enviado via transportadora XYZ"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T14:30:00.000Z"
+                          }
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T12:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Acesso negado ao pedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Você não tem permissão para acessar este pedido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-variants": {
+      "post": {
+        "tags": ["Product Variants"],
+        "summary": "Criar variante de produto",
+        "description": "Cria uma nova variante para um produto existente com upload de imagem obrigatória",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "productId",
+                  "variantTypeId",
+                  "value",
+                  "price",
+                  "photo"
+                ],
+                "properties": {
+                  "productId": {
+                    "type": "integer",
+                    "description": "ID do produto pai",
+                    "example": 15
+                  },
+                  "variantTypeId": {
+                    "type": "integer",
+                    "description": "ID do tipo de variante (ex. cor, tamanho)",
+                    "example": 2
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Valor da variante (ex. \"Azul\", \"M\", \"64GB\")",
+                    "example": "Azul"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Unidade de medida (opcional)",
+                    "example": "GB"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "decimal",
+                    "minimum": 0.01,
+                    "description": "Preço específico desta variante",
+                    "example": 199.99
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem da variante (JPG, JPEG, PNG - máx 2MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Variante criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único da variante",
+                      "example": 8
+                    },
+                    "productId": {
+                      "type": "integer",
+                      "description": "ID do produto pai",
+                      "example": 15
+                    },
+                    "variantTypeId": {
+                      "type": "integer",
+                      "description": "ID do tipo de variante",
+                      "example": 2
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Valor da variante",
+                      "example": "Azul"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Unidade de medida",
+                      "example": "GB"
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "decimal",
+                      "description": "Preço da variante",
+                      "example": 199.99
+                    },
+                    "photo": {
+                      "type": "string",
+                      "description": "Nome do arquivo da imagem",
+                      "example": "clx123abc456.jpg"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T16:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T16:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos ou imagem não enviada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Você deve enviar uma imagem válida."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "productId": ["O produto deve existir"],
+                        "variantTypeId": ["O tipo de variante deve existir"],
+                        "price": ["O preço deve ser um número positivo"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-variants/{id}": {
+      "delete": {
+        "tags": ["Product Variants"],
+        "summary": "Deletar variante de produto",
+        "description": "Remove uma variante de produto do sistema",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID da variante a ser deletada",
+            "example": 8
+          }
+        ],
+        "responses": {
+          "204": {"description": "Variante deletada com sucesso"},
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Variante não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Product Variants"],
+        "summary": "Atualizar variante de produto",
+        "description": "Atualiza uma variante existente, incluindo opção de trocar a imagem",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID da variante a ser atualizada",
+            "example": 8
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["variantTypeId", "value", "price"],
+                "properties": {
+                  "variantTypeId": {
+                    "type": "integer",
+                    "description": "ID do tipo de variante",
+                    "example": 2
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Novo valor da variante",
+                    "example": "Vermelho"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Unidade de medida (opcional)",
+                    "example": "GB"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "decimal",
+                    "minimum": 0.01,
+                    "description": "Novo preço da variante",
+                    "example": 219.99
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Nova imagem da variante (JPG, JPEG, PNG - máx 2MB) - opcional"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Variante atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 8},
+                    "productId": {"type": "integer", "example": 15},
+                    "variantTypeId": {"type": "integer", "example": 2},
+                    "value": {"type": "string", "example": "Vermelho"},
+                    "unit": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "GB"
+                    },
+                    "price": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 219.99
+                    },
+                    "photo": {
+                      "type": "string",
+                      "description": "Nome do arquivo da imagem (atualizada ou existente)",
+                      "example": "clx789def123.jpg"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T16:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T18:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Variante não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "variantTypeId": ["O tipo de variante deve existir"],
+                        "price": ["O preço deve ser um número positivo"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Listar produtos",
+        "description": "Lista produtos com busca, filtros e paginação",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {"type": "string"},
+            "description": "Termo de busca (nome ou descrição)",
+            "example": "smartphone"
+          },
+          {
+            "in": "query",
+            "name": "categoryId",
+            "schema": {"type": "integer"},
+            "description": "Filtrar por categoria",
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {"type": "integer", "minimum": 1},
+            "description": "Número da página",
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {"type": "integer", "minimum": 1, "maximum": 100},
+            "description": "Itens por página",
+            "example": 25
+          },
+          {
+            "in": "query",
+            "name": "groupByCategory",
+            "schema": {"type": "boolean"},
+            "description": "Agrupar resultados por categoria",
+            "example": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 15},
+                          "name": {
+                            "type": "string",
+                            "example": "Smartphone XYZ Pro"
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 899.99
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "Smartphone com tela de 6.5 polegadas e câmera tripla"
+                          },
+                          "supplierId": {"type": "integer", "example": 5},
+                          "categoryId": {"type": "integer", "example": 1},
+                          "tags": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "nullable": true,
+                            "example": ["eletrônicos", "smartphone", "android"]
+                          },
+                          "stock": {"type": "integer", "example": 50},
+                          "supplier": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "integer", "example": 5},
+                              "name": {
+                                "type": "string",
+                                "example": "TechSupplier Ltd"
+                              }
+                            }
+                          },
+                          "images": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {"type": "integer", "example": 1},
+                                "path": {
+                                  "type": "string",
+                                  "example": "https://api.simbora.com/uploads/clx123abc.jpg"
+                                },
+                                "productId": {"type": "integer", "example": 15}
+                              }
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T10:30:00.000Z"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {"type": "integer", "example": 150},
+                        "perPage": {"type": "integer", "example": 25},
+                        "currentPage": {"type": "integer", "example": 1},
+                        "lastPage": {"type": "integer", "example": 6}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Criar novo produto",
+        "description": "Cria um produto completo com imagens e variantes",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "price",
+                  "description",
+                  "supplierId",
+                  "categoryId",
+                  "image"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto",
+                    "example": "Smartphone XYZ Pro"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "decimal",
+                    "minimum": 0.01,
+                    "description": "Preço do produto",
+                    "example": 899.99
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição detalhada do produto",
+                    "example": "Smartphone com tela de 6.5 polegadas, câmera tripla de 108MP"
+                  },
+                  "supplierId": {
+                    "type": "integer",
+                    "description": "ID do fornecedor",
+                    "example": 5
+                  },
+                  "categoryId": {
+                    "type": "integer",
+                    "description": "ID da categoria",
+                    "example": 1
+                  },
+                  "tags": {
+                    "type": "string",
+                    "description": "Tags separadas por vírgula",
+                    "example": "eletrônicos,smartphone,android"
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Quantidade em estoque",
+                    "example": 50
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem principal do produto (PNG, JPG, JPEG - máx 2MB)"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {"type": "string", "format": "binary"},
+                    "description": "Imagens adicionais do produto"
+                  },
+                  "variants": {
+                    "type": "array",
+                    "description": "Variantes do produto (ex. cores, tamanhos)",
+                    "items": {
+                      "type": "object",
+                      "required": ["variantTypeId", "value", "price"],
+                      "properties": {
+                        "variantTypeId": {
+                          "type": "integer",
+                          "description": "ID do tipo de variante",
+                          "example": 2
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Valor da variante",
+                          "example": "Azul"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "description": "Unidade (opcional)",
+                          "example": "GB"
+                        },
+                        "price": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "Preço específico da variante",
+                          "example": 949.99
+                        },
+                        "photo": {
+                          "type": "string",
+                          "format": "binary",
+                          "description": "Foto específica da variante"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 16},
+                    "name": {"type": "string", "example": "Smartphone XYZ Pro"},
+                    "price": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 899.99
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Smartphone com tela de 6.5 polegadas"
+                    },
+                    "supplierId": {"type": "integer", "example": 5},
+                    "categoryId": {"type": "integer", "example": 1},
+                    "tags": {
+                      "type": "array",
+                      "items": {"type": "string"},
+                      "example": ["eletrônicos", "smartphone", "android"]
+                    },
+                    "stock": {"type": "integer", "example": 50},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T16:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Dados de entrada inválidos"},
+          "401": {"description": "Usuário não autenticado"},
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "supplierId": ["O fornecedor deve existir"],
+                        "categoryId": ["A categoria deve existir"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Buscar produto por ID",
+        "description": "Retorna detalhes completos de um produto com categoria, fornecedor, variantes e imagens",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID do produto",
+            "example": 15
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 15},
+                    "name": {"type": "string", "example": "Smartphone XYZ Pro"},
+                    "price": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 899.99
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Smartphone com tela de 6.5 polegadas"
+                    },
+                    "supplierId": {"type": "integer", "example": 5},
+                    "categoryId": {"type": "integer", "example": 1},
+                    "tags": {
+                      "type": "array",
+                      "items": {"type": "string"},
+                      "nullable": true,
+                      "example": ["eletrônicos", "smartphone", "android"]
+                    },
+                    "stock": {"type": "integer", "example": 50},
+                    "category": {
+                      "type": "object",
+                      "properties": {
+                        "id": {"type": "integer", "example": 1},
+                        "name": {"type": "string", "example": "Eletrônicos"}
+                      }
+                    },
+                    "supplier": {
+                      "type": "object",
+                      "properties": {
+                        "id": {"type": "integer", "example": 5},
+                        "name": {
+                          "type": "string",
+                          "example": "TechSupplier Ltd"
+                        }
+                      }
+                    },
+                    "variants": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 8},
+                          "variantTypeId": {"type": "integer", "example": 2},
+                          "value": {"type": "string", "example": "Azul"},
+                          "unit": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "GB"
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 949.99
+                          },
+                          "photo": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "clx456def.jpg"
+                          },
+                          "type": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "integer", "example": 2},
+                              "name": {"type": "string", "example": "Cor"},
+                              "defaultUnit": {
+                                "type": "string",
+                                "example": "unidade"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 1},
+                          "path": {
+                            "type": "string",
+                            "example": "https://api.simbora.com/uploads/clx123abc.jpg"
+                          },
+                          "productId": {"type": "integer", "example": 15}
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T12:45:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Atualizar produto",
+        "description": "Atualiza dados básicos de um produto existente",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID do produto a ser atualizado",
+            "example": 15
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "price",
+                  "description",
+                  "supplierId",
+                  "categoryId"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto",
+                    "example": "Smartphone XYZ Pro Max"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "decimal",
+                    "minimum": 0.01,
+                    "description": "Novo preço do produto",
+                    "example": 999.99
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Nova descrição do produto",
+                    "example": "Smartphone premium com tela de 6.7 polegadas"
+                  },
+                  "supplierId": {
+                    "type": "integer",
+                    "description": "ID do fornecedor",
+                    "example": 5
+                  },
+                  "categoryId": {
+                    "type": "integer",
+                    "description": "ID da categoria",
+                    "example": 1
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "nullable": true,
+                    "description": "Lista de tags",
+                    "example": ["eletrônicos", "smartphone", "premium"]
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Quantidade em estoque",
+                    "example": 30
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Produto atualizado com sucesso"},
+          "401": {"description": "Usuário não autenticado"},
+          "404": {"description": "Produto não encontrado"},
+          "422": {"description": "Erro de validação"}
+        }
+      }
+    },
+    "/products/add-photo": {
+      "post": {
+        "tags": ["Products"],
+        "summary": "Adicionar foto ao produto",
+        "description": "Adiciona uma imagem adicional a um produto existente",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["productId", "image"],
+                "properties": {
+                  "productId": {
+                    "type": "integer",
+                    "description": "ID do produto",
+                    "example": 15
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem a ser adicionada (JPG, JPEG, PNG - máx 2MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Imagem adicionada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {"message": {"type": "string", "example": "OK"}}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Imagem não enviada ou inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Você deve enviar uma imagem válida."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Usuário não autenticado"},
+          "404": {"description": "Produto não encontrado"}
+        }
+      }
+    },
+    "/user-addresses": {
+      "get": {
+        "tags": ["User Addresses"],
+        "summary": "Listar endereços do usuário",
+        "description": "Retorna todos os endereços cadastrados pelo usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de endereços retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID único do endereço",
+                        "example": 1
+                      },
+                      "userId": {
+                        "type": "integer",
+                        "description": "ID do usuário proprietário",
+                        "example": 10
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Nome/apelido do endereço",
+                        "example": "Casa"
+                      },
+                      "streetName": {
+                        "type": "string",
+                        "description": "Nome da rua",
+                        "example": "Rua das Flores"
+                      },
+                      "number": {
+                        "type": "string",
+                        "description": "Número da residência",
+                        "example": "123"
+                      },
+                      "complement": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "Complemento do endereço",
+                        "example": "Apto 45"
+                      },
+                      "neighborhood": {
+                        "type": "string",
+                        "description": "Bairro",
+                        "example": "Centro"
+                      },
+                      "city": {
+                        "type": "string",
+                        "description": "Cidade",
+                        "example": "São Paulo"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "Estado",
+                        "example": "SP"
+                      },
+                      "zipCode": {
+                        "type": "string",
+                        "description": "CEP",
+                        "example": "01234-567"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "País",
+                        "example": "Brasil"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data de criação",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data da última atualização",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "userId": 10,
+                    "name": "Casa",
+                    "streetName": "Rua das Flores",
+                    "number": "123",
+                    "complement": "Apto 45",
+                    "neighborhood": "Centro",
+                    "city": "São Paulo",
+                    "state": "SP",
+                    "zipCode": "01234-567",
+                    "country": "Brasil",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "updatedAt": "2024-01-15T10:30:00.000Z"
+                  },
+                  {
+                    "id": 2,
+                    "userId": 10,
+                    "name": "Trabalho",
+                    "streetName": "Av. Paulista",
+                    "number": "1000",
+                    "complement": "Sala 1501",
+                    "neighborhood": "Bela Vista",
+                    "city": "São Paulo",
+                    "state": "SP",
+                    "zipCode": "01310-100",
+                    "country": "Brasil",
+                    "createdAt": "2024-01-15T11:00:00.000Z",
+                    "updatedAt": "2024-01-15T11:00:00.000Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-addresses/{id}": {
+      "get": {
+        "tags": ["User Addresses"],
+        "summary": "Buscar endereço por ID",
+        "description": "Retorna um endereço específico do usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID do endereço",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 1},
+                    "userId": {"type": "integer", "example": 10},
+                    "name": {"type": "string", "example": "Casa"},
+                    "streetName": {
+                      "type": "string",
+                      "example": "Rua das Flores"
+                    },
+                    "number": {"type": "string", "example": "123"},
+                    "complement": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "Apto 45"
+                    },
+                    "neighborhood": {"type": "string", "example": "Centro"},
+                    "city": {"type": "string", "example": "São Paulo"},
+                    "state": {"type": "string", "example": "SP"},
+                    "zipCode": {"type": "string", "example": "01234-567"},
+                    "country": {"type": "string", "example": "Brasil"},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endereço não encontrado ou não pertence ao usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User Addresses"],
+        "summary": "Deletar endereço",
+        "description": "Remove um endereço específico do usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {"type": "integer"},
+            "description": "ID do endereço a ser deletado",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string", "example": "Ok."}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endereço não encontrado ou não pertence ao usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

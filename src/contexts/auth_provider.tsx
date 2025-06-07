@@ -1,6 +1,12 @@
-import React, { createContext, useState, useContext, useEffect, PropsWithChildren } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  PropsWithChildren,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { api } from '../services/api';
+import {api} from '../services/api';
 
 export interface User {
   id: string;
@@ -22,13 +28,15 @@ export interface AuthProviderProps {
 }
 
 export interface AuthResponse {
-  token: { token: string };
+  token: {token: string};
   user: User;
 }
 
-export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+export const AuthContext = createContext<AuthContextData>(
+  {} as AuthContextData,
+);
 
-export function AuthProvider({ children }: PropsWithChildren) {
+export function AuthProvider({children}: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,10 +62,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
         email,
         password,
       });
-      const { token, user: userData } = response.data;
+      const {token, user: userData} = response.data;
 
       api.defaults.headers.Authorization = `Bearer ${token.token}`;
-      setUser(user)
+      setUser(user);
 
       await AsyncStorage.setItem('@simbora-user', JSON.stringify(userData));
       await AsyncStorage.setItem('@simbora-token', token.token);
@@ -92,9 +100,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         loading,
         signIn,
         signOut,
-        signInWithToken
-      }}
-    >
+        signInWithToken,
+      }}>
       {children}
     </AuthContext.Provider>
   );

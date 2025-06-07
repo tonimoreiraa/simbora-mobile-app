@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Image, Dimensions } from 'react-native';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import {View, Image, Dimensions} from 'react-native';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import tw from 'twrnc';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 interface CarouselProps {
   items: string[];
 }
 
-const Carousel: React.FC<CarouselProps> = ({ items }) => {
+const Carousel: React.FC<CarouselProps> = ({items}) => {
   return (
     <View style={tw`w-full h-96`}>
       <SwiperFlatList
@@ -19,11 +19,11 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
         index={0}
         showPagination
         data={items}
-        renderItem={({ item }) => (
-          <View style={[tw`h-96 w-full`,  { width }]}>
+        renderItem={({item}) => (
+          <View style={[tw`h-96 w-full`, {width}]}>
             <Image
-              source={{ uri: item }}
-              style={[tw`h-96 w-full`, { width }]}
+              source={{uri: item}}
+              style={[tw`h-96 w-full`, {width}]}
               resizeMode="cover"
             />
           </View>

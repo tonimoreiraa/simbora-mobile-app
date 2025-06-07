@@ -8,61 +8,81 @@ import {
 import tw from 'twrnc';
 import CartProduct from '../components/cart_product';
 import Price from '../components/price';
-import { useCart } from '../contexts/cart_provider';
-import { useNavigation } from '@react-navigation/native';
-import { ForYouProducts } from '../components/for_you_products';
+import {useCart} from '../contexts/cart_provider';
+import {useNavigation} from '@react-navigation/native';
+import {ForYouProducts} from '../components/for_you_products';
+import {ShoppingBag} from 'phosphor-react-native';
 
 function Cart() {
-  const cart = useCart()
-  const navigation = useNavigation()
-
+  const cart = useCart();
+  const navigation = useNavigation<any>();
+  
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
-      <ScrollView>
-        <View style={tw`flex flex-col items-center justify-start py-6 h-full`}>
+      <ScrollView style={tw`flex-1`}>
+        <View style={tw`flex flex-col items-center justify-start py-6`}>
+          {/* Header */}
           <View>
             <Text style={tw`text-2xl font-bold`}>Meu carrinho</Text>
           </View>
-          {!cart.items.length && <Text style={tw`text-center mt-4 text-stone-500`}>
-            Nenhum item foi adicionado ao carrinho.
-          </Text>}
+          
+          {/* Empty Cart State */}
+          {!cart.items.length && (
+            <View style={tw`items-center py-8`}>
+              <ShoppingBag size={64} color="#d1d5db" weight="regular" />
+              <Text style={tw`text-center mt-4 text-stone-500 text-lg`}>
+                Nenhum item foi adicionado ao carrinho.
+              </Text>
+              <Text style={tw`text-center mt-2 text-stone-400 text-sm`}>
+                Explore nossos produtos e adicione seus favoritos!
+              </Text>
+            </View>
+          )}
+          
+          {/* Cart Items */}
           <View style={tw`mt-4 w-full px-4`}>
             {cart.items.map(item => (
-              <CartProduct
-                key={item.id}
-                {...item}
-              />
+              <CartProduct key={item.id} {...item} />
             ))}
           </View>
-          <View style={tw`flex w-full mb-4 px-4`}>
-            <Price
-              shipping={null}
-              subTotal={cart.subTotal}
-              discount={cart.discounts}
-            />
-          </View>
+          
+          {/* Price Summary */}
+          {cart.items.length > 0 && (
+            <View style={tw`flex w-full mb-4 px-4`}>
+              <Price
+                shipping={null}
+                subTotal={cart.subTotal}
+                discount={cart.discounts}
+              />
+            </View>
+          )}
+          
+          {/* Action Button */}
           <View style={tw`w-full px-4`}>
-            {cart.items.length ? <TouchableOpacity
-              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
-              disabled={!cart.items.length}
-              onPress={() => navigation.navigate('Checkout')}
-            >
-              <Text style={tw`font-bold text-lg text-white`}>
-                Continuar
-              </Text>
-            </TouchableOpacity> : <TouchableOpacity
-              style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
-              onPress={() => navigation.navigate('Search')}
-            >
-              <Text style={tw`font-bold text-lg text-white`}>
-                Buscar produtos
-              </Text>
-            </TouchableOpacity>}
+            {cart.items.length ? (
+              <TouchableOpacity
+                style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
+                disabled={!cart.items.length}
+                onPress={() => navigation.navigate('Checkout')}>
+                <Text style={tw`font-bold text-lg text-white`}>
+                  Finalizar Compra
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl my-4`}
+                onPress={() => navigation.navigate('ProductsSearch')}>
+                <Text style={tw`font-bold text-lg text-white`}>
+                  Buscar produtos
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
-          <View
-            style={tw`flex flex-row items-center justify-start w-full py-2`}>
+          
+          {/* Recommended Products Section */}
+          <View style={tw`flex flex-row items-center justify-start w-full py-2 px-4`}>
             <View>
-              <Text style={tw`text-xl font-bold ml-4`}>
+              <Text style={tw`text-xl font-bold`}>
                 Produtos Recomendados
               </Text>
             </View>
@@ -70,7 +90,9 @@ function Cart() {
               <Text style={tw`text-xs text-stone-500`}>Relacionados</Text>
             </View>
           </View>
-          <View style={tw`px-4`}>
+          
+          {/* Recommended Products */}
+          <View style={tw`px-4 w-full`}>
             <ForYouProducts />
           </View>
         </View>

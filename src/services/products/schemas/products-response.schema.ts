@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
 export const productImageSchema = z.object({
   id: z.number(),
   productId: z.number(),
-  path: z.string()
+  path: z.string(),
 });
 
 export const supplierSchema = z.object({
@@ -23,18 +23,18 @@ export const productSchema = z.object({
   createdAt: z.string().datetime().optional(),
   updatedAt: z.string().datetime().optional(),
   images: z.array(productImageSchema),
-  supplier: supplierSchema
+  supplier: supplierSchema,
 });
 
 export const metaSchema = z.object({
   total: z.number(),
   per_page: z.number(),
-  current_page: z.number()
+  current_page: z.number(),
 });
 
 export const productsResponseSchema = z.object({
   meta: metaSchema,
-  data: z.array(productSchema)
+  data: z.array(productSchema),
 });
 
 export type ProductImage = z.infer<typeof productImageSchema>;

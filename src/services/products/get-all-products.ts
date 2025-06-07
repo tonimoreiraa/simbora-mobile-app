@@ -1,5 +1,5 @@
-import { api } from '../api';
-import { Product, ProductsResponse } from './schemas/products-response.schema';
+import {api} from '../api';
+import {Product, ProductsResponse} from './schemas/products-response.schema';
 
 const getCorrectImageUrl = (imageUrl: string): string => {
   if (!imageUrl) return '';
@@ -16,31 +16,31 @@ export const getAllProducts = async (
   page: number = 1,
   perPage: number = 25,
   query?: string,
-  categoryId?: number
-): Promise<{products: Product[], total: number, currentPage: number}> => {
+  categoryId?: number,
+): Promise<{products: Product[]; total: number; currentPage: number}> => {
   try {
     const params: Record<string, any> = {
       page,
-      perPage
+      perPage,
     };
-    
+
     if (query) params.query = query;
     if (categoryId) params.categoryId = categoryId;
-    
-    const { data } = await api.get<ProductsResponse>('/products', { params });
-    
+
+    const {data} = await api.get<ProductsResponse>('/products', {params});
+
     const productsWithFixedUrls = data.data.map(product => ({
       ...product,
       images: product.images.map(image => ({
         ...image,
-        path: getCorrectImageUrl(image.path)
-      }))
+        path: getCorrectImageUrl(image.path),
+      })),
     }));
-    
+
     return {
       products: productsWithFixedUrls,
       total: data.meta.total,
-      currentPage: data.meta.current_page
+      currentPage: data.meta.current_page,
     };
   } catch (error: any) {
     console.error('Erro ao buscar produtos:', error);
@@ -52,10 +52,10 @@ export const getAllProducts = async (
 
 export const getProducts = async (
   query?: string,
-  categoryId?: number
+  categoryId?: number,
 ): Promise<Product[]> => {
   try {
-    const { products } = await getAllProducts(1, 100, query, categoryId);
+    const {products} = await getAllProducts(1, 100, query, categoryId);
     return products;
   } catch (error) {
     throw error;

@@ -44,7 +44,9 @@ export default function Adress() {
       <View
         style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl mt-4`}>
         <TouchableOpacity>
-          <Text style={tw`font-bold text-base text-white`}>Salvar Endereço</Text>
+          <Text style={tw`font-bold text-base text-white`}>
+            Salvar Endereço
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

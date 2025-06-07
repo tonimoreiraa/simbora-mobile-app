@@ -9,7 +9,7 @@ import {
 import tw from 'twrnc';
 import AccountInput from '../components/create_account_input';
 import {useForm} from 'react-hook-form';
-import { FolderSimple } from 'phosphor-react-native';
+import {FolderSimple} from 'phosphor-react-native';
 
 interface FormData {
   email: string;
@@ -17,7 +17,7 @@ interface FormData {
 
 function MyAccount() {
   const {control, handleSubmit} = useForm<FormData>();
-  
+
   return (
     <SafeAreaView style={tw`bg-white mb-14`}>
       <ScrollView>
@@ -36,7 +36,7 @@ function MyAccount() {
               </View>
             </View>
             <TouchableOpacity>
-              <FolderSimple size={20} weight='fill' color="#000000" />
+              <FolderSimple size={20} weight="fill" color="#000000" />
             </TouchableOpacity>
           </View>
           <View style={tw`w-full mt-4`}>
