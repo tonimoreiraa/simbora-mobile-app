@@ -25,10 +25,15 @@ import type {
   GetUserAddressesId200,
   GetUserAddressesId401,
   GetUserAddressesId404,
+  PostUserAddresses201,
+  PostUserAddresses400,
+  PostUserAddresses401,
+  PostUserAddresses422,
+  PostUserAddressesBody,
 } from '.././models';
 
 import {axiosInstance} from '../../axios';
-import type {ErrorType} from '../../axios';
+import type {ErrorType, BodyType} from '../../axios';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -107,6 +112,101 @@ export function useGetUserAddresses<
   return query;
 }
 
+/**
+ * Adiciona um novo endereço para o usuário autenticado
+ * @summary Criar novo endereço
+ */
+export const postUserAddresses = (
+  postUserAddressesBody: BodyType<PostUserAddressesBody>,
+  options?: SecondParameter<typeof axiosInstance>,
+  signal?: AbortSignal,
+) => {
+  return axiosInstance<PostUserAddresses201>(
+    {
+      url: `/user-addresses`,
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      data: postUserAddressesBody,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getPostUserAddressesMutationOptions = <
+  TError = ErrorType<
+    PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postUserAddresses>>,
+    TError,
+    {data: BodyType<PostUserAddressesBody>},
+    TContext
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postUserAddresses>>,
+  TError,
+  {data: BodyType<PostUserAddressesBody>},
+  TContext
+> => {
+  const mutationKey = ['postUserAddresses'];
+  const {mutation: mutationOptions, request: requestOptions} = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+    : {mutation: {mutationKey}, request: undefined};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postUserAddresses>>,
+    {data: BodyType<PostUserAddressesBody>}
+  > = props => {
+    const {data} = props ?? {};
+
+    return postUserAddresses(data, requestOptions);
+  };
+
+  return {mutationFn, ...mutationOptions};
+};
+
+export type PostUserAddressesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postUserAddresses>>
+>;
+export type PostUserAddressesMutationBody = BodyType<PostUserAddressesBody>;
+export type PostUserAddressesMutationError = ErrorType<
+  PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
+>;
+
+/**
+ * @summary Criar novo endereço
+ */
+export const usePostUserAddresses = <
+  TError = ErrorType<
+    PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postUserAddresses>>,
+    TError,
+    {data: BodyType<PostUserAddressesBody>},
+    TContext
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postUserAddresses>>,
+  TError,
+  {data: BodyType<PostUserAddressesBody>},
+  TContext
+> => {
+  const mutationOptions = getPostUserAddressesMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
 /**
  * Retorna um endereço específico do usuário autenticado
  * @summary Buscar endereço por ID

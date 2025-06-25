@@ -33,7 +33,7 @@ function Categories() {
 
   // Extrair categorias da resposta da API
   const categories = categoriesResponse || [];
-  
+
   const navigation = useAppNavigation();
 
   if (isError) {
@@ -67,19 +67,26 @@ function Categories() {
         </>
       )}
       {!isLoading &&
-        categories.filter((category): category is { id: number; name: string; image: string } => 
-          typeof category.id === 'number' && typeof category.name === 'string' && typeof category.image === 'string'
-        ).map(category => (
-          <Category
-            id={category.id}
-            name={category.name}
-            image={category.image}
-            key={`category-${category.id}`}
-            onPress={() =>
-              navigation.navigate('CategoryProducts', {categoryId: category.id})
-            }
-          />
-        ))}
+        categories
+          .filter(
+            (category): category is {id: number; name: string; image: string} =>
+              typeof category.id === 'number' &&
+              typeof category.name === 'string' &&
+              typeof category.image === 'string',
+          )
+          .map(category => (
+            <Category
+              id={category.id}
+              name={category.name}
+              image={category.image}
+              key={`category-${category.id}`}
+              onPress={() =>
+                navigation.navigate('CategoryProducts', {
+                  categoryId: category.id,
+                })
+              }
+            />
+          ))}
     </ScrollView>
   );
 }
@@ -100,7 +107,7 @@ function Home() {
               onPress={() => navigation.navigate('ProductsSearch')}
             />
           </View>
-          
+
           {/* Banners */}
           <ScrollView
             style={tw`mt-4`}

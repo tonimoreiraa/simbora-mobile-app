@@ -15,5 +15,7 @@ export type PostAuthSignIn200UserRole =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostAuthSignIn200UserRole = {
   customer: 'customer',
+  admin: 'admin',
   professional: 'professional',
+  supplier: 'supplier',
 } as const;

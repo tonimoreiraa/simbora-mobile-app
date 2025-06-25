@@ -70,8 +70,13 @@ const Product = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   // Usando a função da API gerada em vez da função customizada
-  const {data: productResponse, isLoading, isError, refetch} = useGetProductsId(productId);
-  
+  const {
+    data: productResponse,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetProductsId(productId);
+
   // Extrair os dados do produto da resposta da API
   const data = productResponse;
 
@@ -90,7 +95,8 @@ const Product = () => {
 
   if (isError) {
     return (
-      <SafeAreaView style={tw`items-center justify-center flex-1 bg-white px-4`}>
+      <SafeAreaView
+        style={tw`items-center justify-center flex-1 bg-white px-4`}>
         <Text style={tw`text-lg text-red-500 font-semibold mb-2`}>
           Erro ao carregar produto
         </Text>
@@ -128,7 +134,7 @@ const Product = () => {
       quantity: 1,
       image: getCorrectImageUrl(data.images[0]?.path ?? ''), // Aplicando formatação da URL
     });
-    
+
     Toast.show({
       type: 'success',
       text1: `${data.name} foi adicionado ao carrinho`,
@@ -144,18 +150,13 @@ const Product = () => {
     <SafeAreaView style={tw`py-4 bg-white`}>
       <ScrollView style={tw`mb-26`}>
         {/* Header with Search */}
-        <View
-          style={tw`flex flex-row items-center justify-center w-full px-4`}>
-          <TouchableOpacity 
+        <View style={tw`flex flex-row items-center justify-center w-full px-4`}>
+          <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={tw`mr-3`}>
-            <CaretLeft
-              size={28}
-              color="#000000"
-              weight="regular"
-            />
+            <CaretLeft size={28} color="#000000" weight="regular" />
           </TouchableOpacity>
-          
+
           <View style={tw`flex-1`}>
             <View
               style={tw`flex-row items-center justify-center bg-black rounded-lg px-4 h-12`}>
@@ -175,24 +176,25 @@ const Product = () => {
               </View>
             </View>
           </View>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             onPress={() => navigation.navigate('Cart')}
             style={tw`ml-3`}>
-            <ShoppingBagOpen
-              size={28}
-              weight="fill"
-              color="#000000"
-            />
+            <ShoppingBagOpen size={28} weight="fill" color="#000000" />
           </TouchableOpacity>
         </View>
 
         {/* Product Images Carousel */}
         <View style={tw`mt-4`}>
           {data?.images && data.images.length > 0 ? (
-            <Carousel items={data.images.map(image => getCorrectImageUrl(image.path ?? '')).filter((path): path is string => path !== '')} />
+            <Carousel
+              items={data.images
+                .map(image => getCorrectImageUrl(image.path ?? ''))
+                .filter((path): path is string => path !== '')}
+            />
           ) : (
-            <View style={tw`h-64 bg-gray-200 items-center justify-center mx-4 rounded-lg`}>
+            <View
+              style={tw`h-64 bg-gray-200 items-center justify-center mx-4 rounded-lg`}>
               <Text style={tw`text-gray-500`}>Sem imagens disponíveis</Text>
             </View>
           )}
@@ -202,7 +204,9 @@ const Product = () => {
         <View style={tw`p-4`}>
           <Text style={tw`text-xl font-bold`}>{data?.name}</Text>
           {isOutOfStock && (
-            <Text style={tw`text-red-500 font-medium mt-1`}>Fora de estoque</Text>
+            <Text style={tw`text-red-500 font-medium mt-1`}>
+              Fora de estoque
+            </Text>
           )}
         </View>
 
@@ -260,7 +264,9 @@ const Product = () => {
             Disponibilidade
           </Text>
           <Text style={tw`text-stone-500 text-base`}>
-            {(data?.stock ?? 0) > 0 ? `${data?.stock ?? 0} unidades em estoque` : 'Produto esgotado'}
+            {(data?.stock ?? 0) > 0
+              ? `${data?.stock ?? 0} unidades em estoque`
+              : 'Produto esgotado'}
           </Text>
         </View>
 

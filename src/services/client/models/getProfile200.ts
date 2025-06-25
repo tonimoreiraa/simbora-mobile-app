@@ -5,9 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUp201UserRole} from './postAuthSignUp201UserRole';
+import type {GetProfile200Role} from './getProfile200Role';
+import type {GetProfile200AddressesItem} from './getProfile200AddressesItem';
 
-export type PostAuthSignUp201User = {
+export type GetProfile200 = {
   /** ID único do usuário */
   id?: number;
   /**
@@ -15,15 +16,15 @@ export type PostAuthSignUp201User = {
    * @nullable
    */
   name?: string | null;
-  /** Email do usuário */
-  email?: string;
   /**
    * Nome de usuário único
    * @nullable
    */
   username?: string | null;
+  /** Email do usuário */
+  email?: string;
   /** Papel do usuário no sistema */
-  role?: PostAuthSignUp201UserRole;
+  role?: GetProfile200Role;
   /**
    * URL completa do avatar do usuário
    * @nullable
@@ -35,4 +36,6 @@ export type PostAuthSignUp201User = {
   createdAt?: string;
   /** Data da última atualização */
   updatedAt?: string;
+  /** Lista de endereços do usuário */
+  addresses?: GetProfile200AddressesItem[];
 };

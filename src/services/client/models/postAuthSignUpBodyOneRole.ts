@@ -9,11 +9,11 @@
 /**
  * Papel do usuário no sistema
  */
-export type PostAuthSignUp201UserRole =
-  (typeof PostAuthSignUp201UserRole)[keyof typeof PostAuthSignUp201UserRole];
+export type PostAuthSignUpBodyOneRole =
+  (typeof PostAuthSignUpBodyOneRole)[keyof typeof PostAuthSignUpBodyOneRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const PostAuthSignUp201UserRole = {
+export const PostAuthSignUpBodyOneRole = {
   customer: 'customer',
   admin: 'admin',
   professional: 'professional',

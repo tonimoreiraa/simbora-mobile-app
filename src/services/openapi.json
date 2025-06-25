@@ -79,6 +79,7 @@
                         },
                         "name": {
                           "type": "string",
+                          "nullable": true,
                           "description": "Nome completo do usuário",
                           "example": "João Silva"
                         },
@@ -90,14 +91,32 @@
                         },
                         "username": {
                           "type": "string",
+                          "nullable": true,
                           "description": "Nome de usuário único",
                           "example": "joao.silva"
                         },
                         "role": {
                           "type": "string",
-                          "enum": ["customer", "professional"],
+                          "enum": [
+                            "customer",
+                            "admin",
+                            "professional",
+                            "supplier"
+                          ],
                           "description": "Papel do usuário no sistema",
                           "example": "customer"
+                        },
+                        "avatar": {
+                          "type": "string",
+                          "format": "uri",
+                          "nullable": true,
+                          "description": "URL completa do avatar do usuário",
+                          "example": "https://api.exemplo.com/uploads/avatar123.jpg"
+                        },
+                        "phoneNumber": {
+                          "type": "string",
+                          "description": "Número de telefone formatado",
+                          "example": "11987654321"
                         },
                         "createdAt": {
                           "type": "string",
@@ -247,11 +266,11 @@
       "post": {
         "tags": ["Authentication"],
         "summary": "Cadastro de novo usuário",
-        "description": "Cria uma nova conta de usuário no sistema com os dados fornecidos",
+        "description": "Cria uma nova conta de usuário no sistema com os dados fornecidos, incluindo upload opcional de avatar",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": ["name", "email", "username", "password", "role"],
@@ -286,9 +305,68 @@
                   },
                   "role": {
                     "type": "string",
-                    "enum": ["customer", "professional"],
+                    "enum": ["customer", "admin", "professional", "supplier"],
                     "description": "Papel do usuário no sistema",
                     "example": "customer"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "pattern": "^[0-9]{10,11}$",
+                    "description": "Número de telefone brasileiro (10 ou 11 dígitos, sem código do país)",
+                    "example": "11987654321"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Arquivo de imagem para avatar (JPG, PNG ou JPEG, máximo 2MB)"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "username", "password", "role"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100,
+                    "description": "Nome completo do usuário",
+                    "example": "João Silva"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email único do usuário",
+                    "example": "joao@email.com"
+                  },
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 50,
+                    "pattern": "^[a-zA-Z0-9._-]+$",
+                    "description": "Nome de usuário único",
+                    "example": "joao.silva"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 8,
+                    "description": "Senha do usuário",
+                    "example": "MinhaSenh@123"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["customer", "admin", "professional", "supplier"],
+                    "description": "Papel do usuário no sistema",
+                    "example": "customer"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "pattern": "^[0-9]{10,11}$",
+                    "description": "Número de telefone brasileiro",
+                    "example": "11987654321"
                   }
                 }
               }
@@ -313,6 +391,7 @@
                         },
                         "name": {
                           "type": "string",
+                          "nullable": true,
                           "description": "Nome completo do usuário",
                           "example": "João Silva"
                         },
@@ -324,14 +403,32 @@
                         },
                         "username": {
                           "type": "string",
+                          "nullable": true,
                           "description": "Nome de usuário único",
                           "example": "joao.silva"
                         },
                         "role": {
                           "type": "string",
-                          "enum": ["customer", "professional"],
+                          "enum": [
+                            "customer",
+                            "admin",
+                            "professional",
+                            "supplier"
+                          ],
                           "description": "Papel do usuário no sistema",
                           "example": "customer"
+                        },
+                        "avatar": {
+                          "type": "string",
+                          "format": "uri",
+                          "nullable": true,
+                          "description": "URL completa do avatar do usuário",
+                          "example": "https://api.exemplo.com/uploads/avatar123.jpg"
+                        },
+                        "phoneNumber": {
+                          "type": "string",
+                          "description": "Número de telefone formatado",
+                          "example": "11987654321"
                         },
                         "createdAt": {
                           "type": "string",
@@ -407,7 +504,8 @@
                       "type": "object",
                       "example": {
                         "email": ["O campo email é obrigatório"],
-                        "password": ["O campo senha é obrigatório"]
+                        "password": ["O campo senha é obrigatório"],
+                        "phoneNumber": ["Número de telefone inválido."]
                       }
                     }
                   }
@@ -438,6 +536,22 @@
               }
             }
           },
+          "413": {
+            "description": "Arquivo muito grande",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "O arquivo de avatar não pode exceder 2MB"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "422": {
             "description": "Erro de validação",
             "content": {
@@ -462,8 +576,120 @@
                         "username": [
                           "O username deve ter no mínimo 3 caracteres"
                         ],
-                        "role": ["O role deve ser: customer ou professional"]
+                        "role": [
+                          "O role deve ser: customer, admin, professional ou supplier"
+                        ],
+                        "phoneNumber": [
+                          "O telefone deve ter entre 10 e 11 dígitos"
+                        ]
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/session": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Obter sessão atual",
+        "description": "Retorna os dados do usuário autenticado da sessão atual",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Dados da sessão retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único do usuário",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Nome completo do usuário",
+                      "example": "João Silva"
+                    },
+                    "username": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Nome de usuário único",
+                      "example": "joao.silva"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do usuário",
+                      "example": "joao@email.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["customer", "admin", "professional", "supplier"],
+                      "description": "Papel do usuário no sistema",
+                      "example": "customer"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "URL completa do avatar do usuário",
+                      "example": "https://api.exemplo.com/uploads/avatar123.jpg"
+                    },
+                    "phoneNumber": {
+                      "type": "string",
+                      "description": "Número de telefone formatado",
+                      "example": "11987654321"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do usuário",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
                     }
                   }
                 }
@@ -903,6 +1129,370 @@
                     "message": {
                       "type": "string",
                       "example": "E_ROW_NOT_FOUND: Row not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coupons": {
+      "get": {
+        "tags": ["Coupons"],
+        "summary": "Listar cupons",
+        "description": "Lista todos os cupons disponíveis no sistema com filtros opcionais. Requer permissão de administrador.",
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {"type": "string"},
+            "description": "Filtro de busca por código do cupom (case insensitive)",
+            "example": "DESCONTO"
+          },
+          {
+            "in": "query",
+            "name": "active",
+            "schema": {"type": "boolean", "default": false},
+            "description": "Filtrar apenas cupons ativos",
+            "example": true
+          },
+          {
+            "in": "query",
+            "name": "categoryId",
+            "schema": {"type": "integer"},
+            "description": "Filtrar por ID da categoria",
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "supplierId",
+            "schema": {"type": "integer"},
+            "description": "Filtrar por ID do fornecedor",
+            "example": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de cupons retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID único do cupom",
+                        "example": 1
+                      },
+                      "code": {
+                        "type": "string",
+                        "description": "Código do cupom",
+                        "example": "DESCONTO10"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Descrição do cupom",
+                        "example": "10% de desconto em produtos selecionados"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["percent", "fixed", "shipping"],
+                        "description": "Tipo do desconto",
+                        "example": "percent"
+                      },
+                      "minOrderValue": {
+                        "type": "number",
+                        "description": "Valor mínimo do pedido para usar o cupom",
+                        "example": 100
+                      },
+                      "supplierId": {
+                        "type": "integer",
+                        "description": "ID do fornecedor associado",
+                        "example": 2
+                      },
+                      "categoryId": {
+                        "type": "integer",
+                        "description": "ID da categoria associada",
+                        "example": 1
+                      },
+                      "value": {
+                        "type": "number",
+                        "description": "Valor do desconto (percentual ou fixo)",
+                        "example": 10
+                      },
+                      "maxUses": {
+                        "type": "integer",
+                        "description": "Máximo de usos do cupom",
+                        "example": 100
+                      },
+                      "usesCount": {
+                        "type": "integer",
+                        "description": "Quantidade de vezes que o cupom foi usado",
+                        "example": 25
+                      },
+                      "maxUsesPerUser": {
+                        "type": "integer",
+                        "description": "Máximo de usos por usuário",
+                        "example": 1
+                      },
+                      "validFrom": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data de início da validade",
+                        "example": "2024-01-01T00:00:00.000Z"
+                      },
+                      "validUntil": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data de fim da validade",
+                        "example": "2024-12-31T23:59:59.000Z"
+                      },
+                      "active": {
+                        "type": "boolean",
+                        "description": "Status de ativação do cupom",
+                        "example": true
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data de criação do cupom",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Data da última atualização",
+                        "example": "2024-01-15T10:30:00.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Usuário não tem permissão de administrador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Você não tem acesso a este método."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coupons/verify/{code}": {
+      "get": {
+        "tags": ["Coupons"],
+        "summary": "Verificar validade do cupom",
+        "description": "Verifica se um cupom é válido para uso, considerando status ativo, limites de uso, período de validade e outras restrições",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Código do cupom a ser verificado (case insensitive)",
+            "example": "DESCONTO10"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cupom válido encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único do cupom",
+                      "example": 1
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Código do cupom",
+                      "example": "DESCONTO10"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Descrição do cupom",
+                      "example": "10% de desconto em produtos selecionados"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["percent", "fixed", "shipping"],
+                      "description": "Tipo do desconto",
+                      "example": "percent"
+                    },
+                    "minOrderValue": {
+                      "type": "number",
+                      "description": "Valor mínimo do pedido para usar o cupom",
+                      "example": 100
+                    },
+                    "supplierId": {
+                      "type": "integer",
+                      "description": "ID do fornecedor associado",
+                      "example": 2
+                    },
+                    "categoryId": {
+                      "type": "integer",
+                      "description": "ID da categoria associada",
+                      "example": 1
+                    },
+                    "value": {
+                      "type": "number",
+                      "description": "Valor do desconto (percentual ou fixo)",
+                      "example": 10
+                    },
+                    "maxUses": {
+                      "type": "integer",
+                      "description": "Máximo de usos do cupom",
+                      "example": 100
+                    },
+                    "usesCount": {
+                      "type": "integer",
+                      "description": "Quantidade de vezes que o cupom foi usado",
+                      "example": 25
+                    },
+                    "maxUsesPerUser": {
+                      "type": "integer",
+                      "description": "Máximo de usos por usuário",
+                      "example": 1
+                    },
+                    "validFrom": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de início da validade",
+                      "example": "2024-01-01T00:00:00.000Z"
+                    },
+                    "validUntil": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de fim da validade",
+                      "example": "2024-12-31T23:59:59.000Z"
+                    },
+                    "active": {
+                      "type": "boolean",
+                      "description": "Status de ativação do cupom",
+                      "example": true
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do cupom",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cupom não encontrado ou inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_ROW_NOT_FOUND: Row not found"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "code": [
+                          "Cupom não encontrado, inativo, expirado ou esgotado"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Parâmetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {"code": ["O código do cupom é obrigatório"]}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
                     }
                   }
                 }
@@ -3052,6 +3642,448 @@
         }
       }
     },
+    "/profile": {
+      "put": {
+        "tags": ["Profile"],
+        "summary": "Atualizar perfil do usuário",
+        "description": "Atualiza os dados do perfil do usuário autenticado, incluindo upload opcional de avatar",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100,
+                    "description": "Nome completo do usuário",
+                    "example": "Maria Silva Santos"
+                  },
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 50,
+                    "pattern": "^[a-zA-Z0-9._-]+$",
+                    "description": "Nome de usuário único (apenas letras, números, pontos, hífens e underscores)",
+                    "example": "maria.santos"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "pattern": "^[0-9]{10,11}$",
+                    "description": "Número de telefone brasileiro (10 ou 11 dígitos, sem código do país)",
+                    "example": "11987654321"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Arquivo de imagem para avatar (JPG, PNG ou JPEG, máximo 2MB)"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100,
+                    "description": "Nome completo do usuário",
+                    "example": "Maria Silva Santos"
+                  },
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 50,
+                    "pattern": "^[a-zA-Z0-9._-]+$",
+                    "description": "Nome de usuário único",
+                    "example": "maria.santos"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "pattern": "^[0-9]{10,11}$",
+                    "description": "Número de telefone brasileiro",
+                    "example": "11987654321"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único do usuário",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nome completo do usuário",
+                      "example": "Maria Silva Santos"
+                    },
+                    "username": {
+                      "type": "string",
+                      "description": "Nome de usuário único",
+                      "example": "maria.santos"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do usuário",
+                      "example": "maria@email.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["customer", "admin", "professional", "supplier"],
+                      "description": "Papel do usuário no sistema",
+                      "example": "customer"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "URL completa do avatar do usuário",
+                      "example": "https://api.exemplo.com/uploads/avatar123.jpg"
+                    },
+                    "phoneNumber": {
+                      "type": "string",
+                      "description": "Número de telefone formatado",
+                      "example": "11987654321"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do usuário",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-06-25T14:20:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "phoneNumber": ["Número de telefone inválido."],
+                        "avatar": [
+                          "O arquivo deve ser uma imagem JPG, PNG ou JPEG"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Username já existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "O usuário maria.santos já existe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo muito grande",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "O arquivo de avatar não pode exceder 2MB"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                      },
+                      "example": {
+                        "name": ["O nome deve ter no mínimo 2 caracteres"],
+                        "username": [
+                          "O username deve ter no mínimo 3 caracteres"
+                        ],
+                        "phoneNumber": [
+                          "O telefone deve ter entre 10 e 11 dígitos"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Profile"],
+        "summary": "Obter perfil do usuário",
+        "description": "Retorna os dados completos do perfil do usuário autenticado, incluindo endereços associados",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Dados do perfil retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único do usuário",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Nome completo do usuário",
+                      "example": "Maria Silva Santos"
+                    },
+                    "username": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Nome de usuário único",
+                      "example": "maria.santos"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email do usuário",
+                      "example": "maria@email.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["customer", "admin", "professional", "supplier"],
+                      "description": "Papel do usuário no sistema",
+                      "example": "customer"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "format": "uri",
+                      "nullable": true,
+                      "description": "URL completa do avatar do usuário",
+                      "example": "https://api.exemplo.com/uploads/avatar123.jpg"
+                    },
+                    "phoneNumber": {
+                      "type": "string",
+                      "description": "Número de telefone formatado",
+                      "example": "11987654321"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data de criação do usuário",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Data da última atualização",
+                      "example": "2024-06-25T14:20:00.000Z"
+                    },
+                    "addresses": {
+                      "type": "array",
+                      "description": "Lista de endereços do usuário",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "ID único do endereço",
+                            "example": 1
+                          },
+                          "userId": {
+                            "type": "integer",
+                            "description": "ID do usuário proprietário",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Nome do endereço (ex Casa, Trabalho)",
+                            "example": "Casa"
+                          },
+                          "streetName": {
+                            "type": "string",
+                            "description": "Nome da rua/logradouro",
+                            "example": "Rua das Flores"
+                          },
+                          "number": {
+                            "type": "string",
+                            "description": "Número do endereço",
+                            "example": "123"
+                          },
+                          "complement": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Complemento do endereço",
+                            "example": "Apartamento 45"
+                          },
+                          "neighborhood": {
+                            "type": "string",
+                            "description": "Bairro",
+                            "example": "Centro"
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "Cidade",
+                            "example": "São Paulo"
+                          },
+                          "state": {
+                            "type": "string",
+                            "description": "Estado",
+                            "example": "SP"
+                          },
+                          "zipCode": {
+                            "type": "string",
+                            "description": "CEP",
+                            "example": "01234-567"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "País",
+                            "example": "Brasil"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data de criação do endereço",
+                            "example": "2024-02-01T08:00:00.000Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Data da última atualização",
+                            "example": "2024-02-01T08:00:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/user-addresses": {
       "get": {
         "tags": ["User Addresses"],
@@ -3184,6 +4216,183 @@
                     "message": {
                       "type": "string",
                       "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User Addresses"],
+        "summary": "Criar novo endereço",
+        "description": "Adiciona um novo endereço para o usuário autenticado",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "streetName",
+                  "number",
+                  "neighborhood",
+                  "city",
+                  "state",
+                  "zipCode"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome/apelido para identificar o endereço",
+                    "example": "Casa dos Pais"
+                  },
+                  "streetName": {
+                    "type": "string",
+                    "description": "Nome da rua, avenida, etc.",
+                    "example": "Rua das Palmeiras"
+                  },
+                  "number": {
+                    "type": "string",
+                    "description": "Número da residência/estabelecimento",
+                    "example": "456"
+                  },
+                  "complement": {
+                    "type": "string",
+                    "description": "Complemento (apartamento, sala, bloco, etc.)",
+                    "example": "Bloco B, Apto 302"
+                  },
+                  "neighborhood": {
+                    "type": "string",
+                    "description": "Bairro",
+                    "example": "Jardins"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Cidade",
+                    "example": "Rio de Janeiro"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "Estado (sigla)",
+                    "example": "RJ"
+                  },
+                  "zipCode": {
+                    "type": "string",
+                    "description": "CEP (com ou sem formatação)",
+                    "example": "22071-900"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "País",
+                    "example": "Brasil"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Endereço criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "ID único do endereço criado",
+                      "example": 3
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "description": "ID do usuário proprietário",
+                      "example": 10
+                    },
+                    "name": {"type": "string", "example": "Casa dos Pais"},
+                    "streetName": {
+                      "type": "string",
+                      "example": "Rua das Palmeiras"
+                    },
+                    "number": {"type": "string", "example": "456"},
+                    "complement": {
+                      "type": "string",
+                      "nullable": true,
+                      "example": "Bloco B, Apto 302"
+                    },
+                    "neighborhood": {"type": "string", "example": "Jardins"},
+                    "city": {"type": "string", "example": "Rio de Janeiro"},
+                    "state": {"type": "string", "example": "RJ"},
+                    "zipCode": {"type": "string", "example": "22071-900"},
+                    "country": {"type": "string", "example": "Brasil"},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T14:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T14:30:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário não autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "E_UNAUTHORIZED_ACCESS: Unauthorized access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "name": ["O nome do endereço é obrigatório"],
+                        "zipCode": ["O CEP é obrigatório"]
+                      }
                     }
                   }
                 }

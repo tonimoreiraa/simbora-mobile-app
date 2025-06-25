@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function Categories() {
   const navigation = useNavigation<any>();
-  
+
   // Usando a função da API gerada em vez da customizada
   const {
     data: categoriesResponse,
@@ -54,7 +54,9 @@ export default function Categories() {
   }
 
   const categoriesToShow =
-    filteredResults && filteredResults.length > 0 ? filteredResults : categories;
+    filteredResults && filteredResults.length > 0
+      ? filteredResults
+      : categories;
 
   return (
     <ScrollView style={tw`px-4`}>
@@ -82,9 +84,7 @@ export default function Categories() {
           // Loading Skeletons
           <View style={tw`flex-row flex-wrap justify-between`}>
             {[...Array(8).keys()].map(index => (
-              <View 
-                style={tw`w-[106px] mb-4`} 
-                key={`skeleton-${index}`}>
+              <View style={tw`w-[106px] mb-4`} key={`skeleton-${index}`}>
                 <View style={tw`w-24 h-24 bg-gray-200 rounded-xl mb-2`} />
                 <View style={tw`w-full h-4 bg-gray-200 rounded`} />
               </View>

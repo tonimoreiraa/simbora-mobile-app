@@ -5,25 +5,19 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUp201UserRole} from './postAuthSignUp201UserRole';
+import type {PutProfile200Role} from './putProfile200Role';
 
-export type PostAuthSignUp201User = {
+export type PutProfile200 = {
   /** ID único do usuário */
   id?: number;
-  /**
-   * Nome completo do usuário
-   * @nullable
-   */
-  name?: string | null;
+  /** Nome completo do usuário */
+  name?: string;
+  /** Nome de usuário único */
+  username?: string;
   /** Email do usuário */
   email?: string;
-  /**
-   * Nome de usuário único
-   * @nullable
-   */
-  username?: string | null;
   /** Papel do usuário no sistema */
-  role?: PostAuthSignUp201UserRole;
+  role?: PutProfile200Role;
   /**
    * URL completa do avatar do usuário
    * @nullable

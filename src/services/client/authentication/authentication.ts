@@ -5,14 +5,21 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 import type {
   MutationFunction,
+  QueryFunction,
+  QueryKey,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
 } from 'react-query';
 
 import type {
+  GetAuthSession200,
+  GetAuthSession401,
+  GetAuthSession500,
   PostAuthSignIn200,
   PostAuthSignIn400,
   PostAuthSignIn401,
@@ -22,9 +29,11 @@ import type {
   PostAuthSignUp201,
   PostAuthSignUp400,
   PostAuthSignUp409,
+  PostAuthSignUp413,
   PostAuthSignUp422,
   PostAuthSignUp500,
-  PostAuthSignUpBody,
+  PostAuthSignUpBodyOne,
+  PostAuthSignUpBodyTwo,
 } from '.././models';
 
 import {axiosInstance} from '../../axios';
@@ -134,22 +143,18 @@ export const usePostAuthSignIn = <
   return useMutation(mutationOptions);
 };
 /**
- * Cria uma nova conta de usuário no sistema com os dados fornecidos
+ * Cria uma nova conta de usuário no sistema com os dados fornecidos, incluindo upload opcional de avatar
  * @summary Cadastro de novo usuário
  */
 export const postAuthSignUp = (
-  postAuthSignUpBody: BodyType<PostAuthSignUpBody>,
+  postAuthSignUpBody:
+    | BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>
+    | PostAuthSignUpBodyTwo,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
   return axiosInstance<PostAuthSignUp201>(
-    {
-      url: `/auth/sign-up`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postAuthSignUpBody,
-      signal,
-    },
+    {url: `/auth/sign-up`, method: 'POST', data: postAuthSignUpBody, signal},
     options,
   );
 };
@@ -158,6 +163,7 @@ export const getPostAuthSignUpMutationOptions = <
   TError = ErrorType<
     | PostAuthSignUp400
     | PostAuthSignUp409
+    | PostAuthSignUp413
     | PostAuthSignUp422
     | PostAuthSignUp500
   >,
@@ -166,14 +172,14 @@ export const getPostAuthSignUpMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof postAuthSignUp>>,
     TError,
-    {data: BodyType<PostAuthSignUpBody>},
+    {data: BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>},
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postAuthSignUp>>,
   TError,
-  {data: BodyType<PostAuthSignUpBody>},
+  {data: BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>},
   TContext
 > => {
   const mutationKey = ['postAuthSignUp'];
@@ -187,7 +193,7 @@ export const getPostAuthSignUpMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postAuthSignUp>>,
-    {data: BodyType<PostAuthSignUpBody>}
+    {data: BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>}
   > = props => {
     const {data} = props ?? {};
 
@@ -200,9 +206,15 @@ export const getPostAuthSignUpMutationOptions = <
 export type PostAuthSignUpMutationResult = NonNullable<
   Awaited<ReturnType<typeof postAuthSignUp>>
 >;
-export type PostAuthSignUpMutationBody = BodyType<PostAuthSignUpBody>;
+export type PostAuthSignUpMutationBody = BodyType<
+  PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo
+>;
 export type PostAuthSignUpMutationError = ErrorType<
-  PostAuthSignUp400 | PostAuthSignUp409 | PostAuthSignUp422 | PostAuthSignUp500
+  | PostAuthSignUp400
+  | PostAuthSignUp409
+  | PostAuthSignUp413
+  | PostAuthSignUp422
+  | PostAuthSignUp500
 >;
 
 /**
@@ -212,6 +224,7 @@ export const usePostAuthSignUp = <
   TError = ErrorType<
     | PostAuthSignUp400
     | PostAuthSignUp409
+    | PostAuthSignUp413
     | PostAuthSignUp422
     | PostAuthSignUp500
   >,
@@ -220,17 +233,93 @@ export const usePostAuthSignUp = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof postAuthSignUp>>,
     TError,
-    {data: BodyType<PostAuthSignUpBody>},
+    {data: BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>},
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof postAuthSignUp>>,
   TError,
-  {data: BodyType<PostAuthSignUpBody>},
+  {data: BodyType<PostAuthSignUpBodyOne | PostAuthSignUpBodyTwo>},
   TContext
 > => {
   const mutationOptions = getPostAuthSignUpMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
+/**
+ * Retorna os dados do usuário autenticado da sessão atual
+ * @summary Obter sessão atual
+ */
+export const getAuthSession = (
+  options?: SecondParameter<typeof axiosInstance>,
+  signal?: AbortSignal,
+) => {
+  return axiosInstance<GetAuthSession200>(
+    {url: `/auth/session`, method: 'GET', signal},
+    options,
+  );
+};
+
+export const getGetAuthSessionQueryKey = () => {
+  return [`/auth/session`] as const;
+};
+
+export const getGetAuthSessionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuthSession>>,
+  TError = ErrorType<GetAuthSession401 | GetAuthSession500>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAuthSession>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}) => {
+  const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAuthSessionQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthSession>>> = ({
+    signal,
+  }) => getAuthSession(requestOptions, signal);
+
+  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuthSession>>,
+    TError,
+    TData
+  > & {queryKey: QueryKey};
+};
+
+export type GetAuthSessionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAuthSession>>
+>;
+export type GetAuthSessionQueryError = ErrorType<
+  GetAuthSession401 | GetAuthSession500
+>;
+
+/**
+ * @summary Obter sessão atual
+ */
+
+export function useGetAuthSession<
+  TData = Awaited<ReturnType<typeof getAuthSession>>,
+  TError = ErrorType<GetAuthSession401 | GetAuthSession500>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAuthSession>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
+  const queryOptions = getGetAuthSessionQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
