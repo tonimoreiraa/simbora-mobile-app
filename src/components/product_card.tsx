@@ -30,11 +30,11 @@ export interface Product {
 const ProductCard = (product: Product) => {
   const {id, name, price, supplier, images} = product;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  
+
   const handlePressProduct = () => {
     navigation.navigate('Product', {id});
   };
-  
+
   const priceValue = typeof price === 'string' ? parseFloat(price) : price;
 
   return (

@@ -16,7 +16,7 @@ import {ShoppingBag} from 'phosphor-react-native';
 function Cart() {
   const cart = useCart();
   const navigation = useNavigation<any>();
-  
+
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
       <ScrollView style={tw`flex-1`}>
@@ -25,7 +25,7 @@ function Cart() {
           <View>
             <Text style={tw`text-2xl font-bold`}>Meu carrinho</Text>
           </View>
-          
+
           {/* Empty Cart State */}
           {!cart.items.length && (
             <View style={tw`items-center py-8`}>
@@ -38,14 +38,14 @@ function Cart() {
               </Text>
             </View>
           )}
-          
+
           {/* Cart Items */}
           <View style={tw`mt-4 w-full px-4`}>
             {cart.items.map(item => (
               <CartProduct key={item.id} {...item} />
             ))}
           </View>
-          
+
           {/* Price Summary */}
           {cart.items.length > 0 && (
             <View style={tw`flex w-full mb-4 px-4`}>
@@ -56,7 +56,7 @@ function Cart() {
               />
             </View>
           )}
-          
+
           {/* Action Button */}
           <View style={tw`w-full px-4`}>
             {cart.items.length ? (
@@ -78,19 +78,18 @@ function Cart() {
               </TouchableOpacity>
             )}
           </View>
-          
+
           {/* Recommended Products Section */}
-          <View style={tw`flex flex-row items-center justify-start w-full py-2 px-4`}>
+          <View
+            style={tw`flex flex-row items-center justify-start w-full py-2 px-4`}>
             <View>
-              <Text style={tw`text-xl font-bold`}>
-                Produtos Recomendados
-              </Text>
+              <Text style={tw`text-xl font-bold`}>Produtos Recomendados</Text>
             </View>
             <View style={tw`border border-blue-400 p-2 rounded-lg ml-2`}>
               <Text style={tw`text-xs text-stone-500`}>Relacionados</Text>
             </View>
           </View>
-          
+
           {/* Recommended Products */}
           <View style={tw`px-4 w-full`}>
             <ForYouProducts />

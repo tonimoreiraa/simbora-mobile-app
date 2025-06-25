@@ -21,7 +21,6 @@ const Category: React.FC<CategoryProps> = ({
     <TouchableOpacity
       style={tw`w-[106px] items-center justify-center rounded-2xl mr-2 mt-2`}
       onPress={onPress}>
-      
       {/* Container da Imagem - Aumentado de w-20 h-20 para w-24 h-24 */}
       <View style={tw`w-24 h-24 bg-gray-100 rounded-xl overflow-hidden mb-2`}>
         {image ? (
@@ -31,7 +30,8 @@ const Category: React.FC<CategoryProps> = ({
             resizeMode="cover"
           />
         ) : (
-          <View style={tw`w-full h-full items-center justify-center bg-gray-200`}>
+          <View
+            style={tw`w-full h-full items-center justify-center bg-gray-200`}>
             <Text style={tw`text-gray-400 text-xs`}>IMG</Text>
           </View>
         )}

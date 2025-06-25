@@ -10,14 +10,27 @@ import type {PostAuthSignIn200UserRole} from './postAuthSignIn200UserRole';
 export type PostAuthSignIn200User = {
   /** ID único do usuário */
   id?: number;
-  /** Nome completo do usuário */
-  name?: string;
+  /**
+   * Nome completo do usuário
+   * @nullable
+   */
+  name?: string | null;
   /** Email do usuário */
   email?: string;
-  /** Nome de usuário único */
-  username?: string;
+  /**
+   * Nome de usuário único
+   * @nullable
+   */
+  username?: string | null;
   /** Papel do usuário no sistema */
   role?: PostAuthSignIn200UserRole;
+  /**
+   * URL completa do avatar do usuário
+   * @nullable
+   */
+  avatar?: string | null;
+  /** Número de telefone formatado */
+  phoneNumber?: string;
   /** Data de criação do usuário */
   createdAt?: string;
   /** Data da última atualização */

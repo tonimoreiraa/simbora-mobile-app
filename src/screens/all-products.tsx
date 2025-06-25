@@ -68,24 +68,28 @@ const AllProducts = () => {
       ? {
           query: debouncedSearchTerm,
         }
-      : undefined
+      : undefined,
   );
 
   // Extrair e filtrar produtos localmente
   const allProducts = productsResponse?.data || [];
-  
+
   const filteredAndSortedProducts = React.useMemo(() => {
     let filtered = [...allProducts];
 
     // Aplicar filtros locais
     if (localFilters.minPrice !== undefined) {
-      filtered = filtered.filter(product => (product.price ?? 0) >= localFilters.minPrice!);
+      filtered = filtered.filter(
+        product => (product.price ?? 0) >= localFilters.minPrice!,
+      );
     }
-    
+
     if (localFilters.maxPrice !== undefined) {
-      filtered = filtered.filter(product => (product.price ?? 0) <= localFilters.maxPrice!);
+      filtered = filtered.filter(
+        product => (product.price ?? 0) <= localFilters.maxPrice!,
+      );
     }
-    
+
     if (localFilters.inStock) {
       filtered = filtered.filter(product => (product.stock ?? 0) > 0);
     }
@@ -94,7 +98,7 @@ const AllProducts = () => {
     if (localFilters.sortBy) {
       filtered.sort((a, b) => {
         let aValue, bValue;
-        
+
         switch (localFilters.sortBy) {
           case 'name':
             aValue = a.name?.toLowerCase() || '';
@@ -169,9 +173,10 @@ const AllProducts = () => {
     };
   };
 
-  const hasActiveFilters = localFilters.minPrice !== undefined || 
-                          localFilters.maxPrice !== undefined || 
-                          localFilters.inStock === true;
+  const hasActiveFilters =
+    localFilters.minPrice !== undefined ||
+    localFilters.maxPrice !== undefined ||
+    localFilters.inStock === true;
 
   return (
     <SafeAreaView style={tw`flex-1 bg-white`}>
@@ -179,33 +184,35 @@ const AllProducts = () => {
       <View
         style={tw`flex-row items-center justify-between px-4 py-2 border-b border-gray-200`}>
         <View style={tw`flex-row items-center`}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={tw`mr-3`}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={tw`mr-3`}>
             <ArrowLeft size={24} color="#000" weight="regular" />
           </TouchableOpacity>
           <Text style={tw`text-xl font-bold`}>Todos os Produtos</Text>
         </View>
-        
+
         <View style={tw`flex-row items-center`}>
-          <TouchableOpacity
-            onPress={toggleSortOrder}
-            style={tw`mr-3 p-2`}>
+          <TouchableOpacity onPress={toggleSortOrder} style={tw`mr-3 p-2`}>
             {localFilters.sortOrder === 'asc' ? (
               <SortAscending size={20} color="#666" weight="regular" />
             ) : (
               <SortDescending size={20} color="#666" weight="regular" />
             )}
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             onPress={() => setShowFilters(true)}
             style={tw`p-2 relative`}>
-            <FunnelSimple 
-              size={20} 
-              color={hasActiveFilters ? "#3b82f6" : "#666"} 
-              weight={hasActiveFilters ? "fill" : "regular"} 
+            <FunnelSimple
+              size={20}
+              color={hasActiveFilters ? '#3b82f6' : '#666'}
+              weight={hasActiveFilters ? 'fill' : 'regular'}
             />
             {hasActiveFilters && (
-              <View style={tw`absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full`} />
+              <View
+                style={tw`absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full`}
+              />
             )}
           </TouchableOpacity>
         </View>
@@ -293,7 +300,8 @@ const AllProducts = () => {
         <View style={tw`flex-1 justify-end bg-black bg-opacity-50`}>
           <View style={tw`bg-white rounded-t-3xl max-h-4/5`}>
             {/* Filter Header */}
-            <View style={tw`flex-row items-center justify-between p-4 border-b border-gray-200`}>
+            <View
+              style={tw`flex-row items-center justify-between p-4 border-b border-gray-200`}>
               <Text style={tw`text-lg font-bold`}>Filtros</Text>
               <TouchableOpacity onPress={() => setShowFilters(false)}>
                 <XCircle size={24} color="#666" weight="regular" />
@@ -303,7 +311,9 @@ const AllProducts = () => {
             <ScrollView style={tw`p-4`}>
               {/* Sort By */}
               <View style={tw`mb-6`}>
-                <Text style={tw`text-base font-semibold mb-3`}>Ordenar por</Text>
+                <Text style={tw`text-base font-semibold mb-3`}>
+                  Ordenar por
+                </Text>
                 <View style={tw`flex-row flex-wrap`}>
                   {[
                     {key: 'name', label: 'Nome'},
@@ -312,15 +322,23 @@ const AllProducts = () => {
                   ].map(sort => (
                     <TouchableOpacity
                       key={sort.key}
-                      onPress={() => setLocalFilters(prev => ({...prev, sortBy: sort.key as any}))}
+                      onPress={() =>
+                        setLocalFilters(prev => ({
+                          ...prev,
+                          sortBy: sort.key as any,
+                        }))
+                      }
                       style={tw`mr-2 mb-2 px-4 py-2 rounded-full border ${
                         localFilters.sortBy === sort.key
                           ? 'bg-blue-500 border-blue-500'
                           : 'bg-white border-gray-300'
                       }`}>
-                      <Text style={tw`${
-                        localFilters.sortBy === sort.key ? 'text-white' : 'text-gray-700'
-                      }`}>
+                      <Text
+                        style={tw`${
+                          localFilters.sortBy === sort.key
+                            ? 'text-white'
+                            : 'text-gray-700'
+                        }`}>
                         {sort.label}
                       </Text>
                     </TouchableOpacity>
@@ -330,29 +348,45 @@ const AllProducts = () => {
 
               {/* Price Range */}
               <View style={tw`mb-6`}>
-                <Text style={tw`text-base font-semibold mb-3`}>Faixa de preço</Text>
+                <Text style={tw`text-base font-semibold mb-3`}>
+                  Faixa de preço
+                </Text>
                 <View style={tw`flex-row items-center`}>
                   <View style={tw`flex-1 mr-2`}>
-                    <Text style={tw`text-sm text-gray-600 mb-1`}>Valor mínimo</Text>
+                    <Text style={tw`text-sm text-gray-600 mb-1`}>
+                      Valor mínimo
+                    </Text>
                     <TouchableOpacity
                       style={tw`p-3 border border-gray-300 rounded-lg`}
                       onPress={() => {
                         // Modal para inserir preço mínimo
                       }}>
-                      <Text style={tw`${localFilters.minPrice ? 'text-black' : 'text-gray-400'}`}>
-                        {localFilters.minPrice ? `R$ ${localFilters.minPrice}` : 'Mín'}
+                      <Text
+                        style={tw`${
+                          localFilters.minPrice ? 'text-black' : 'text-gray-400'
+                        }`}>
+                        {localFilters.minPrice
+                          ? `R$ ${localFilters.minPrice}`
+                          : 'Mín'}
                       </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={tw`flex-1 ml-2`}>
-                    <Text style={tw`text-sm text-gray-600 mb-1`}>Valor máximo</Text>
+                    <Text style={tw`text-sm text-gray-600 mb-1`}>
+                      Valor máximo
+                    </Text>
                     <TouchableOpacity
                       style={tw`p-3 border border-gray-300 rounded-lg`}
                       onPress={() => {
                         // Modal para inserir preço máximo
                       }}>
-                      <Text style={tw`${localFilters.maxPrice ? 'text-black' : 'text-gray-400'}`}>
-                        {localFilters.maxPrice ? `R$ ${localFilters.maxPrice}` : 'Máx'}
+                      <Text
+                        style={tw`${
+                          localFilters.maxPrice ? 'text-black' : 'text-gray-400'
+                        }`}>
+                        {localFilters.maxPrice
+                          ? `R$ ${localFilters.maxPrice}`
+                          : 'Máx'}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -361,23 +395,34 @@ const AllProducts = () => {
 
               {/* Stock Filter */}
               <View style={tw`mb-6`}>
-                <Text style={tw`text-base font-semibold mb-3`}>Disponibilidade</Text>
+                <Text style={tw`text-base font-semibold mb-3`}>
+                  Disponibilidade
+                </Text>
                 <TouchableOpacity
-                  onPress={() => setLocalFilters(prev => ({
-                    ...prev,
-                    inStock: prev.inStock === true ? undefined : true
-                  }))}
+                  onPress={() =>
+                    setLocalFilters(prev => ({
+                      ...prev,
+                      inStock: prev.inStock === true ? undefined : true,
+                    }))
+                  }
                   style={tw`flex-row items-center p-3 border rounded-lg ${
-                    localFilters.inStock ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                    localFilters.inStock
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-300'
                   }`}>
-                  <View style={tw`w-5 h-5 rounded border-2 mr-3 items-center justify-center ${
-                    localFilters.inStock ? 'bg-blue-500 border-blue-500' : 'border-gray-300'
-                  }`}>
+                  <View
+                    style={tw`w-5 h-5 rounded border-2 mr-3 items-center justify-center ${
+                      localFilters.inStock
+                        ? 'bg-blue-500 border-blue-500'
+                        : 'border-gray-300'
+                    }`}>
                     {localFilters.inStock && (
                       <Text style={tw`text-white text-xs`}>✓</Text>
                     )}
                   </View>
-                  <Text style={tw`text-gray-700`}>Apenas produtos em estoque</Text>
+                  <Text style={tw`text-gray-700`}>
+                    Apenas produtos em estoque
+                  </Text>
                 </TouchableOpacity>
               </View>
 
