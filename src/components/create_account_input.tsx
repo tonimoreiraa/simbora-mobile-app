@@ -1,15 +1,17 @@
 import {ComponentProps, useState} from 'react';
-import {Control, Controller, FieldPath, FieldValues} from 'react-hook-form';
-import {Button, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Control, Controller, FieldPath, FieldValues, RegisterOptions} from 'react-hook-form';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Eye, EyeSlash} from 'phosphor-react-native';
 import tw from 'twrnc';
 
 interface InputProps<TFieldValues extends FieldValues>
-  extends ComponentProps<typeof TextInput> {
+  extends Omit<ComponentProps<typeof TextInput>, 'value' | 'onChangeText'> {
   label?: string;
   name: FieldPath<TFieldValues>;
   control: Control<TFieldValues>;
   isPassword?: boolean;
+  defaultValue?: string;
+  rules?: RegisterOptions<TFieldValues, FieldPath<TFieldValues>>;
 }
 
 function AccountInput<TFieldValues extends FieldValues>({
@@ -17,16 +19,20 @@ function AccountInput<TFieldValues extends FieldValues>({
   name,
   control,
   isPassword = false,
+  defaultValue,
+  rules,
   ...props
 }: InputProps<TFieldValues>) {
   const [hiddenPassword, setHiddenPassword] = useState(true);
-
+  
   return (
     <View style={tw`w-full`}>
       <Text style={tw`text-xs mb-1`}>{label}</Text>
       <Controller
         control={control}
         name={name}
+        defaultValue={defaultValue as any}
+        rules={rules}
         render={({field, fieldState}) => {
           return (
             <>
@@ -38,7 +44,7 @@ function AccountInput<TFieldValues extends FieldValues>({
                   secureTextEntry={isPassword && hiddenPassword}
                   {...props}
                   onChangeText={field.onChange}
-                  value={field.value}
+                  value={field.value || ''}
                 />
                 {isPassword && (
                   <TouchableOpacity

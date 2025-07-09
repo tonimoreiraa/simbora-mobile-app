@@ -158,20 +158,20 @@ const AllProducts = () => {
   };
 
   const adaptProductToCardProps = (product: any): ProductCardProps => {
-    return {
-      id: product?.id || 0,
-      name: product?.name || 'Produto sem nome',
-      price: product?.price || 0,
-      description: product?.description || '',
-      images: product?.images || [],
-      createdAt: product?.createdAt || new Date().toISOString(),
-      supplierId: product?.supplierId || 0,
-      categoryId: product?.categoryId || 0,
-      tags: product?.tags || null,
-      stock: product?.stock || 0,
-      supplier: product?.supplier || {id: 0, name: ''},
-    };
+  return {
+    id: product?.id || 0,
+    name: product?.name || 'Produto sem nome',
+    price: product?.price || 0,
+    description: product?.description || '',
+    images: product?.images || [],
+    createdAt: product?.createdAt || new Date().toISOString(),
+    supplierId: product?.supplierId || 0,
+    categoryId: product?.categoryId || 0,
+    tags: product?.tags || null,
+    stock: product?.stock || 0,
+    supplier: product?.supplier?.name || 'Fornecedor não informado', // ✅ Corrigido: extraindo apenas o nome
   };
+};
 
   const hasActiveFilters =
     localFilters.minPrice !== undefined ||
