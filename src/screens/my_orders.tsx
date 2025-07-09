@@ -9,27 +9,53 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import ProductForecast from '../components/product_forecast';
 import {useState} from 'react';
-import {useGetAllOrders} from '../services/orders/use-orders';
+import {useGetOrders} from '../services/client/orders/orders';
 import {Package} from 'phosphor-react-native';
+import {useNavigation} from '@react-navigation/native';
 
 function MyOrders() {
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
 
-  const {data, isLoading, error} = useGetAllOrders({
+  const {data, isLoading, error} = useGetOrders({
     page,
     perPage: 10,
   });
 
-  const filteredOrders =
-    data?.orders.filter(order => {
-      if (!searchQuery) return true;
-      return String(order.id).includes(searchQuery);
-    }) || [];
+  const orders = data?.data || [];
+  const total = data?.meta?.total || 0;
+
+  const filteredOrders = orders.filter(order => {
+    if (!searchQuery) return true;
+    return String(order.id).includes(searchQuery);
+  });
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
   };
+
+  const handleOrderPress = (orderId: number | string, orderStatus: string) => {
+    switch (orderStatus.toLowerCase()) {
+      case 'shipped':
+      case 'enviado':
+        navigation.navigate('WithdrawOrder', { orderId });
+        break;
+      case 'delivered':
+      case 'entregue':
+        navigation.navigate('ResumeOrder', { orderId });
+        break;
+      case 'out for delivery':
+      case 'em rota':
+        navigation.navigate('ResumeOrder', { orderId });
+        break;
+      default:
+        navigation.navigate('ResumeOrder', { orderId });
+        break;
+    }
+  };
+
+  const totalPages = Math.ceil(total / 10);
 
   return (
     <SafeAreaView style={tw`bg-white`}>
@@ -37,7 +63,6 @@ function MyOrders() {
         <Text style={tw`text-2xl font-bold text-center mb-2`}>
           Meus Pedidos
         </Text>
-
         <View style={tw`w-full px-3`}>
           <InputSearch
             hideImageScanner
@@ -47,7 +72,6 @@ function MyOrders() {
             placeholder="Buscar pedido por número..."
           />
         </View>
-
         <View style={tw`px-3`}>
           {isLoading ? (
             <View style={tw`items-center justify-center py-10`}>
@@ -70,22 +94,26 @@ function MyOrders() {
               </Text>
             </View>
           ) : (
-            filteredOrders.map(order => (
-              <ProductForecast
-                key={order.id}
-                order={{
-                  id: order.id,
-                  status: order.status,
-                  items: order.items,
-                  shipping: order.shipping,
-                  createdAt: order.createdAt,
-                }}
-              />
-            ))
+            filteredOrders
+              .filter(order => order.id !== undefined)
+              .map(order => (
+                <ProductForecast
+                  key={order.id}
+                  order={{
+                    id: order.id!,
+                    status: order.status || '',
+                    items: (order as any).items || [],
+                    shipping: (order as any).shipping || null,
+                    createdAt: order.createdAt || '',
+                    estimatedDelivery: (order as any).estimatedDelivery || '',
+                    deliveryDate: (order as any).deliveryDate || '',
+                  }}
+                  onPress={() => handleOrderPress(order.id!, order.status || '')}
+                />
+              ))
           )}
         </View>
-
-        {data && data.total > data.orders.length && (
+        {total > orders.length && (
           <View style={tw`flex-row justify-center items-center py-4`}>
             <Text
               style={tw`${
@@ -95,17 +123,13 @@ function MyOrders() {
               Anterior
             </Text>
             <Text style={tw`text-gray-500`}>
-              Página {page} de {Math.ceil(data.total / 10)}
+              Página {page} de {totalPages}
             </Text>
             <Text
               style={tw`${
-                page < Math.ceil(data.total / 10)
-                  ? 'text-orange-500'
-                  : 'text-gray-300'
+                page < totalPages ? 'text-orange-500' : 'text-gray-300'
               } px-4 py-2`}
-              onPress={() =>
-                page < Math.ceil(data.total / 10) && setPage(p => p + 1)
-              }>
+              onPress={() => page < totalPages && setPage(p => p + 1)}>
               Próxima
             </Text>
           </View>
