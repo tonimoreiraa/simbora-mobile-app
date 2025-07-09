@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -18,23 +19,38 @@ import {
 } from 'phosphor-react-native';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
-import ColorSelect from '../components/color_select';
+import ColorSelect from '../components/variant_select';
 import {
   useNavigation,
   useRoute,
   RouteProp,
   NavigationProp,
 } from '@react-navigation/native';
-import {useGetProductsId} from '../services/client/products/products'; // Usando a função da API gerada
+import {useGetProductsId} from '../services/client/products/products';
 import {useCart} from '../contexts/cart_provider';
 import Toast from 'react-native-toast-message';
 import {ForYouProducts} from '../components/for_you_products';
 import {getCorrectImageUrl} from '../utils/image';
+import VariantSelect from '../components/variant_select';
 
 type RootStackParamList = {
   Cart: undefined;
   Product: {id: number};
 };
+
+interface Variant {
+  id: number;
+  value: string;
+  unit: string;
+  price: string;
+  photo: string;
+  variantTypeId: number;
+  type: {
+    id: number;
+    name: string;
+    defaultUnit: string;
+  };
+}
 
 interface Product {
   category: {
@@ -60,7 +76,7 @@ interface Product {
   supplierId: number;
   tags: Array<string>;
   updatedAt: string;
-  variants: Array<any>;
+  variants: Array<Variant>;
 }
 
 const Product = () => {
@@ -69,7 +85,8 @@ const Product = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  // Usando a função da API gerada em vez da função customizada
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+
   const {
     data: productResponse,
     isLoading,
@@ -77,10 +94,52 @@ const Product = () => {
     refetch,
   } = useGetProductsId(productId);
 
-  // Extrair os dados do produto da resposta da API
   const data = productResponse;
-
   const cart = useCart();
+
+  const handleVariantSelect = (variantValue: string | null) => {
+    if (variantValue === null) {
+      setSelectedVariant(null);
+      return;
+    }
+
+    const variant = data?.variants?.find(v => v.value === variantValue);
+    if (variant) {
+      setSelectedVariant({
+        ...variant,
+        price: variant.price?.toString() ?? '0'
+      } as Variant);
+    } else {
+      setSelectedVariant(null);
+    }
+  };
+
+  const getDisplayImages = () => {
+    if (selectedVariant && selectedVariant.photo) {
+      return [selectedVariant.photo];
+    }
+    if (data?.images && data.images.length > 0) {
+      return data.images
+        .map(image => getCorrectImageUrl(image.path ?? ''))
+        .filter((path): path is string => path !== '');
+    }
+    
+    return [];
+  };
+
+  const getDisplayPrice = () => {
+    if (selectedVariant) {
+      return selectedVariant.price;
+    }
+    return data?.price ?? '0';
+  };
+
+  const getVariantTypeName = () => {
+    if (data?.variants && data.variants.length > 0 && data.variants[0]?.type?.name) {
+      return data.variants[0].type.name.toLowerCase();
+    }
+    return 'opção';
+  };
 
   if (isLoading || !data) {
     return (
@@ -118,7 +177,9 @@ const Product = () => {
   }
 
   const handleAddCart = () => {
-    if (!data?.images || data.images.length === 0 || !data.id) {
+    const displayImages = getDisplayImages();
+    
+    if (displayImages.length === 0 || !data.id) {
       Toast.show({
         type: 'error',
         text1: 'Produto indisponível',
@@ -130,9 +191,9 @@ const Product = () => {
     cart.push({
       id: data.id,
       name: data.name ?? 'Produto sem nome',
-      price: Number(data.price),
+      price: Number(getDisplayPrice()),
       quantity: 1,
-      image: getCorrectImageUrl(data.images[0]?.path ?? ''), // Aplicando formatação da URL
+      image: displayImages[0],
     });
 
     Toast.show({
@@ -143,13 +204,12 @@ const Product = () => {
     });
   };
 
-  // Verificar se o produto está em estoque
   const isOutOfStock = (data?.stock ?? 0) <= 0;
+  const displayImages = getDisplayImages();
 
   return (
     <SafeAreaView style={tw`py-4 bg-white`}>
       <ScrollView style={tw`mb-26`}>
-        {/* Header with Search */}
         <View style={tw`flex flex-row items-center justify-center w-full px-4`}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -184,14 +244,9 @@ const Product = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Product Images Carousel */}
         <View style={tw`mt-4`}>
-          {data?.images && data.images.length > 0 ? (
-            <Carousel
-              items={data.images
-                .map(image => getCorrectImageUrl(image.path ?? ''))
-                .filter((path): path is string => path !== '')}
-            />
+          {displayImages.length > 0 ? (
+            <Carousel items={displayImages} />
           ) : (
             <View
               style={tw`h-64 bg-gray-200 items-center justify-center mx-4 rounded-lg`}>
@@ -200,7 +255,6 @@ const Product = () => {
           )}
         </View>
 
-        {/* Product Name */}
         <View style={tw`p-4`}>
           <Text style={tw`text-xl font-bold`}>{data?.name}</Text>
           {isOutOfStock && (
@@ -208,9 +262,13 @@ const Product = () => {
               Fora de estoque
             </Text>
           )}
+          {selectedVariant && selectedVariant.value && (
+            <Text style={tw`text-blue-600 font-medium mt-1`}>
+              {getVariantTypeName()}: {selectedVariant.value}
+            </Text>
+          )}
         </View>
 
-        {/* Category and Tags */}
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={tw`px-4`}>
             {data?.category && (
@@ -229,26 +287,25 @@ const Product = () => {
             <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
           </View>
         </ScrollView>
-
-        {/* Color Selection */}
         {data?.variants && data.variants.length > 0 && (
           <View style={tw`px-4`}>
             <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
-              Selecione a cor
+              Selecione {getVariantTypeName() === 'cor' ? 'a' : 'o'} {getVariantTypeName()}
             </Text>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               style={tw`py-2`}>
-              <ColorSelect />
-              <ColorSelect />
-              <ColorSelect />
-              <ColorSelect />
+              <VariantSelect 
+                options={data.variants
+                  .map(variant => variant.value)
+                  .filter((value): value is string => typeof value === 'string' && value !== undefined)} 
+                onSelect={handleVariantSelect}
+              />
             </ScrollView>
           </View>
         )}
 
-        {/* Product Description */}
         <View style={tw`px-4`}>
           <Text style={tw`font-bold text-base text-stone-600 mt-2`}>
             Descrição
@@ -258,7 +315,6 @@ const Product = () => {
           </Text>
         </View>
 
-        {/* Stock Information */}
         <View style={tw`px-4 mt-4`}>
           <Text style={tw`font-bold text-base text-stone-600`}>
             Disponibilidade
@@ -270,7 +326,6 @@ const Product = () => {
           </Text>
         </View>
 
-        {/* Supplier Information */}
         {data?.supplier && (
           <View style={tw`px-4 mt-4`}>
             <Text style={tw`font-bold text-base text-stone-600`}>
@@ -281,21 +336,18 @@ const Product = () => {
             </Text>
           </View>
         )}
-
-        {/* Similar Products */}
         <View style={tw`px-4`}>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
           <ForYouProducts />
         </View>
       </ScrollView>
 
-      {/* Bottom Cart Section */}
       <View
         style={tw`absolute flex-row items-center bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
         <View style={tw`w-1/3`}>
           <View style={tw`flex flex-row items-center`}>
             <Text style={tw`text-lg font-semibold`}>
-              {Number(data?.price ?? 0).toLocaleString('pt-BR', {
+              {Number(getDisplayPrice()).toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
               })}

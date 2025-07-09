@@ -200,7 +200,6 @@ function MyAccount() {
     <SafeAreaView style={tw`bg-white flex-1`}>
       <View style={tw`flex-row items-center justify-between px-4 py-3`}>
         <TouchableOpacity>
-          <ArrowLeft size={24} color="#000" />
         </TouchableOpacity>
         <Text style={tw`text-xl font-bold`}>Minha conta</Text>
         <View style={tw`w-6`} />
