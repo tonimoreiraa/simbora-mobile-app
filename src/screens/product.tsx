@@ -19,7 +19,6 @@ import {
 } from 'phosphor-react-native';
 import tw from 'twrnc';
 import Carousel from '../components/carousel';
-import ColorSelect from '../components/variant_select';
 import {
   useNavigation,
   useRoute,
@@ -128,10 +127,38 @@ const Product = () => {
   };
 
   const getDisplayPrice = () => {
-    if (selectedVariant) {
+    if (selectedVariant && selectedVariant.price) {
       return selectedVariant.price;
     }
     return data?.price ?? '0';
+  };
+
+  const getDisplayUnit = () => {
+    if (selectedVariant && selectedVariant.unit) {
+      return selectedVariant.unit;
+    }
+    if (selectedVariant && selectedVariant.type?.defaultUnit) {
+      return selectedVariant.type.defaultUnit;
+    }
+    return '';
+  };
+
+  const getDisplayName = () => {
+    if (selectedVariant && selectedVariant.value) {
+      return `${data?.name} - ${selectedVariant.value}`;
+    }
+    return data?.name ?? 'Produto sem nome';
+  };
+
+  const getInstallmentPrice = () => {
+    const price = Number(getDisplayPrice());
+    const installments = 12;
+    const installmentValue = price / installments;
+    
+    return installmentValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   };
 
   const getVariantTypeName = () => {
@@ -190,15 +217,21 @@ const Product = () => {
 
     cart.push({
       id: data.id,
-      name: data.name ?? 'Produto sem nome',
+      name: getDisplayName(),
       price: Number(getDisplayPrice()),
       quantity: 1,
       image: displayImages[0],
+      variant: selectedVariant ? {
+        id: selectedVariant.id,
+        value: selectedVariant.value,
+        unit: selectedVariant.unit,
+        type: selectedVariant.type.name,
+      } : undefined,
     });
 
     Toast.show({
       type: 'success',
-      text1: `${data.name} foi adicionado ao carrinho`,
+      text1: `${getDisplayName()} foi adicionado ao carrinho`,
       text2: 'Toque para ver seu carrinho.',
       onPress: () => navigation.navigate('Cart'),
     });
@@ -206,6 +239,7 @@ const Product = () => {
 
   const isOutOfStock = (data?.stock ?? 0) <= 0;
   const displayImages = getDisplayImages();
+  const displayUnit = getDisplayUnit();
 
   return (
     <SafeAreaView style={tw`py-4 bg-white`}>
@@ -263,9 +297,12 @@ const Product = () => {
             </Text>
           )}
           {selectedVariant && selectedVariant.value && (
-            <Text style={tw`text-blue-600 font-medium mt-1`}>
-              {getVariantTypeName()}: {selectedVariant.value}
-            </Text>
+            <View style={tw`mt-1`}>
+              <Text style={tw`text-blue-600 font-medium`}>
+                {getVariantTypeName()}: {selectedVariant.value}
+                {displayUnit && ` (${displayUnit})`}
+              </Text>
+            </View>
           )}
         </View>
 
@@ -287,6 +324,7 @@ const Product = () => {
             <Text style={tw`text-stone-600 text-lg`}>Para você</Text>
           </View>
         </ScrollView>
+
         {data?.variants && data.variants.length > 0 && (
           <View style={tw`px-4`}>
             <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
@@ -313,6 +351,11 @@ const Product = () => {
           <Text style={tw`text-stone-500 text-base`}>
             {data?.description || 'Descrição não disponível.'}
           </Text>
+          {selectedVariant && displayUnit && (
+            <Text style={tw`text-blue-600 text-sm mt-2`}>
+              Unidade: {displayUnit}
+            </Text>
+          )}
         </View>
 
         <View style={tw`px-4 mt-4`}>
@@ -336,6 +379,7 @@ const Product = () => {
             </Text>
           </View>
         )}
+
         <View style={tw`px-4`}>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
           <ForYouProducts />
@@ -353,7 +397,9 @@ const Product = () => {
               })}
             </Text>
           </View>
-          <Text style={tw`font-semibold text-stone-300 mt-1`}>Em até 12x</Text>
+          <Text style={tw`font-semibold text-stone-300 mt-1`}>
+            12x de {getInstallmentPrice()}
+          </Text>
         </View>
         <TouchableOpacity
           style={tw`flex flex-col items-center justify-center ${
