@@ -1,7 +1,5 @@
 import {ScrollView, View, Text} from 'react-native';
 import tw from 'twrnc';
-import ProductForecast from '../components/product_forecast';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import CartProduct from '../components/cart_product';
 import {useCart} from '../contexts/cart_provider';
 import QrCode from '../assets/qrcode.svg';

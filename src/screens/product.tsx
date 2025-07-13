@@ -31,6 +31,7 @@ import Toast from 'react-native-toast-message';
 import {ForYouProducts} from '../components/for_you_products';
 import {getCorrectImageUrl} from '../utils/image';
 import VariantSelect from '../components/variant_select';
+import { ChatCard } from '../components/chat_card';
 
 type RootStackParamList = {
   Cart: undefined;
@@ -379,6 +380,10 @@ const Product = () => {
             </Text>
           </View>
         )}
+
+        <View style={tw`px-4 mt-3`}>
+          <ChatCard />
+        </View>
 
         <View style={tw`px-4`}>
           <Text style={tw`font-semibold text-xl mt-4`}>Itens similares</Text>
