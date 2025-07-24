@@ -7,7 +7,8 @@ export default function Notification() {
       style={tw`flex flex-row items-center justify-between bg-stone-100 w-full p-3 mt-4 bg-black rounded-xl`}>
       <View style={tw`flex flex-row items-center justify-center`}>
         <View
-          style={tw`w-12 h-12 bg-stone-200 rounded-lg border border-blue-500`}></View>
+          style={tw`w-12 h-12 bg-stone-200 rounded-lg border border-blue-500`}
+        />
         <View style={tw`flex flex-row items-center flex-wrap w-72 ml-4`}>
           <Text style={tw`text-white`}>
             <Text style={tw`font-bold`}>Você recebeu um pedido, </Text>

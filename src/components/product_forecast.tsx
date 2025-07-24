@@ -55,7 +55,9 @@ function ProductForecast({order, onPress}: ProductForecastProps) {
   const translatedStatus = statusTranslations[order.status] || order.status;
 
   const formatDate = (date: string | Date | undefined) => {
-    if (!date) return '';
+    if (!date) {
+      return '';
+    }
     const dateObj = typeof date === 'string' ? new Date(date) : date;
     return dateObj.toLocaleDateString('pt-BR', {
       day: '2-digit',

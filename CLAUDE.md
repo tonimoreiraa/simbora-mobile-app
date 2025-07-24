@@ -58,22 +58,26 @@ npm run commit    # Uses commitizen for standardized commits
 ## Key Development Notes
 
 ### Code Generation
+
 ```bash
 # Regenerate API client after OpenAPI schema changes
 npx orval
 ```
 
 ### Styling Approach
+
 - Uses NativeWind for Tailwind-style React Native styling
 - Additional utility library `twrnc` for dynamic styles
 - Custom components follow React Native patterns
 
 ### State Management Pattern
+
 - Global state: React Context (AuthProvider, CartProvider)
 - Server state: React Query hooks in service layers
 - Form state: React Hook Form with Zod validation
 
 ### Navigation Structure
+
 - Bottom tabs for main sections (Home, Categories, Cart, Account)
 - Stack navigation for detailed flows
 - Route definitions in `routes.tsx`

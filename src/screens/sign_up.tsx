@@ -229,11 +229,11 @@ function SignUp() {
                 tw`flex flex-row items-center justify-between w-full py-4`,
                 {opacity: socialAnim},
               ]}>
-              <View style={tw`border border-stone-200 w-24`}></View>
+              <View style={tw`border border-stone-200 w-24`} />
               <Text style={tw`text-xs text-stone-400`}>
                 Entre com uma rede social
               </Text>
-              <View style={tw`border border-stone-200 w-24`}></View>
+              <View style={tw`border border-stone-200 w-24`} />
             </Animated.View>
 
             {mutation.isError && (

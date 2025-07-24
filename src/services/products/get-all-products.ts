@@ -2,7 +2,9 @@ import {api} from '../api';
 import {Product, ProductsResponse} from './schemas/products-response.schema';
 
 const getCorrectImageUrl = (imageUrl: string): string => {
-  if (!imageUrl) return '';
+  if (!imageUrl) {
+    return '';
+  }
   if (imageUrl.includes('uploads/https://')) {
     return imageUrl.replace('http://localhost:3333/uploads/', '');
   }
@@ -24,8 +26,12 @@ export const getAllProducts = async (
       perPage,
     };
 
-    if (query) params.query = query;
-    if (categoryId) params.categoryId = categoryId;
+    if (query) {
+      params.query = query;
+    }
+    if (categoryId) {
+      params.categoryId = categoryId;
+    }
 
     const {data} = await api.get<ProductsResponse>('/products', {params});
 

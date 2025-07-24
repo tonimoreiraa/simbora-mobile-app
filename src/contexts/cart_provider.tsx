@@ -94,8 +94,9 @@ export default function CartProvider({children}: PropsWithChildren) {
 export const useCart = () => {
   const context = useContext(CartContext);
 
-  if (!context.items)
+  if (!context.items) {
     throw new Error('useCart must be used within a CartProvider');
+  }
 
   return context;
 };
@@ -103,12 +104,15 @@ export const useCart = () => {
 export const useCartItemQuantity = (itemId: number) => {
   const context = useContext(CartContext);
 
-  if (!context.items)
+  if (!context.items) {
     throw new Error('useCart must be used within a CartProvider');
+  }
 
   const item = context.items.find(i => i.id == itemId);
 
-  if (!item) throw new Error('Cart item does not exists.');
+  if (!item) {
+    throw new Error('Cart item does not exists.');
+  }
 
   const add = () =>
     context.update(itemId, {

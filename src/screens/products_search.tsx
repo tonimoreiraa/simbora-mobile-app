@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text} from 'react-native';
+import {SafeAreaView, ScrollView} from 'react-native';
 import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import {useDebouncedState} from '../helpers/debounced-state';
@@ -19,7 +19,7 @@ const getProducts = async (params: any) => {
 
 export function ProductsSearch() {
   const {debouncedValue, setInputValue, inputValue} = useDebouncedState();
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
 
   const {data} = useQuery(['@products', debouncedValue, page], getProducts, {
     keepPreviousData: true,

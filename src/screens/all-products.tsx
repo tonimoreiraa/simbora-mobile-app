@@ -116,8 +116,12 @@ const AllProducts = () => {
             return 0;
         }
 
-        if (aValue < bValue) return localFilters.sortOrder === 'asc' ? -1 : 1;
-        if (aValue > bValue) return localFilters.sortOrder === 'asc' ? 1 : -1;
+        if (aValue < bValue) {
+          return localFilters.sortOrder === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return localFilters.sortOrder === 'asc' ? 1 : -1;
+        }
         return 0;
       });
     }

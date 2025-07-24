@@ -27,7 +27,9 @@ function MyOrders() {
   const total = data?.meta?.total || 0;
 
   const filteredOrders = orders.filter(order => {
-    if (!searchQuery) return true;
+    if (!searchQuery) {
+      return true;
+    }
     return String(order.id).includes(searchQuery);
   });
 

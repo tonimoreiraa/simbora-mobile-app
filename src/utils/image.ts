@@ -4,7 +4,9 @@
  * removendo duplicações e tratando diferentes formatos
  */
 export const getCorrectImageUrl = (imageUrl: string): string => {
-  if (!imageUrl) return '';
+  if (!imageUrl) {
+    return '';
+  }
 
   // Remove duplicação de uploads/https://
   if (imageUrl.includes('uploads/https://')) {
