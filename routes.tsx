@@ -18,6 +18,7 @@ import Logo from './src/assets/LOGO.svg';
 import Checkout from './src/screens/checkout';
 import RemoveOrder from './src/screens/remove_order';
 import AllProducts from './src/screens/all-products';
+import CategoryProducts from './src/screens/category-products';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -236,6 +237,14 @@ export default function Routes() {
           headerShown: false,
         }}
         component={AllProducts}
+      />
+      <Stack.Screen
+        name="CategoryProducts"
+        options={{
+          title: 'Produtos da Categoria',
+          headerShown: false,
+        }}
+        component={CategoryProducts}
       />
     </Stack.Navigator>
   );
