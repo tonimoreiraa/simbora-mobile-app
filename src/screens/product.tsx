@@ -31,7 +31,7 @@ import Toast from 'react-native-toast-message';
 import {ForYouProducts} from '../components/for_you_products';
 import {getCorrectImageUrl} from '../utils/image';
 import VariantSelect from '../components/variant_select';
-import { ChatCard } from '../components/chat_card';
+import {ChatCard} from '../components/chat_card';
 
 type RootStackParamList = {
   Cart: undefined;
@@ -107,7 +107,7 @@ const Product = () => {
     if (variant) {
       setSelectedVariant({
         ...variant,
-        price: variant.price?.toString() ?? '0'
+        price: variant.price?.toString() ?? '0',
       } as Variant);
     } else {
       setSelectedVariant(null);
@@ -123,7 +123,7 @@ const Product = () => {
         .map(image => getCorrectImageUrl(image.path ?? ''))
         .filter((path): path is string => path !== '');
     }
-    
+
     return [];
   };
 
@@ -155,7 +155,7 @@ const Product = () => {
     const price = Number(getDisplayPrice());
     const installments = 12;
     const installmentValue = price / installments;
-    
+
     return installmentValue.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
@@ -163,7 +163,11 @@ const Product = () => {
   };
 
   const getVariantTypeName = () => {
-    if (data?.variants && data.variants.length > 0 && data.variants[0]?.type?.name) {
+    if (
+      data?.variants &&
+      data.variants.length > 0 &&
+      data.variants[0]?.type?.name
+    ) {
       return data.variants[0].type.name.toLowerCase();
     }
     return 'opção';
@@ -206,7 +210,7 @@ const Product = () => {
 
   const handleAddCart = () => {
     const displayImages = getDisplayImages();
-    
+
     if (displayImages.length === 0 || !data.id) {
       Toast.show({
         type: 'error',
@@ -222,12 +226,14 @@ const Product = () => {
       price: Number(getDisplayPrice()),
       quantity: 1,
       image: displayImages[0],
-      variant: selectedVariant ? {
-        id: selectedVariant.id,
-        value: selectedVariant.value,
-        unit: selectedVariant.unit,
-        type: selectedVariant.type.name,
-      } : undefined,
+      variant: selectedVariant
+        ? {
+            id: selectedVariant.id,
+            value: selectedVariant.value,
+            unit: selectedVariant.unit,
+            type: selectedVariant.type.name,
+          }
+        : undefined,
     });
 
     Toast.show({
@@ -329,16 +335,20 @@ const Product = () => {
         {data?.variants && data.variants.length > 0 && (
           <View style={tw`px-4`}>
             <Text style={tw`font-bold text-base text-stone-600 mt-4`}>
-              Selecione {getVariantTypeName() === 'cor' ? 'a' : 'o'} {getVariantTypeName()}
+              Selecione {getVariantTypeName() === 'cor' ? 'a' : 'o'}{' '}
+              {getVariantTypeName()}
             </Text>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               style={tw`py-2`}>
-              <VariantSelect 
+              <VariantSelect
                 options={data.variants
                   .map(variant => variant.value)
-                  .filter((value): value is string => typeof value === 'string' && value !== undefined)} 
+                  .filter(
+                    (value): value is string =>
+                      typeof value === 'string' && value !== undefined,
+                  )}
                 onSelect={handleVariantSelect}
               />
             </ScrollView>

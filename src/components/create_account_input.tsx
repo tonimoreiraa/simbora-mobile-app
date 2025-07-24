@@ -1,5 +1,11 @@
 import {ComponentProps, useState} from 'react';
-import {Control, Controller, FieldPath, FieldValues, RegisterOptions} from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  FieldPath,
+  FieldValues,
+  RegisterOptions,
+} from 'react-hook-form';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Eye, EyeSlash} from 'phosphor-react-native';
 import tw from 'twrnc';
@@ -24,7 +30,7 @@ function AccountInput<TFieldValues extends FieldValues>({
   ...props
 }: InputProps<TFieldValues>) {
   const [hiddenPassword, setHiddenPassword] = useState(true);
-  
+
   return (
     <View style={tw`w-full`}>
       <Text style={tw`text-xs mb-1`}>{label}</Text>

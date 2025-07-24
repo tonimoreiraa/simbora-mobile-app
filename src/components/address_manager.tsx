@@ -10,13 +10,8 @@ import {
   Modal,
 } from 'react-native';
 import tw from 'twrnc';
-import { useForm, Controller } from 'react-hook-form';
-import {
-  Trash,
-  X,
-  Check,
-  MapPin,
-} from 'phosphor-react-native';
+import {useForm, Controller} from 'react-hook-form';
+import {Trash, X, Check, MapPin} from 'phosphor-react-native';
 import {
   useGetUserAddresses,
   usePostUserAddresses,
@@ -42,15 +37,10 @@ function AddressManager() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm<AddressFormData>();
 
-  const {
-    data: addresses,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetUserAddresses();
+  const {data: addresses, isLoading, isError, refetch} = useGetUserAddresses();
 
   const createAddressMutation = usePostUserAddresses({
     mutation: {
@@ -59,9 +49,12 @@ function AddressManager() {
         refetch();
         closeModal();
       },
-      onError: (error) => {
+      onError: error => {
         console.error('Erro ao criar endereço:', error);
-        Alert.alert('Erro', 'Não foi possível adicionar o endereço. Tente novamente.');
+        Alert.alert(
+          'Erro',
+          'Não foi possível adicionar o endereço. Tente novamente.',
+        );
       },
     },
   });
@@ -72,9 +65,12 @@ function AddressManager() {
         Alert.alert('Sucesso', 'Endereço removido com sucesso!');
         refetch();
       },
-      onError: (error) => {
+      onError: error => {
         console.error('Erro ao deletar endereço:', error);
-        Alert.alert('Erro', 'Não foi possível remover o endereço. Tente novamente.');
+        Alert.alert(
+          'Erro',
+          'Não foi possível remover o endereço. Tente novamente.',
+        );
       },
     },
   });
@@ -104,7 +100,7 @@ function AddressManager() {
       zipCode: removeCepMask(data.zipCode),
     };
 
-    createAddressMutation.mutate({ data: formattedData });
+    createAddressMutation.mutate({data: formattedData});
   };
 
   const handleDeleteAddress = (addressId: number, addressName: string) => {
@@ -112,13 +108,13 @@ function AddressManager() {
       'Confirmar exclusão',
       `Tem certeza que deseja excluir o endereço "${addressName}"?`,
       [
-        { text: 'Cancelar', style: 'cancel' },
+        {text: 'Cancelar', style: 'cancel'},
         {
           text: 'Excluir',
           style: 'destructive',
-          onPress: () => deleteAddressMutation.mutate({ id: addressId }),
+          onPress: () => deleteAddressMutation.mutate({id: addressId}),
         },
-      ]
+      ],
     );
   };
 
@@ -131,7 +127,9 @@ function AddressManager() {
             <Text style={tw`text-sm text-gray-500`}>Carregando...</Text>
             <View style={tw`flex-row items-center mt-1`}>
               <ActivityIndicator size="small" color="#6B7280" />
-              <Text style={tw`font-medium text-base ml-2`}>Carregando endereços</Text>
+              <Text style={tw`font-medium text-base ml-2`}>
+                Carregando endereços
+              </Text>
             </View>
           </View>
         </View>
@@ -144,12 +142,13 @@ function AddressManager() {
       <View style={tw`mt-4 w-full`}>
         <Text style={tw`text-xl font-bold`}>Gerenciar endereço</Text>
         <View style={tw`w-full mt-2`}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={tw`bg-stone-100 rounded-lg p-4`}
-            onPress={() => refetch()}
-          >
+            onPress={() => refetch()}>
             <Text style={tw`text-sm text-gray-500`}>Erro ao carregar</Text>
-            <Text style={tw`font-medium text-base`}>Toque para tentar novamente</Text>
+            <Text style={tw`font-medium text-base`}>
+              Toque para tentar novamente
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -159,12 +158,14 @@ function AddressManager() {
   return (
     <View style={tw`mt-4 w-full`}>
       <Text style={tw`text-xl font-bold`}>Gerenciar endereço</Text>
-      
+
       <View style={tw`w-full mt-2`}>
         {addresses && addresses.length > 0 ? (
           <>
             {addresses.map((address: any, index: number) => (
-              <View key={address.id || index} style={tw`bg-stone-100 rounded-lg p-4 mb-2`}>
+              <View
+                key={address.id || index}
+                style={tw`bg-stone-100 rounded-lg p-4 mb-2`}>
                 <View style={tw`flex-row justify-between items-start`}>
                   <View style={tw`flex-1`}>
                     <View style={tw`flex-row items-center`}>
@@ -173,53 +174,65 @@ function AddressManager() {
                       </Text>
                       {address.isMain && (
                         <View style={tw`bg-blue-100 px-2 py-1 rounded ml-2`}>
-                          <Text style={tw`text-blue-700 text-xs font-medium`}>Principal</Text>
+                          <Text style={tw`text-blue-700 text-xs font-medium`}>
+                            Principal
+                          </Text>
                         </View>
                       )}
                     </View>
                     <Text style={tw`font-medium text-base`}>
                       {address.streetName}, {address.number}
                       {address.complement ? `, ${address.complement}` : ''}
-                      {'\n'}{address.neighborhood}, {address.city} - {address.state}
+                      {'\n'}
+                      {address.neighborhood}, {address.city} - {address.state}
                       {'\n'}CEP: {address.zipCode}
                     </Text>
                   </View>
                   <View style={tw`flex-row ml-2`}>
                     <TouchableOpacity
-                      onPress={() => handleDeleteAddress(address.id, address.name)}
-                      style={tw`p-1`}
-                    >
+                      onPress={() =>
+                        handleDeleteAddress(address.id, address.name)
+                      }
+                      style={tw`p-1`}>
                       <Trash size={16} color="#EF4444" />
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
             ))}
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={tw`bg-stone-100 rounded-lg p-4 flex-row items-center justify-between`}
-              onPress={() => openModal()}
-            >
+              onPress={() => openModal()}>
               <View>
-                <Text style={tw`text-sm text-gray-500`}>Adicionar endereço</Text>
+                <Text style={tw`text-sm text-gray-500`}>
+                  Adicionar endereço
+                </Text>
                 <Text style={tw`font-medium text-base`}>Novo endereço</Text>
               </View>
-              <View style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
-                <Text style={tw`text-white text-lg font-bold leading-none`}>+</Text>
+              <View
+                style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
+                <Text style={tw`text-white text-lg font-bold leading-none`}>
+                  +
+                </Text>
               </View>
             </TouchableOpacity>
           </>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={tw`bg-stone-100 rounded-lg p-4 flex-row items-center justify-between`}
-            onPress={() => openModal()}
-          >
+            onPress={() => openModal()}>
             <View>
               <Text style={tw`text-sm text-gray-500`}>Adicionar endereço</Text>
-              <Text style={tw`font-medium text-base`}>Nenhum endereço cadastrado</Text>
+              <Text style={tw`font-medium text-base`}>
+                Nenhum endereço cadastrado
+              </Text>
             </View>
-            <View style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
-              <Text style={tw`text-white text-lg font-bold leading-none`}>+</Text>
+            <View
+              style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
+              <Text style={tw`text-white text-lg font-bold leading-none`}>
+                +
+              </Text>
             </View>
           </TouchableOpacity>
         )}
@@ -229,20 +242,20 @@ function AddressManager() {
         visible={isModalVisible}
         animationType="slide"
         presentationStyle="pageSheet"
-        onRequestClose={closeModal}
-      >
+        onRequestClose={closeModal}>
         <View style={tw`bg-white flex-1`}>
-          <View style={tw`flex-row items-center justify-between px-4 py-4 border-b border-gray-100`}>
+          <View
+            style={tw`flex-row items-center justify-between px-4 py-4 border-b border-gray-100`}>
             <TouchableOpacity onPress={closeModal}>
               <X size={24} color="#000" />
             </TouchableOpacity>
-            <Text style={tw`text-xl font-bold`}>
-              Adicionar endereço
-            </Text>
+            <Text style={tw`text-xl font-bold`}>Adicionar endereço</Text>
             <View style={tw`w-6`} />
           </View>
 
-          <ScrollView style={tw`flex-1 px-4 py-6`} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={tw`flex-1 px-4 py-6`}
+            showsVerticalScrollIndicator={false}>
             <Text style={tw`text-xl font-bold mb-4`}>Endereço</Text>
 
             <View style={tw`mb-4`}>
@@ -251,11 +264,13 @@ function AddressManager() {
                 control={control}
                 rules={{
                   required: 'Nome é obrigatório',
-                  maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+                  maxLength: {value: 50, message: 'Máximo 50 caracteres'},
                 }}
-                render={({ field: { onChange, value } }) => (
+                render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>Nome do endereço</Text>
+                    <Text style={tw`text-sm text-gray-500 mb-1`}>
+                      Nome do endereço
+                    </Text>
                     <TextInput
                       style={tw`bg-gray-100 rounded-lg p-4 text-base`}
                       placeholder="Casa, Trabalho, etc."
@@ -267,7 +282,9 @@ function AddressManager() {
                 )}
               />
               {errors.name && (
-                <Text style={tw`text-red-500 text-xs mt-1`}>{errors.name.message}</Text>
+                <Text style={tw`text-red-500 text-xs mt-1`}>
+                  {errors.name.message}
+                </Text>
               )}
             </View>
 
@@ -277,16 +294,16 @@ function AddressManager() {
                 control={control}
                 rules={{
                   required: 'CEP é obrigatório',
-                  pattern: { value: /^\d{5}-?\d{3}$/, message: 'CEP inválido' },
+                  pattern: {value: /^\d{5}-?\d{3}$/, message: 'CEP inválido'},
                 }}
-                render={({ field: { onChange, value } }) => (
+                render={({field: {onChange, value}}) => (
                   <View>
                     <Text style={tw`text-sm text-gray-500 mb-1`}>CEP</Text>
                     <TextInput
                       style={tw`bg-gray-100 rounded-lg p-4 text-base`}
                       placeholder="00000-000"
                       value={value}
-                      onChangeText={(text) => {
+                      onChangeText={text => {
                         const maskedValue = applyCepMask(text);
                         onChange(maskedValue);
                       }}
@@ -297,7 +314,9 @@ function AddressManager() {
                 )}
               />
               {errors.zipCode && (
-                <Text style={tw`text-red-500 text-xs mt-1`}>{errors.zipCode.message}</Text>
+                <Text style={tw`text-red-500 text-xs mt-1`}>
+                  {errors.zipCode.message}
+                </Text>
               )}
             </View>
 
@@ -307,9 +326,9 @@ function AddressManager() {
                 control={control}
                 rules={{
                   required: 'Rua é obrigatória',
-                  maxLength: { value: 100, message: 'Máximo 100 caracteres' },
+                  maxLength: {value: 100, message: 'Máximo 100 caracteres'},
                 }}
-                render={({ field: { onChange, value } }) => (
+                render={({field: {onChange, value}}) => (
                   <View>
                     <Text style={tw`text-sm text-gray-500 mb-1`}>Endereço</Text>
                     <TextInput
@@ -323,7 +342,9 @@ function AddressManager() {
                 )}
               />
               {errors.streetName && (
-                <Text style={tw`text-red-500 text-xs mt-1`}>{errors.streetName.message}</Text>
+                <Text style={tw`text-red-500 text-xs mt-1`}>
+                  {errors.streetName.message}
+                </Text>
               )}
             </View>
 
@@ -334,9 +355,9 @@ function AddressManager() {
                   control={control}
                   rules={{
                     required: 'Número é obrigatório',
-                    maxLength: { value: 10, message: 'Máximo 10 caracteres' },
+                    maxLength: {value: 10, message: 'Máximo 10 caracteres'},
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({field: {onChange, value}}) => (
                     <View>
                       <Text style={tw`text-sm text-gray-500 mb-1`}>Número</Text>
                       <TextInput
@@ -350,7 +371,9 @@ function AddressManager() {
                   )}
                 />
                 {errors.number && (
-                  <Text style={tw`text-red-500 text-xs mt-1`}>{errors.number.message}</Text>
+                  <Text style={tw`text-red-500 text-xs mt-1`}>
+                    {errors.number.message}
+                  </Text>
                 )}
               </View>
 
@@ -359,11 +382,13 @@ function AddressManager() {
                   name="complement"
                   control={control}
                   rules={{
-                    maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+                    maxLength: {value: 50, message: 'Máximo 50 caracteres'},
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Complemento</Text>
+                      <Text style={tw`text-sm text-gray-500 mb-1`}>
+                        Complemento
+                      </Text>
                       <TextInput
                         style={tw`bg-gray-100 rounded-lg p-4 text-base`}
                         placeholder="Apto 101"
@@ -375,7 +400,9 @@ function AddressManager() {
                   )}
                 />
                 {errors.complement && (
-                  <Text style={tw`text-red-500 text-xs mt-1`}>{errors.complement.message}</Text>
+                  <Text style={tw`text-red-500 text-xs mt-1`}>
+                    {errors.complement.message}
+                  </Text>
                 )}
               </View>
             </View>
@@ -386,9 +413,9 @@ function AddressManager() {
                 control={control}
                 rules={{
                   required: 'Bairro é obrigatório',
-                  maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+                  maxLength: {value: 50, message: 'Máximo 50 caracteres'},
                 }}
-                render={({ field: { onChange, value } }) => (
+                render={({field: {onChange, value}}) => (
                   <View>
                     <Text style={tw`text-sm text-gray-500 mb-1`}>Bairro</Text>
                     <TextInput
@@ -402,7 +429,9 @@ function AddressManager() {
                 )}
               />
               {errors.neighborhood && (
-                <Text style={tw`text-red-500 text-xs mt-1`}>{errors.neighborhood.message}</Text>
+                <Text style={tw`text-red-500 text-xs mt-1`}>
+                  {errors.neighborhood.message}
+                </Text>
               )}
             </View>
 
@@ -413,9 +442,9 @@ function AddressManager() {
                   control={control}
                   rules={{
                     required: 'Cidade é obrigatória',
-                    maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+                    maxLength: {value: 50, message: 'Máximo 50 caracteres'},
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({field: {onChange, value}}) => (
                     <View>
                       <Text style={tw`text-sm text-gray-500 mb-1`}>Cidade</Text>
                       <TextInput
@@ -429,7 +458,9 @@ function AddressManager() {
                   )}
                 />
                 {errors.city && (
-                  <Text style={tw`text-red-500 text-xs mt-1`}>{errors.city.message}</Text>
+                  <Text style={tw`text-red-500 text-xs mt-1`}>
+                    {errors.city.message}
+                  </Text>
                 )}
               </View>
 
@@ -439,17 +470,17 @@ function AddressManager() {
                   control={control}
                   rules={{
                     required: 'Estado é obrigatório',
-                    maxLength: { value: 2, message: 'Use a sigla (ex: SP)' },
-                    minLength: { value: 2, message: 'Use a sigla (ex: SP)' },
+                    maxLength: {value: 2, message: 'Use a sigla (ex: SP)'},
+                    minLength: {value: 2, message: 'Use a sigla (ex: SP)'},
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({field: {onChange, value}}) => (
                     <View>
                       <Text style={tw`text-sm text-gray-500 mb-1`}>Estado</Text>
                       <TextInput
                         style={tw`bg-gray-100 rounded-lg p-4 text-base`}
                         placeholder="SP"
                         value={value}
-                        onChangeText={(text) => onChange(text.toUpperCase())}
+                        onChangeText={text => onChange(text.toUpperCase())}
                         maxLength={2}
                         autoCapitalize="characters"
                       />
@@ -457,7 +488,9 @@ function AddressManager() {
                   )}
                 />
                 {errors.state && (
-                  <Text style={tw`text-red-500 text-xs mt-1`}>{errors.state.message}</Text>
+                  <Text style={tw`text-red-500 text-xs mt-1`}>
+                    {errors.state.message}
+                  </Text>
                 )}
               </View>
             </View>
@@ -466,19 +499,23 @@ function AddressManager() {
               <Controller
                 name="isMain"
                 control={control}
-                render={({ field: { onChange, value } }) => (
+                render={({field: {onChange, value}}) => (
                   <TouchableOpacity
                     style={tw`flex-row items-center p-4 bg-gray-100 rounded-lg`}
-                    onPress={() => onChange(!value)}
-                  >
+                    onPress={() => onChange(!value)}>
                     <View
                       style={tw`w-5 h-5 rounded border-2 mr-3 ${
-                        value ? 'bg-blue-500 border-blue-500' : 'border-gray-300'
-                      }`}
-                    >
-                      {value && <Check size={12} color="#fff" style={tw`m-auto`} />}
+                        value
+                          ? 'bg-blue-500 border-blue-500'
+                          : 'border-gray-300'
+                      }`}>
+                      {value && (
+                        <Check size={12} color="#fff" style={tw`m-auto`} />
+                      )}
                     </View>
-                    <Text style={tw`text-base`}>Definir como endereço principal</Text>
+                    <Text style={tw`text-base`}>
+                      Definir como endereço principal
+                    </Text>
                   </TouchableOpacity>
                 )}
               />
@@ -490,8 +527,7 @@ function AddressManager() {
               disabled={createAddressMutation.isLoading}
               style={tw`bg-blue-500 rounded-lg p-4 items-center ${
                 createAddressMutation.isLoading ? 'opacity-50' : ''
-              }`}
-            >
+              }`}>
               {createAddressMutation.isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
