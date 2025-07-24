@@ -169,9 +169,9 @@ const SendRequest = ({}: SendRequestProps) => {
       // 6. Redirecionar para aba de pedidos após um delay
       setTimeout(() => {
         try {
-          // Navegar para a aba MyOrders dentro do BottomTab
+          // Navegar para a aba MyOrders dentro do Home
           navigation.navigate(
-            'BottomTab' as never,
+            'Home' as never,
             {
               screen: 'MyOrders',
             } as never,

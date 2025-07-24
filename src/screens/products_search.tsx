@@ -2,28 +2,39 @@ import {SafeAreaView, ScrollView} from 'react-native';
 import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import {useDebouncedState} from '../helpers/debounced-state';
-import {useQuery} from 'react-query';
-import {api} from '../services/api';
 import {useState} from 'react';
-import ProductCard from '../components/product_card';
+import ProductCard, {Product as ProductCardProps} from '../components/product_card';
 import {View} from 'react-native';
-
-const getProducts = async (params: any) => {
-  const query = params.queryKey[1];
-  const page = params.queryKey[2];
-  const {data} = await api.get('/products', {
-    params: {query, page},
-  });
-  return data;
-};
+import {useGetProducts} from '../services/client/products/products';
 
 export function ProductsSearch() {
   const {debouncedValue, setInputValue, inputValue} = useDebouncedState();
-  const [page] = useState(1);
 
-  const {data} = useQuery(['@products', debouncedValue, page], getProducts, {
-    keepPreviousData: true,
-  });
+  const {data: productsResponse} = useGetProducts(
+    debouncedValue
+      ? {
+          query: debouncedValue,
+        }
+      : undefined,
+  );
+
+  const allProducts = productsResponse?.data || [];
+
+  const adaptProductToCardProps = (product: any): ProductCardProps => {
+    return {
+      id: product?.id || 0,
+      name: product?.name || 'Produto sem nome',
+      price: product?.price || 0,
+      description: product?.description || '',
+      images: product?.images || [],
+      createdAt: product?.createdAt || new Date().toISOString(),
+      supplierId: product?.supplierId || 0,
+      categoryId: product?.categoryId || 0,
+      tags: product?.tags || [],
+      stock: product?.stock || 0,
+      supplier: product?.supplier?.name || 'Fornecedor não informado',
+    };
+  };
 
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
@@ -34,8 +45,11 @@ export function ProductsSearch() {
           autoFocus
         />
         <View style={tw`flex-wrap flex-row gap-4 justify-between`}>
-          {data?.data.map((product: any) => (
-            <ProductCard {...product} />
+          {allProducts.map((product: any) => (
+            <ProductCard
+              key={product?.id || Math.random()}
+              {...adaptProductToCardProps(product)}
+            />
           ))}
         </View>
       </ScrollView>
