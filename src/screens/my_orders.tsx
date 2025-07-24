@@ -39,18 +39,18 @@ function MyOrders() {
     switch (orderStatus.toLowerCase()) {
       case 'shipped':
       case 'enviado':
-        navigation.navigate('WithdrawOrder', { orderId });
+        navigation.navigate('WithdrawOrder', {orderId});
         break;
       case 'delivered':
       case 'entregue':
-        navigation.navigate('ResumeOrder', { orderId });
+        navigation.navigate('ResumeOrder', {orderId});
         break;
       case 'out for delivery':
       case 'em rota':
-        navigation.navigate('ResumeOrder', { orderId });
+        navigation.navigate('ResumeOrder', {orderId});
         break;
       default:
-        navigation.navigate('ResumeOrder', { orderId });
+        navigation.navigate('ResumeOrder', {orderId});
         break;
     }
   };
@@ -108,7 +108,9 @@ function MyOrders() {
                     estimatedDelivery: (order as any).estimatedDelivery || '',
                     deliveryDate: (order as any).deliveryDate || '',
                   }}
-                  onPress={() => handleOrderPress(order.id!, order.status || '')}
+                  onPress={() =>
+                    handleOrderPress(order.id!, order.status || '')
+                  }
                 />
               ))
           )}
