@@ -166,7 +166,7 @@ export default function Routes() {
 
   return (
     <Stack.Navigator
-      initialRouteName={'BottomTab'}
+      initialRouteName={'Home'}
       screenOptions={{
         headerBackground: () => (
           <View style={{flex: 1, backgroundColor: 'transparent'}} />
@@ -177,7 +177,7 @@ export default function Routes() {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen
-        name="BottomTab"
+        name="Home"
         component={BottomTab}
         options={{headerShown: false, headerTransparent: true}}
       />
