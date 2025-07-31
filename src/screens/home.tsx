@@ -83,6 +83,7 @@ function Categories() {
               onPress={() =>
                 navigation.navigate('CategoryProducts', {
                   categoryId: category.id,
+                  categoryName: category.name,
                 })
               }
             />
