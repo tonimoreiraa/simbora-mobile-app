@@ -111,7 +111,7 @@ function Home() {
             />
           </View>
 
-          <View style={tw`-mt-2`}>
+          <View>
             <Notification
             />
           </View>
