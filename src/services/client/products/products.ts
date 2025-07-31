@@ -59,13 +59,13 @@ export const getProducts = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetProducts200>(
-    {url: `/products`, method: 'GET', params, signal},
+    {url: '/products', method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetProductsQueryKey = (params?: GetProductsParams) => {
-  return [`/products`, ...(params ? [params] : [])] as const;
+  return ['/products', ...(params ? [params] : [])] as const;
 };
 
 export const getGetProductsQueryOptions = <
@@ -419,12 +419,12 @@ export const postProductsAddPhoto = (
   signal?: AbortSignal,
 ) => {
   const formData = new FormData();
-  formData.append(`productId`, postProductsAddPhotoBody.productId.toString());
-  formData.append(`image`, postProductsAddPhotoBody.image);
+  formData.append('productId', postProductsAddPhotoBody.productId.toString());
+  formData.append('image', postProductsAddPhotoBody.image);
 
   return axiosInstance<PostProductsAddPhoto200>(
     {
-      url: `/products/add-photo`,
+      url: '/products/add-photo',
       method: 'POST',
       headers: {'Content-Type': 'multipart/form-data'},
       data: formData,

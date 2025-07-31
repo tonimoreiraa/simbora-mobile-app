@@ -47,13 +47,13 @@ export const getCategories = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetCategories200Item[]>(
-    {url: `/categories`, method: 'GET', params, signal},
+    {url: '/categories', method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetCategoriesQueryKey = (params?: GetCategoriesParams) => {
-  return [`/categories`, ...(params ? [params] : [])] as const;
+  return ['/categories', ...(params ? [params] : [])] as const;
 };
 
 export const getGetCategoriesQueryOptions = <
@@ -129,18 +129,18 @@ export const postCategories = (
   signal?: AbortSignal,
 ) => {
   const formData = new FormData();
-  formData.append(`name`, postCategoriesBody.name);
+  formData.append('name', postCategoriesBody.name);
   if (postCategoriesBody.description !== undefined) {
-    formData.append(`description`, postCategoriesBody.description);
+    formData.append('description', postCategoriesBody.description);
   }
   if (postCategoriesBody.categoryId !== undefined) {
-    formData.append(`categoryId`, postCategoriesBody.categoryId.toString());
+    formData.append('categoryId', postCategoriesBody.categoryId.toString());
   }
-  formData.append(`image`, postCategoriesBody.image);
+  formData.append('image', postCategoriesBody.image);
 
   return axiosInstance<PostCategories201>(
     {
-      url: `/categories`,
+      url: '/categories',
       method: 'POST',
       headers: {'Content-Type': 'multipart/form-data'},
       data: formData,
@@ -312,14 +312,14 @@ export const putCategoriesId = (
   options?: SecondParameter<typeof axiosInstance>,
 ) => {
   const formData = new FormData();
-  formData.append(`name`, putCategoriesIdBody.name);
+  formData.append('name', putCategoriesIdBody.name);
   if (putCategoriesIdBody.description !== undefined) {
-    formData.append(`description`, putCategoriesIdBody.description);
+    formData.append('description', putCategoriesIdBody.description);
   }
   if (putCategoriesIdBody.categoryId !== undefined) {
-    formData.append(`categoryId`, putCategoriesIdBody.categoryId.toString());
+    formData.append('categoryId', putCategoriesIdBody.categoryId.toString());
   }
-  formData.append(`image`, putCategoriesIdBody.image);
+  formData.append('image', putCategoriesIdBody.image);
 
   return axiosInstance<PutCategoriesId200>(
     {

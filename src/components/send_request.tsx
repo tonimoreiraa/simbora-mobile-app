@@ -20,37 +20,41 @@ import {
 import {useGetUsers} from '../services/client/users/users';
 import {usePostOrderSharesShare} from '../services/client/order-shares/order-shares';
 import {usePostOrders} from '../services/client/orders/orders';
-import {GetUsers200DataItemOneOfRole} from '../services/client/models/getUsers200DataItemOneOfRole';
 import {useCart} from '../contexts/cart_provider';
+import {useGetUserAddresses} from '../services/client/user-addresses/user-addresses';
 import {useNavigation} from '@react-navigation/native';
 import {getCorrectImageUrl} from '../utils/image';
 import Toast from 'react-native-toast-message';
+import {useAuth} from '../contexts/auth_provider';
 
 interface SendRequestProps {
-  // Component props
+  selectedAddress?: any;
 }
 
-const SendRequest = ({}: SendRequestProps) => {
+const SendRequest = ({selectedAddress}: SendRequestProps) => {
   const [searchText, setSearchText] = useState('');
   const [isSharing, setIsSharing] = useState(false);
 
   // Hooks com tratamento de erro
-  let cart, navigation, usersResponse, isLoading, isError;
-  let shareOrderMutation, createOrderMutation;
+  let cart, navigation, usersResponse, isLoading, isError, currentUser;
+  let shareOrderMutation, createOrderMutation, userAddressesData;
 
   try {
     cart = useCart();
     navigation = useNavigation();
+    currentUser = useAuth().user;
 
     const usersQuery = useGetUsers({
-      search: searchText || undefined,
-      role: GetUsers200DataItemOneOfRole.customer,
-      limit: 20,
+      query: searchText || undefined,
+      perPage: 20,
     });
+
+    const userAddressesQuery = useGetUserAddresses();
 
     usersResponse = usersQuery.data;
     isLoading = usersQuery.isLoading;
     isError = usersQuery.isError;
+    userAddressesData = userAddressesQuery.data;
 
     shareOrderMutation = usePostOrderSharesShare();
     createOrderMutation = usePostOrders();
@@ -76,27 +80,31 @@ const SendRequest = ({}: SendRequestProps) => {
   const filteredCustomers = useMemo(() => {
     try {
       const customers = usersResponse?.data || [];
+      
+      // Filtrar para remover o usuário atual
+      const customersWithoutCurrentUser = customers.filter(customer => {
+        return customer?.id !== currentUser?.id;
+      });
+
       if (!searchText) {
-        return customers;
+        return customersWithoutCurrentUser;
       }
 
-      return customers.filter(customer => {
+      return customersWithoutCurrentUser.filter(customer => {
         const name = customer?.name?.toLowerCase() || '';
         const username = customer?.username?.toLowerCase() || '';
-        const email = customer?.email?.toLowerCase() || '';
         const search = searchText.toLowerCase();
 
         return (
           name.includes(search) ||
-          username.includes(search) ||
-          email.includes(search)
+          username.includes(search)
         );
       });
     } catch (error) {
       console.error('Erro ao filtrar clientes:', error);
       return [];
     }
-  }, [usersResponse?.data, searchText]);
+  }, [usersResponse?.data, searchText, currentUser?.id]);
 
   const handleShareOrder = async (userId: number, userName: string) => {
     try {
@@ -119,31 +127,60 @@ const SendRequest = ({}: SendRequestProps) => {
       const shippingPrice = 0; // Sem frete por enquanto (pode ser calculado depois)
       const totalPrice = subtotalPrice - discountPrice + shippingPrice;
 
-      // 2. Criar o pedido com os itens do carrinho e valores obrigatórios
-      const orderData = {
-        items: cart.items.map(item => ({
-          productId: item.id,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-        subtotalPrice,
-        totalPrice,
-        discountPrice,
-        shippingPrice,
-        status: 'Pending',
+      // 2. Usar endereço selecionado na etapa anterior ou buscar endereço principal como fallback
+      const addressToUse = selectedAddress || userAddressesData?.find(addr => addr);
+
+      // 3. Criar o pedido com os itens do carrinho (incluindo variantes quando disponíveis)
+      const orderData: any = {
+        items: cart.items.map(item => {
+          const orderItem: any = {
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price,
+            // Adicionar informações extras do produto disponíveis no carrinho
+            name: item.name,
+            image: item.image,
+          };
+
+          // Incluir informações da variante se disponível
+          if (item.variant) {
+            orderItem.variant = {
+              id: item.variant.id,
+              value: item.variant.value,
+              unit: item.variant.unit,
+              type: item.variant.type,
+            };
+          }
+          
+
+          return orderItem;
+        }),
         type: 'delivery' as const,
         // Não incluir payment para que fique pendente de pagamento
       };
+
+
+      // 4. Incluir informações de shipping se endereço estiver disponível
+      if (addressToUse) {
+        orderData.shipping = {
+          address: `${addressToUse.streetName}, ${addressToUse.number}${addressToUse.complement ? `, ${addressToUse.complement}` : ''}`,
+          city: addressToUse.city,
+          state: addressToUse.state,
+          zipCode: addressToUse.zipCode,
+          method: 'standard' as const,
+        };
+      }
 
       const createdOrder = await createOrderMutation.mutateAsync({
         data: orderData,
       });
 
+
       if (!createdOrder?.id) {
         throw new Error('Erro ao criar pedido - ID não retornado');
       }
 
-      // 3. Compartilhar o pedido criado
+      // 5. Compartilhar o pedido criado
       await shareOrderMutation.mutateAsync({
         data: {
           orderId: createdOrder.id,
@@ -151,31 +188,32 @@ const SendRequest = ({}: SendRequestProps) => {
         },
       });
 
-      // 4. Limpar o carrinho
+      // 6. Limpar o carrinho
       cart.clear();
 
-      // 5. Mostrar sucesso e redirecionar
+      // 7. Mostrar sucesso e redirecionar
       const formattedTotal = totalPrice.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       });
 
+      const deliveryInfo = addressToUse
+        ? `\nEntrega: ${addressToUse.city}, ${addressToUse.state}`
+        : '\nEndereço de entrega será definido pelo cliente';
+
       Toast.show({
         type: 'success',
         text1: 'Pedido compartilhado!',
-        text2: `${formattedTotal} enviado para ${userName}. Status: Pendente de pagamento`,
+        text2: `${formattedTotal} enviado para ${userName}${deliveryInfo}`,
       });
 
-      // 6. Redirecionar para aba de pedidos após um delay
+      // 8. Redirecionar para aba de pedidos após um delay
       setTimeout(() => {
         try {
           // Navegar para a aba MyOrders dentro do Home
-          navigation.navigate(
-            'Home' as never,
-            {
-              screen: 'MyOrders',
-            } as never,
-          );
+          (navigation as any).navigate('Home', {
+            screen: 'MyOrders',
+          });
         } catch (navError) {
           console.error('Erro na navegação:', navError);
         }

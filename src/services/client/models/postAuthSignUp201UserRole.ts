@@ -12,7 +12,7 @@
 export type PostAuthSignUp201UserRole =
   (typeof PostAuthSignUp201UserRole)[keyof typeof PostAuthSignUp201UserRole];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostAuthSignUp201UserRole = {
   customer: 'customer',
   admin: 'admin',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -24,7 +24,7 @@ import {
 
 type RootStackParamList = {
   Home: undefined;
-  ResumeOrder: undefined;
+  ResumeOrder: {selectedAddress?: any};
   WithdrawOrder: undefined;
 };
 
@@ -47,6 +47,7 @@ export function UserAddresses() {
     number | null
   >(null);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isLoadingCep, setIsLoadingCep] = useState(false);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -54,6 +55,7 @@ export function UserAddresses() {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: {errors},
   } = useForm<AddressFormData>();
 
@@ -102,6 +104,38 @@ export function UserAddresses() {
     return value.replace(/\D/g, '');
   };
 
+  const fetchAddressFromCep = async (cep: string) => {
+    const cleanCep = removeCepMask(cep);
+    
+    if (cleanCep.length !== 8) {
+      return;
+    }
+
+    setIsLoadingCep(true);
+    
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+      const data = await response.json();
+      
+      if (data.erro) {
+        Alert.alert('Erro', 'CEP não encontrado');
+        return;
+      }
+
+      // Preencher os campos com os dados do ViaCEP
+      setValue('streetName', data.logradouro || '');
+      setValue('neighborhood', data.bairro || '');
+      setValue('city', data.localidade || '');
+      setValue('state', data.uf || '');
+      
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      Alert.alert('Erro', 'Não foi possível buscar o CEP. Verifique sua conexão.');
+    } finally {
+      setIsLoadingCep(false);
+    }
+  };
+
   const openModal = () => {
     reset();
     setIsModalVisible(true);
@@ -141,7 +175,9 @@ export function UserAddresses() {
       Alert.alert('Atenção', 'Selecione um endereço para continuar.');
       return;
     }
-    navigation.navigate('ResumeOrder');
+
+    const selectedAddress = addresses?.find(addr => addr.id === selectedAddressId);
+    navigation.navigate('ResumeOrder', {selectedAddress});
   };
 
   if (isLoading) {
@@ -344,7 +380,16 @@ export function UserAddresses() {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>CEP</Text>
+                    <View style={tw`flex-row items-center mb-1`}>
+                      <Text style={tw`text-sm text-gray-500`}>CEP</Text>
+                      {isLoadingCep && (
+                        <ActivityIndicator 
+                          size="small" 
+                          color="#6B7280" 
+                          style={tw`ml-2`}
+                        />
+                      )}
+                    </View>
                     <TextInput
                       style={tw`bg-gray-100 rounded-lg p-4 text-base`}
                       placeholder="00000-000"
@@ -352,9 +397,16 @@ export function UserAddresses() {
                       onChangeText={text => {
                         const maskedValue = applyCepMask(text);
                         onChange(maskedValue);
+                        
+                        // Buscar endereço automaticamente quando CEP estiver completo
+                        const cleanCep = removeCepMask(maskedValue);
+                        if (cleanCep.length === 8) {
+                          fetchAddressFromCep(maskedValue);
+                        }
                       }}
                       keyboardType="numeric"
                       maxLength={9}
+                      editable={!isLoadingCep}
                     />
                   </View>
                 )}

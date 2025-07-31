@@ -9,7 +9,7 @@
 export type GetOrderPaymentsStatus =
   (typeof GetOrderPaymentsStatus)[keyof typeof GetOrderPaymentsStatus];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const GetOrderPaymentsStatus = {
   pending: 'pending',
   processing: 'processing',

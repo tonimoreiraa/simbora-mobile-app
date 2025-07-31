@@ -12,7 +12,7 @@
 export type PostAuthSignUpBodyTwoRole =
   (typeof PostAuthSignUpBodyTwoRole)[keyof typeof PostAuthSignUpBodyTwoRole];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostAuthSignUpBodyTwoRole = {
   customer: 'customer',
   admin: 'admin',

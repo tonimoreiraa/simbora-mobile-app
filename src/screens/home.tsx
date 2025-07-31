@@ -17,6 +17,7 @@ import {ForYouProducts} from '../components/for_you_products';
 import {useGetCategories} from '../services/client/categories/categories'; // Usando a função da API gerada
 import Banner1 from '../assets/banner1.svg';
 import Banner2 from '../assets/banner2.svg';
+import Notification from '../components/notification';
 
 function useAppNavigation() {
   return useNavigation<any>();
@@ -103,9 +104,15 @@ function Home() {
             <Location />
             <Logo style={tw`flex`} width={40} height={40} />
           </View>
-          <View>
+
+          <View style={tw`mb-2`}>
             <InputSearch
               onPress={() => navigation.navigate('ProductsSearch')}
+            />
+          </View>
+
+          <View>
+            <Notification
             />
           </View>
 
@@ -117,7 +124,6 @@ function Home() {
             <Banner1 style={tw`mr-2`} />
             <Banner2 />
           </ScrollView>
-
           {/* Seção de Categorias */}
           <View>
             <View style={tw`flex flex-row items-center justify-between mt-5`}>

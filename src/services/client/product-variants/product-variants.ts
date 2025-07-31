@@ -58,7 +58,7 @@ export const getProductVariants = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetProductVariants200Item[]>(
-    {url: `/product-variants`, method: 'GET', params, signal},
+    {url: '/product-variants', method: 'GET', params, signal},
     options,
   );
 };
@@ -66,7 +66,7 @@ export const getProductVariants = (
 export const getGetProductVariantsQueryKey = (
   params?: GetProductVariantsParams,
 ) => {
-  return [`/product-variants`, ...(params ? [params] : [])] as const;
+  return ['/product-variants', ...(params ? [params] : [])] as const;
 };
 
 export const getGetProductVariantsQueryOptions = <
@@ -145,21 +145,21 @@ export const postProductVariants = (
   signal?: AbortSignal,
 ) => {
   const formData = new FormData();
-  formData.append(`productId`, postProductVariantsBody.productId.toString());
+  formData.append('productId', postProductVariantsBody.productId.toString());
   formData.append(
-    `variantTypeId`,
+    'variantTypeId',
     postProductVariantsBody.variantTypeId.toString(),
   );
-  formData.append(`value`, postProductVariantsBody.value);
+  formData.append('value', postProductVariantsBody.value);
   if (postProductVariantsBody.unit !== undefined) {
-    formData.append(`unit`, postProductVariantsBody.unit);
+    formData.append('unit', postProductVariantsBody.unit);
   }
-  formData.append(`price`, postProductVariantsBody.price.toString());
-  formData.append(`photo`, postProductVariantsBody.photo);
+  formData.append('price', postProductVariantsBody.price.toString());
+  formData.append('photo', postProductVariantsBody.photo);
 
   return axiosInstance<PostProductVariants201>(
     {
-      url: `/product-variants`,
+      url: '/product-variants',
       method: 'POST',
       headers: {'Content-Type': 'multipart/form-data'},
       data: formData,
@@ -352,16 +352,16 @@ export const putProductVariantsId = (
 ) => {
   const formData = new FormData();
   formData.append(
-    `variantTypeId`,
+    'variantTypeId',
     putProductVariantsIdBody.variantTypeId.toString(),
   );
-  formData.append(`value`, putProductVariantsIdBody.value);
+  formData.append('value', putProductVariantsIdBody.value);
   if (putProductVariantsIdBody.unit !== undefined) {
-    formData.append(`unit`, putProductVariantsIdBody.unit);
+    formData.append('unit', putProductVariantsIdBody.unit);
   }
-  formData.append(`price`, putProductVariantsIdBody.price.toString());
+  formData.append('price', putProductVariantsIdBody.price.toString());
   if (putProductVariantsIdBody.photo !== undefined) {
-    formData.append(`photo`, putProductVariantsIdBody.photo);
+    formData.append('photo', putProductVariantsIdBody.photo);
   }
 
   return axiosInstance<PutProductVariantsId200>(

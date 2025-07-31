@@ -9,6 +9,7 @@ import {
   Switch,
 } from 'react-native';
 import tw from 'twrnc';
+import {useRoute} from '@react-navigation/native';
 import Price from '../components/price';
 import ShippingMethod from '../components/shipping_method';
 import DropDown from '../components/dropdown';
@@ -26,6 +27,9 @@ import {
 import {CreditCard, Calendar} from 'phosphor-react-native';
 
 function OrderResume() {
+  const route = useRoute();
+  const {selectedAddress} = route.params as {selectedAddress?: any} || {};
+
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const translateY = useSharedValue(400);
@@ -157,7 +161,7 @@ function OrderResume() {
             animatedStyle,
           ]}>
           <View style={tw``}>
-            <SendRequest />
+            <SendRequest selectedAddress={selectedAddress} />
           </View>
         </Animated.View>
       </PanGestureHandler>

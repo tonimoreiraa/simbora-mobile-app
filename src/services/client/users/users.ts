@@ -36,13 +36,13 @@ export const getUsers = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetUsers200>(
-    {url: `/users`, method: 'GET', params, signal},
+    {url: '/users', method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetUsersQueryKey = (params?: GetUsersParams) => {
-  return [`/users`, ...(params ? [params] : [])] as const;
+  return ['/users', ...(params ? [params] : [])] as const;
 };
 
 export const getGetUsersQueryOptions = <

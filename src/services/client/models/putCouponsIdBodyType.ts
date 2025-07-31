@@ -12,7 +12,7 @@
 export type PutCouponsIdBodyType =
   (typeof PutCouponsIdBodyType)[keyof typeof PutCouponsIdBodyType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PutCouponsIdBodyType = {
   percent: 'percent',
   fixed: 'fixed',

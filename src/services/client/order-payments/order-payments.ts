@@ -40,7 +40,7 @@ export const getOrderPayments = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetOrderPayments200>(
-    {url: `/order-payments`, method: 'GET', params, signal},
+    {url: '/order-payments', method: 'GET', params, signal},
     options,
   );
 };
@@ -48,7 +48,7 @@ export const getOrderPayments = (
 export const getGetOrderPaymentsQueryKey = (
   params?: GetOrderPaymentsParams,
 ) => {
-  return [`/order-payments`, ...(params ? [params] : [])] as const;
+  return ['/order-payments', ...(params ? [params] : [])] as const;
 };
 
 export const getGetOrderPaymentsQueryOptions = <

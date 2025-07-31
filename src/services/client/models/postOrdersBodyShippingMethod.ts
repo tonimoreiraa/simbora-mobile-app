@@ -12,7 +12,7 @@
 export type PostOrdersBodyShippingMethod =
   (typeof PostOrdersBodyShippingMethod)[keyof typeof PostOrdersBodyShippingMethod];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostOrdersBodyShippingMethod = {
   standard: 'standard',
   express: 'express',
