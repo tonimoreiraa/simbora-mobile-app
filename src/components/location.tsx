@@ -11,29 +11,43 @@ export default function Location() {
   const primaryAddress = addresses?.[0];
 
   const formatAddress = (address: any) => {
-    if (!address) return null;
+    if (!address) {
+      return null;
+    }
     return `${address.streetName}, ${address.number}${
       address.complement ? `, ${address.complement}` : ''
     }`;
   };
 
   const truncateAddress = (address: string, maxLength: number = 12) => {
-    if (address.length <= maxLength) return address;
+    if (address.length <= maxLength) {
+      return address;
+    }
     return address.substring(0, maxLength).trim() + '...';
   };
 
   const getAddressText = () => {
-    if (isLoading) return 'Carregando...';
-    if (isError) return 'Erro ao carregar';
-    if (!primaryAddress) return 'Adicionar endereço';
+    if (isLoading) {
+      return 'Carregando...';
+    }
+    if (isError) {
+      return 'Erro ao carregar';
+    }
+    if (!primaryAddress) {
+      return 'Adicionar endereço';
+    }
 
     const fullAddress = formatAddress(primaryAddress);
     return truncateAddress(fullAddress ?? '');
   };
 
   const getAddressColor = () => {
-    if (isLoading || isError) return 'text-stone-400';
-    if (!primaryAddress) return 'text-stone-400 underline';
+    if (isLoading || isError) {
+      return 'text-stone-400';
+    }
+    if (!primaryAddress) {
+      return 'text-stone-400 underline';
+    }
     return 'text-stone-500 underline';
   };
 

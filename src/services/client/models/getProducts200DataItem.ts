@@ -19,6 +19,8 @@ export type GetProducts200DataItem = {
   /** @nullable */
   tags?: string[] | null;
   stock?: number;
+  createdAt?: string;
+  updatedAt?: string;
   supplier?: GetProducts200DataItemSupplier;
   variants?: GetProducts200DataItemVariantsItem[];
   images?: GetProducts200DataItemImagesItem[];

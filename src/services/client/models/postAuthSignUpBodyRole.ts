@@ -12,7 +12,6 @@
 export type PostAuthSignUpBodyRole =
   (typeof PostAuthSignUpBodyRole)[keyof typeof PostAuthSignUpBodyRole];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostAuthSignUpBodyRole = {
   customer: 'customer',
   professional: 'professional',

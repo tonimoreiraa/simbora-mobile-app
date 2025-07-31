@@ -12,7 +12,9 @@ export const getAllOrders = async (
       perPage,
     };
 
-    if (status) params.status = status;
+    if (status) {
+      params.status = status;
+    }
 
     const {data} = await api.get<OrdersResponse>('/orders', {params});
 

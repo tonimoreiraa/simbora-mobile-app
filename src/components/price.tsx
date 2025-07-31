@@ -31,7 +31,7 @@ function Price({subTotal, discount, shipping, total}: PriceProps) {
                   style: 'currency',
                   currency: 'BRL',
                 })
-              : typeof shipping == 'number'
+              : typeof shipping === 'number'
               ? 'Grátis'
               : 'A definir'}
           </Text>

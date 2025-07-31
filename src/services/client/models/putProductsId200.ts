@@ -17,6 +17,7 @@ export type PutProductsId200 = {
   /** @nullable */
   tags?: string[] | null;
   stock?: number;
-  variants?: PutProductsId200VariantsItem[];
+  createdAt?: string;
   updatedAt?: string;
+  variants?: PutProductsId200VariantsItem[];
 };

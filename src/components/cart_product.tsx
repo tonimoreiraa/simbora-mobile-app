@@ -3,7 +3,7 @@ import tw from 'twrnc';
 import {Trash, Plus, Minus} from 'phosphor-react-native';
 import {CartItem, useCartItemQuantity} from '../contexts/cart_provider';
 
-function CartProduct({quantity, name, image, price, id}: CartItem) {
+function CartProduct({quantity, name, image, price, id, variant}: CartItem) {
   const {add, decrease, remove} = useCartItemQuantity(id);
 
   return (
@@ -26,12 +26,17 @@ function CartProduct({quantity, name, image, price, id}: CartItem) {
             <Trash size={20} weight="fill" color="#c6c6c6" />
           </TouchableOpacity>
         </View>
-        <View style={tw`flex flex-row items-center`}>
-          <Text style={tw`font-light text-sm text-stone-500 mt-1 mr-1`}>
-            Cor:
-          </Text>
-          <Text style={tw`text-sm font-bold mt-1`}>Preto</Text>
-        </View>
+        {variant && (
+          <View style={tw`flex flex-row items-center`}>
+            <Text style={tw`font-light text-sm text-stone-500 mt-1 mr-1`}>
+              {variant.type}:
+            </Text>
+            <Text style={tw`text-sm font-bold mt-1`}>
+              {variant.value}
+              {variant.unit && ` (${variant.unit})`}
+            </Text>
+          </View>
+        )}
         <View style={tw`flex-row justify-between items-center`}>
           <View style={tw`flex-row items-center gap-2`}>
             <TouchableOpacity

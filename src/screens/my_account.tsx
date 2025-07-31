@@ -229,7 +229,7 @@ function MyAccount() {
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
       <View style={tw`flex-row items-center justify-between px-4 py-3`}>
-        <TouchableOpacity></TouchableOpacity>
+        <TouchableOpacity />
         <Text style={tw`text-xl font-bold`}>Minha conta</Text>
         <View style={tw`w-6`} />
       </View>
@@ -239,7 +239,7 @@ function MyAccount() {
           <View
             style={tw`flex flex-row items-center justify-between bg-stone-100 w-full p-2 mt-4 rounded-xl`}>
             <View style={tw`flex flex-row items-center justify-center`}>
-              <View style={tw`w-14 h-14 bg-stone-200 rounded-lg`}></View>
+              <View style={tw`w-14 h-14 bg-stone-200 rounded-lg`} />
               <View style={tw`ml-4`}>
                 <Text style={tw`text-lg font-bold`}>Foto de perfil</Text>
                 <Text style={tw`text-xs text-gray-500`}>

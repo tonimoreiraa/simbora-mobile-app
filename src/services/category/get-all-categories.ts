@@ -2,7 +2,9 @@ import {api} from '../api';
 import {Category} from './schemas/categories-response.schema';
 
 const getCorrectImageUrl = (imageUrl: string): string => {
-  if (!imageUrl) return '';
+  if (!imageUrl) {
+    return '';
+  }
 
   if (imageUrl.includes('uploads/https://')) {
     return imageUrl.replace('http://localhost:3333/uploads/', '');

@@ -4,7 +4,9 @@ export function useSearch<T>(data: Array<T> | undefined, key: keyof T) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredResults = useMemo(() => {
-    if (!searchTerm || !data) return data;
+    if (!searchTerm || !data) {
+      return data;
+    }
 
     const searchWords = searchTerm.toLowerCase().split(/\s+/);
     return data.filter(item => {

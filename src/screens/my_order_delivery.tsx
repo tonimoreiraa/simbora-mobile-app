@@ -36,7 +36,7 @@ function MyOrderDelivery() {
         <View style={tw`mt-4`}>
           <OrderTimeline events={orderEvents} />
         </View>
-        <View></View>
+        <View />
       </View>
     </ScrollView>
   );
