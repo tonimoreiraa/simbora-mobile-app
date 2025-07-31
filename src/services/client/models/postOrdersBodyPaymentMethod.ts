@@ -12,7 +12,7 @@
 export type PostOrdersBodyPaymentMethod =
   (typeof PostOrdersBodyPaymentMethod)[keyof typeof PostOrdersBodyPaymentMethod];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostOrdersBodyPaymentMethod = {
   credit_card: 'credit_card',
   debit_card: 'debit_card',

@@ -24,7 +24,7 @@ import {
 
 type RootStackParamList = {
   Home: undefined;
-  ResumeOrder: undefined;
+  ResumeOrder: {selectedAddress?: any};
   WithdrawOrder: undefined;
 };
 
@@ -141,7 +141,9 @@ export function UserAddresses() {
       Alert.alert('Atenção', 'Selecione um endereço para continuar.');
       return;
     }
-    navigation.navigate('ResumeOrder');
+
+    const selectedAddress = addresses?.find(addr => addr.id === selectedAddressId);
+    navigation.navigate('ResumeOrder', {selectedAddress});
   };
 
   if (isLoading) {

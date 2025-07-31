@@ -41,7 +41,7 @@ export const postOrderSharesShare = (
 ) => {
   return axiosInstance<PostOrderSharesShare201>(
     {
-      url: `/order-shares/share`,
+      url: '/order-shares/share',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postOrderSharesShareBody,
@@ -136,7 +136,7 @@ export const patchOrderSharesView = (
 ) => {
   return axiosInstance<PatchOrderSharesView200>(
     {
-      url: `/order-shares/view`,
+      url: '/order-shares/view',
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       data: patchOrderSharesViewBody,

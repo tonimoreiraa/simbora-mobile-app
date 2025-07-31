@@ -45,13 +45,13 @@ export const getOrders = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetOrders200>(
-    {url: `/orders`, method: 'GET', params, signal},
+    {url: '/orders', method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetOrdersQueryKey = (params?: GetOrdersParams) => {
-  return [`/orders`, ...(params ? [params] : [])] as const;
+  return ['/orders', ...(params ? [params] : [])] as const;
 };
 
 export const getGetOrdersQueryOptions = <
@@ -128,7 +128,7 @@ export const postOrders = (
 ) => {
   return axiosInstance<PostOrders201>(
     {
-      url: `/orders`,
+      url: '/orders',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postOrdersBody,

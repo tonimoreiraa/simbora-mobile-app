@@ -59,7 +59,7 @@ export const getProductVariantTypes = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetProductVariantTypes200Item[]>(
-    {url: `/product-variant-types`, method: 'GET', params, signal},
+    {url: '/product-variant-types', method: 'GET', params, signal},
     options,
   );
 };
@@ -67,7 +67,7 @@ export const getProductVariantTypes = (
 export const getGetProductVariantTypesQueryKey = (
   params?: GetProductVariantTypesParams,
 ) => {
-  return [`/product-variant-types`, ...(params ? [params] : [])] as const;
+  return ['/product-variant-types', ...(params ? [params] : [])] as const;
 };
 
 export const getGetProductVariantTypesQueryOptions = <
@@ -147,7 +147,7 @@ export const postProductVariantTypes = (
 ) => {
   return axiosInstance<PostProductVariantTypes201>(
     {
-      url: `/product-variant-types`,
+      url: '/product-variant-types',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postProductVariantTypesBody,

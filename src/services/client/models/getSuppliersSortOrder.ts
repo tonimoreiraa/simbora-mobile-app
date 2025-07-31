@@ -9,7 +9,7 @@
 export type GetSuppliersSortOrder =
   (typeof GetSuppliersSortOrder)[keyof typeof GetSuppliersSortOrder];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const GetSuppliersSortOrder = {
   asc: 'asc',
   desc: 'desc',

@@ -12,7 +12,7 @@
 export type PostOrderUpdatesBodyStatus =
   (typeof PostOrderUpdatesBodyStatus)[keyof typeof PostOrderUpdatesBodyStatus];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostOrderUpdatesBodyStatus = {
   Pending: 'Pending',
   Confirmed: 'Confirmed',

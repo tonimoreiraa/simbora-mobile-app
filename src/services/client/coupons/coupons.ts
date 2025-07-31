@@ -49,13 +49,13 @@ export const getCoupons = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetCoupons200Item[]>(
-    {url: `/coupons`, method: 'GET', params, signal},
+    {url: '/coupons', method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetCouponsQueryKey = (params?: GetCouponsParams) => {
-  return [`/coupons`, ...(params ? [params] : [])] as const;
+  return ['/coupons', ...(params ? [params] : [])] as const;
 };
 
 export const getGetCouponsQueryOptions = <
@@ -134,7 +134,7 @@ export const postCoupons = (
 ) => {
   return axiosInstance<PostCoupons201>(
     {
-      url: `/coupons`,
+      url: '/coupons',
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postCouponsBody,

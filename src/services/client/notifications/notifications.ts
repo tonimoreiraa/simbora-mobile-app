@@ -33,13 +33,13 @@ export const getNotifications = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetNotifications200>(
-    {url: `/notifications`, method: 'GET', signal},
+    {url: '/notifications', method: 'GET', signal},
     options,
   );
 };
 
 export const getGetNotificationsQueryKey = () => {
-  return [`/notifications`] as const;
+  return ['/notifications'] as const;
 };
 
 export const getGetNotificationsQueryOptions = <

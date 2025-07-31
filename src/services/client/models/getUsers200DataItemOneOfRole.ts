@@ -12,7 +12,7 @@
 export type GetUsers200DataItemOneOfRole =
   (typeof GetUsers200DataItemOneOfRole)[keyof typeof GetUsers200DataItemOneOfRole];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const GetUsers200DataItemOneOfRole = {
   customer: 'customer',
   admin: 'admin',

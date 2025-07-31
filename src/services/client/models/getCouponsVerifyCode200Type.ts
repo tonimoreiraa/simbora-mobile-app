@@ -12,7 +12,7 @@
 export type GetCouponsVerifyCode200Type =
   (typeof GetCouponsVerifyCode200Type)[keyof typeof GetCouponsVerifyCode200Type];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const GetCouponsVerifyCode200Type = {
   percent: 'percent',
   fixed: 'fixed',

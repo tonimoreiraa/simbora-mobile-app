@@ -12,7 +12,7 @@
 export type PostOrdersBodyType =
   (typeof PostOrdersBodyType)[keyof typeof PostOrdersBodyType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+
 export const PostOrdersBodyType = {
   delivery: 'delivery',
   pickup: 'pickup',
