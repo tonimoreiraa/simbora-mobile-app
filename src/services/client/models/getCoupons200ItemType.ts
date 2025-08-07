@@ -12,7 +12,7 @@
 export type GetCoupons200ItemType =
   (typeof GetCoupons200ItemType)[keyof typeof GetCoupons200ItemType];
 
-
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetCoupons200ItemType = {
   percent: 'percent',
   fixed: 'fixed',

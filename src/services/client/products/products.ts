@@ -29,6 +29,11 @@ import type {
   GetProductsId404,
   GetProductsId500,
   GetProductsParams,
+  PostProducts201,
+  PostProducts400,
+  PostProducts401,
+  PostProducts422,
+  PostProducts500,
   PostProductsAddPhoto200,
   PostProductsAddPhoto400,
   PostProductsAddPhoto401,
@@ -36,6 +41,7 @@ import type {
   PostProductsAddPhoto413,
   PostProductsAddPhoto500,
   PostProductsAddPhotoBody,
+  PostProductsBody,
   PutProductsId200,
   PutProductsId401,
   PutProductsId404,
@@ -59,13 +65,13 @@ export const getProducts = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetProducts200>(
-    {url: '/products', method: 'GET', params, signal},
+    {url: `/products`, method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetProductsQueryKey = (params?: GetProductsParams) => {
-  return ['/products', ...(params ? [params] : [])] as const;
+  return [`/products`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetProductsQueryOptions = <
@@ -131,6 +137,123 @@ export function useGetProducts<
   return query;
 }
 
+/**
+ * Cria um produto completo com imagens e variantes
+ * @summary Criar novo produto
+ */
+export const postProducts = (
+  postProductsBody: BodyType<PostProductsBody>,
+  options?: SecondParameter<typeof axiosInstance>,
+  signal?: AbortSignal,
+) => {
+  const formData = new FormData();
+  formData.append(`name`, postProductsBody.name);
+  formData.append(`price`, postProductsBody.price.toString());
+  formData.append(`description`, postProductsBody.description);
+  formData.append(`supplierId`, postProductsBody.supplierId.toString());
+  formData.append(`categoryId`, postProductsBody.categoryId.toString());
+  if (postProductsBody.tags !== undefined) {
+    formData.append(`tags`, postProductsBody.tags);
+  }
+  if (postProductsBody.stock !== undefined) {
+    formData.append(`stock`, postProductsBody.stock.toString());
+  }
+  formData.append(`image`, postProductsBody.image);
+  if (postProductsBody.images !== undefined) {
+    postProductsBody.images.forEach(value => formData.append(`images`, value));
+  }
+  if (postProductsBody.variants !== undefined) {
+    postProductsBody.variants.forEach(value =>
+      formData.append(`variants`, JSON.stringify(value)),
+    );
+  }
+
+  return axiosInstance<PostProducts201>(
+    {
+      url: `/products`,
+      method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data'},
+      data: formData,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getPostProductsMutationOptions = <
+  TError = ErrorType<
+    PostProducts400 | PostProducts401 | PostProducts422 | PostProducts500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postProducts>>,
+    TError,
+    {data: BodyType<PostProductsBody>},
+    TContext
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postProducts>>,
+  TError,
+  {data: BodyType<PostProductsBody>},
+  TContext
+> => {
+  const mutationKey = ['postProducts'];
+  const {mutation: mutationOptions, request: requestOptions} = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+    : {mutation: {mutationKey}, request: undefined};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postProducts>>,
+    {data: BodyType<PostProductsBody>}
+  > = props => {
+    const {data} = props ?? {};
+
+    return postProducts(data, requestOptions);
+  };
+
+  return {mutationFn, ...mutationOptions};
+};
+
+export type PostProductsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postProducts>>
+>;
+export type PostProductsMutationBody = BodyType<PostProductsBody>;
+export type PostProductsMutationError = ErrorType<
+  PostProducts400 | PostProducts401 | PostProducts422 | PostProducts500
+>;
+
+/**
+ * @summary Criar novo produto
+ */
+export const usePostProducts = <
+  TError = ErrorType<
+    PostProducts400 | PostProducts401 | PostProducts422 | PostProducts500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postProducts>>,
+    TError,
+    {data: BodyType<PostProductsBody>},
+    TContext
+  >;
+  request?: SecondParameter<typeof axiosInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postProducts>>,
+  TError,
+  {data: BodyType<PostProductsBody>},
+  TContext
+> => {
+  const mutationOptions = getPostProductsMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
 /**
  * Retorna detalhes completos de um produto com categoria, fornecedor, variantes e imagens
  * @summary Buscar produto por ID
@@ -419,12 +542,12 @@ export const postProductsAddPhoto = (
   signal?: AbortSignal,
 ) => {
   const formData = new FormData();
-  formData.append('productId', postProductsAddPhotoBody.productId.toString());
-  formData.append('image', postProductsAddPhotoBody.image);
+  formData.append(`productId`, postProductsAddPhotoBody.productId.toString());
+  formData.append(`image`, postProductsAddPhotoBody.image);
 
   return axiosInstance<PostProductsAddPhoto200>(
     {
-      url: '/products/add-photo',
+      url: `/products/add-photo`,
       method: 'POST',
       headers: {'Content-Type': 'multipart/form-data'},
       data: formData,

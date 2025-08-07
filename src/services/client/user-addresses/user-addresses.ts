@@ -46,13 +46,13 @@ export const getUserAddresses = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetUserAddresses200Item[]>(
-    {url: '/user-addresses', method: 'GET', signal},
+    {url: `/user-addresses`, method: 'GET', signal},
     options,
   );
 };
 
 export const getGetUserAddressesQueryKey = () => {
-  return ['/user-addresses'] as const;
+  return [`/user-addresses`] as const;
 };
 
 export const getGetUserAddressesQueryOptions = <
@@ -123,7 +123,7 @@ export const postUserAddresses = (
 ) => {
   return axiosInstance<PostUserAddresses201>(
     {
-      url: '/user-addresses',
+      url: `/user-addresses`,
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postUserAddressesBody,

@@ -52,13 +52,13 @@ export const getSuppliers = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetSuppliers200>(
-    {url: '/suppliers', method: 'GET', params, signal},
+    {url: `/suppliers`, method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetSuppliersQueryKey = (params?: GetSuppliersParams) => {
-  return ['/suppliers', ...(params ? [params] : [])] as const;
+  return [`/suppliers`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetSuppliersQueryOptions = <
@@ -134,18 +134,18 @@ export const postSuppliers = (
   signal?: AbortSignal,
 ) => {
   const formData = new FormData();
-  formData.append('name', postSuppliersBody.name);
+  formData.append(`name`, postSuppliersBody.name);
   if (postSuppliersBody.description !== undefined) {
-    formData.append('description', postSuppliersBody.description);
+    formData.append(`description`, postSuppliersBody.description);
   }
-  formData.append('address', postSuppliersBody.address);
+  formData.append(`address`, postSuppliersBody.address);
   if (postSuppliersBody.photo !== undefined) {
-    formData.append('photo', postSuppliersBody.photo);
+    formData.append(`photo`, postSuppliersBody.photo);
   }
 
   return axiosInstance<PostSuppliers201>(
     {
-      url: '/suppliers',
+      url: `/suppliers`,
       method: 'POST',
       headers: {'Content-Type': 'multipart/form-data'},
       data: formData,
@@ -318,16 +318,16 @@ export const putSuppliersId = (
 ) => {
   const formData = new FormData();
   if (putSuppliersIdBody.name !== undefined) {
-    formData.append('name', putSuppliersIdBody.name);
+    formData.append(`name`, putSuppliersIdBody.name);
   }
   if (putSuppliersIdBody.description !== undefined) {
-    formData.append('description', putSuppliersIdBody.description);
+    formData.append(`description`, putSuppliersIdBody.description);
   }
   if (putSuppliersIdBody.address !== undefined) {
-    formData.append('address', putSuppliersIdBody.address);
+    formData.append(`address`, putSuppliersIdBody.address);
   }
   if (putSuppliersIdBody.photo !== undefined) {
-    formData.append('photo', putSuppliersIdBody.photo);
+    formData.append(`photo`, putSuppliersIdBody.photo);
   }
 
   return axiosInstance<PutSuppliersId200>(

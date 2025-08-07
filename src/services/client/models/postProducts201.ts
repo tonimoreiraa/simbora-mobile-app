@@ -16,6 +16,7 @@ export type PostProducts201 = {
   categoryId?: number;
   tags?: string[];
   stock?: number;
-  variants?: PostProducts201VariantsItem[];
   createdAt?: string;
+  updatedAt?: string;
+  variants?: PostProducts201VariantsItem[];
 };

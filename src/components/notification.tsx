@@ -13,7 +13,8 @@ import {usePatchOrderSharesView} from '../services/client/order-shares/order-sha
 import {useQueryClient} from 'react-query';
 
 // Interface extendida para incluir o campo userId
-interface NotificationItemWithUserId extends GetNotifications200OrderSharesItem {
+interface NotificationItemWithUserId
+  extends GetNotifications200OrderSharesItem {
   userId?: number;
 }
 
@@ -31,12 +32,15 @@ export default function Notification({onPress}: NotificationProps) {
 
   const allNotifications = notificationsData?.orderShares || [];
   // Filtrar apenas notificações não visualizadas
-  const notifications = allNotifications.filter(notification => notification.viewed === false);
+  const notifications = allNotifications.filter(
+    notification => notification.viewed === false,
+  );
   const totalNotifications = notifications.length;
-  const currentNotification = notifications[currentNotificationIndex] as NotificationItemWithUserId;
-  const senderUserId = currentNotification?.userId
+  const currentNotification = notifications[
+    currentNotificationIndex
+  ] as NotificationItemWithUserId;
+  const senderUserId = currentNotification?.userId;
   const message = currentNotification?.message;
-  
 
   // Buscar usuários para encontrar o remetente da notificação
   const {data: usersData, isLoading: isLoadingUsers} = useGetUsers(
@@ -49,14 +53,13 @@ export default function Notification({onPress}: NotificationProps) {
         enabled: !!senderUserId, // Sempre buscar se tiver ID (removendo condição de notifications)
         staleTime: 5 * 60 * 1000, // Cache por 5 minutos
         refetchOnWindowFocus: false,
-      }
-    }
+      },
+    },
   );
-
 
   // Se não encontrou o usuário na primeira busca, tentar uma busca mais ampla
   const foundUser = usersData?.data?.find(u => u.id === senderUserId);
-  
+
   const {data: alternativeUsersData} = useGetUsers(
     {
       query: 'a', // Busca com uma letra que está em muitos nomes
@@ -67,20 +70,19 @@ export default function Notification({onPress}: NotificationProps) {
         enabled: !foundUser && !!senderUserId && !isLoadingUsers,
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: false,
-      }
-    }
+      },
+    },
   );
-
 
   // Combinir os resultados das duas buscas
   const allUsers = [
     ...(usersData?.data || []),
-    ...(alternativeUsersData?.data || [])
+    ...(alternativeUsersData?.data || []),
   ];
 
   // Remover duplicatas baseado no ID
-  const uniqueUsers = allUsers.filter((user, index, self) => 
-    index === self.findIndex(u => u.id === user.id)
+  const uniqueUsers = allUsers.filter(
+    (user, index, self) => index === self.findIndex(u => u.id === user.id),
   );
 
   // Só mostrar se houver notificações
@@ -98,13 +100,19 @@ export default function Notification({onPress}: NotificationProps) {
               orderShareId: currentNotification.id.toString(),
             },
           });
-          
+
           // Invalidar a query das notificações para recarregar os dados
           await queryClient.invalidateQueries('/notifications');
-          
-          console.log('Notificação marcada como visualizada:', currentNotification.id);
+
+          console.log(
+            'Notificação marcada como visualizada:',
+            currentNotification.id,
+          );
         } catch (viewError) {
-          console.error('Erro ao marcar notificação como visualizada:', viewError);
+          console.error(
+            'Erro ao marcar notificação como visualizada:',
+            viewError,
+          );
           // Continuar mesmo se der erro ao marcar como visualizada
         }
       }
@@ -113,7 +121,7 @@ export default function Notification({onPress}: NotificationProps) {
       if (onPress && currentNotification) {
         onPress(currentNotification);
       }
-      
+
       // Navegar diretamente para a tela de MyOrders
       (navigation as any).navigate('MyOrders');
     } catch (error) {
@@ -145,7 +153,7 @@ export default function Notification({onPress}: NotificationProps) {
   // A mensagem geralmente vem no formato: "João compartilhou um pedido com você"
   let senderName = 'Usuário';
   let extractedName = '';
-  
+
   if (message) {
     // Tentar extrair o nome da mensagem
     const nameMatch = message.match(/^(.+?)\s+compartilhou/);
@@ -163,13 +171,25 @@ export default function Notification({onPress}: NotificationProps) {
     senderName = targetUser.name;
   } else if (!extractedName) {
     // Fallback para nome genérico baseado no ID
-    const genericNames = ['Alex', 'Bruno', 'Carlos', 'Daniel', 'Eduardo', 'Felipe', 'Gabriel', 'Hugo', 'Igor', 'João'];
-    senderName = senderUserId ? genericNames[(senderUserId - 1) % genericNames.length] : 'Usuário';
+    const genericNames = [
+      'Alex',
+      'Bruno',
+      'Carlos',
+      'Daniel',
+      'Eduardo',
+      'Felipe',
+      'Gabriel',
+      'Hugo',
+      'Igor',
+      'João',
+    ];
+    senderName = senderUserId
+      ? genericNames[(senderUserId - 1) % genericNames.length]
+      : 'Usuário';
   }
 
   // Para o avatar, usar dados do usuário encontrado
   const senderAvatar = targetUser?.avatar;
-
 
   // URL da imagem do avatar usando getCorrectImageUrl
   const avatarUrl = getCorrectImageUrl(senderAvatar ?? '');
@@ -182,18 +202,24 @@ export default function Notification({onPress}: NotificationProps) {
           <TouchableOpacity
             onPress={handlePreviousNotification}
             disabled={currentNotificationIndex === 0}
-            style={tw`p-1 ${currentNotificationIndex === 0 ? 'opacity-30' : ''}`}>
+            style={tw`p-1 ${
+              currentNotificationIndex === 0 ? 'opacity-30' : ''
+            }`}>
             <CaretLeft size={20} color="white" weight="bold" />
           </TouchableOpacity>
-          
+
           <Text style={tw`text-white text-sm`}>
             {currentNotificationIndex + 1} de {totalNotifications} notificações
           </Text>
-          
+
           <TouchableOpacity
             onPress={handleNextNotification}
             disabled={currentNotificationIndex === totalNotifications - 1}
-            style={tw`p-1 ${currentNotificationIndex === totalNotifications - 1 ? 'opacity-30' : ''}`}>
+            style={tw`p-1 ${
+              currentNotificationIndex === totalNotifications - 1
+                ? 'opacity-30'
+                : ''
+            }`}>
             <CaretRight size={20} color="white" weight="bold" />
           </TouchableOpacity>
         </View>
@@ -215,7 +241,8 @@ export default function Notification({onPress}: NotificationProps) {
             <Text style={tw`underline`}>toque aqui</Text>
           </Text>
           <Text style={tw`text-white text-sm opacity-70`}>
-            para revisar e finalizar, seu pedido foi encaminhado por: {senderName}
+            para revisar e finalizar, seu pedido foi encaminhado por:{' '}
+            {senderName}
           </Text>
         </View>
       </TouchableOpacity>

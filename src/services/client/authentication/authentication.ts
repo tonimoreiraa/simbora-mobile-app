@@ -52,7 +52,7 @@ export const postAuthSignIn = (
 ) => {
   return axiosInstance<PostAuthSignIn200>(
     {
-      url: '/auth/sign-in',
+      url: `/auth/sign-in`,
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postAuthSignInBody,
@@ -154,7 +154,7 @@ export const postAuthSignUp = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<PostAuthSignUp201>(
-    {url: '/auth/sign-up', method: 'POST', data: postAuthSignUpBody, signal},
+    {url: `/auth/sign-up`, method: 'POST', data: postAuthSignUpBody, signal},
     options,
   );
 };
@@ -256,13 +256,13 @@ export const getAuthSession = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetAuthSession200>(
-    {url: '/auth/session', method: 'GET', signal},
+    {url: `/auth/session`, method: 'GET', signal},
     options,
   );
 };
 
 export const getGetAuthSessionQueryKey = () => {
-  return ['/auth/session'] as const;
+  return [`/auth/session`] as const;
 };
 
 export const getGetAuthSessionQueryOptions = <

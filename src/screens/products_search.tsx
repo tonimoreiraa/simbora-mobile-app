@@ -3,7 +3,9 @@ import InputSearch from '../components/input_search';
 import tw from 'twrnc';
 import {useDebouncedState} from '../helpers/debounced-state';
 import {useState} from 'react';
-import ProductCard, {Product as ProductCardProps} from '../components/product_card';
+import ProductCard, {
+  Product as ProductCardProps,
+} from '../components/product_card';
 import {View} from 'react-native';
 import {useGetProducts} from '../services/client/products/products';
 

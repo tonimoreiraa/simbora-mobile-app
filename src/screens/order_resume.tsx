@@ -28,7 +28,7 @@ import {CreditCard, Calendar} from 'phosphor-react-native';
 
 function OrderResume() {
   const route = useRoute();
-  const {selectedAddress} = route.params as {selectedAddress?: any} || {};
+  const {selectedAddress} = (route.params as {selectedAddress?: any}) || {};
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);

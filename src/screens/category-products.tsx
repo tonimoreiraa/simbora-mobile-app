@@ -31,7 +31,8 @@ interface CategoryProductsRouteParams {
 const CategoryProducts = () => {
   const navigation = useNavigation<any>();
   const route = useRoute();
-  const {categoryId, categoryName} = route.params as CategoryProductsRouteParams;
+  const {categoryId, categoryName} =
+    route.params as CategoryProductsRouteParams;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');

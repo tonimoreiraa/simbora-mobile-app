@@ -6103,6 +6103,267 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Criar novo produto",
+        "description": "Cria um produto completo com imagens e variantes",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "price",
+                  "description",
+                  "supplierId",
+                  "categoryId",
+                  "image"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto",
+                    "example": "Smartphone XYZ Pro"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "decimal",
+                    "minimum": 0.01,
+                    "description": "Preço do produto",
+                    "example": 899.99
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Descrição detalhada do produto",
+                    "example": "Smartphone com tela de 6.5 polegadas, câmera tripla de 108MP"
+                  },
+                  "supplierId": {
+                    "type": "integer",
+                    "description": "ID do fornecedor",
+                    "example": 5
+                  },
+                  "categoryId": {
+                    "type": "integer",
+                    "description": "ID da categoria",
+                    "example": 1
+                  },
+                  "tags": {
+                    "type": "string",
+                    "description": "Tags separadas por vírgula",
+                    "example": "eletrônicos,smartphone,android"
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Quantidade em estoque",
+                    "example": 50
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Imagem principal do produto (PNG, JPG, JPEG - máx 2MB)"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {"type": "string", "format": "binary"},
+                    "description": "Imagens adicionais do produto"
+                  },
+                  "variants": {
+                    "type": "array",
+                    "description": "Variantes do produto (ex. cores, tamanhos)",
+                    "items": {
+                      "type": "object",
+                      "required": ["variantTypeId", "value", "price"],
+                      "properties": {
+                        "variantTypeId": {
+                          "type": "integer",
+                          "description": "ID do tipo de variante",
+                          "example": 2
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Valor da variante",
+                          "example": "Azul"
+                        },
+                        "unit": {
+                          "type": "string",
+                          "description": "Unidade (opcional)",
+                          "example": "GB"
+                        },
+                        "price": {
+                          "type": "number",
+                          "format": "decimal",
+                          "description": "Preço específico da variante",
+                          "example": 949.99
+                        },
+                        "photo": {
+                          "type": "string",
+                          "format": "binary",
+                          "description": "Foto específica da variante"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer", "example": 16},
+                    "name": {"type": "string", "example": "Smartphone XYZ Pro"},
+                    "price": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 899.99
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Smartphone com tela de 6.5 polegadas"
+                    },
+                    "supplierId": {"type": "integer", "example": 5},
+                    "categoryId": {"type": "integer", "example": 1},
+                    "tags": {
+                      "type": "array",
+                      "items": {"type": "string"},
+                      "example": ["eletrônicos", "smartphone", "android"]
+                    },
+                    "stock": {"type": "integer", "example": 50},
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T12:45:00.000Z"
+                    },
+                    "variants": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "integer", "example": 8},
+                          "variantTypeId": {"type": "integer", "example": 2},
+                          "value": {"type": "string", "example": "Azul"},
+                          "unit": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "GB"
+                          },
+                          "price": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 949.99
+                          },
+                          "photo": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "clx456def.jpg"
+                          },
+                          "type": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "integer", "example": 2},
+                              "name": {"type": "string", "example": "Cor"},
+                              "defaultUnit": {
+                                "type": "string",
+                                "example": "unidade"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados de entrada inválidos"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "supplierId": ["O fornecedor deve existir"],
+                        "categoryId": ["A categoria deve existir"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/products/{id}": {
