@@ -5,9 +5,15 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
+import type {PostOrders201ItemsItemProduct} from './postOrders201ItemsItemProduct';
 
 export type PostOrders201ItemsItem = {
+  id?: number;
   productId?: number;
+  /** @nullable */
+  productVariantId?: number | null;
   quantity?: number;
-  price?: number;
+  unitPrice?: number;
+  totalPrice?: number;
+  product?: PostOrders201ItemsItemProduct;
 };

@@ -240,6 +240,7 @@ export * from './postOrderUpdatesBody';
 export * from './postOrderUpdatesBodyStatus';
 export * from './postOrders201';
 export * from './postOrders201ItemsItem';
+export * from './postOrders201ItemsItemProduct';
 export * from './postOrders201Payment';
 export * from './postOrders201Shipping';
 export * from './postOrders201Type';

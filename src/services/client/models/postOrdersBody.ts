@@ -6,17 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {PostOrdersBodyItemsItem} from './postOrdersBodyItemsItem';
-import type {PostOrdersBodyPayment} from './postOrdersBodyPayment';
-import type {PostOrdersBodyShipping} from './postOrdersBodyShipping';
 import type {PostOrdersBodyType} from './postOrdersBodyType';
 
 export type PostOrdersBody = {
   /** Itens do pedido */
   items: PostOrdersBodyItemsItem[];
-  /** Informações de pagamento */
-  payment?: PostOrdersBodyPayment;
-  /** Informações de envio */
-  shipping?: PostOrdersBodyShipping;
+  /** ID do endereço de entrega (opcional) */
+  addressId?: number;
   /** Tipo do pedido - entrega ou retirada */
   type?: PostOrdersBodyType;
 };

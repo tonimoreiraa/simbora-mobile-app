@@ -8,12 +8,14 @@
 
 export type PostOrdersBodyItemsItem = {
   /** ID do produto */
-  productId: number;
+  product_id: number;
+  /** ID da variante do produto (opcional) */
+  product_variant_id?: number;
   /**
    * Quantidade do produto
    * @minimum 1
    */
   quantity: number;
-  /** Preço unitário do produto */
-  price: number;
+  /** Preço unitário do produto no momento da compra */
+  unit_price: number;
 };

@@ -12,7 +12,7 @@ function Price({subTotal, discount, shipping, total}: PriceProps) {
   return (
     <View style={tw`flex w-full border border-stone-300 p-4 mt-4 rounded-lg`}>
       <View style={tw`flex flex-row items-center justify-between py-2`}>
-        <Text>Subtotal</Text>
+        <Text style={tw`text-gray-500`}>Subtotal:</Text>
         <View style={tw`flex flex-row items-center justify-between`}>
           <Text style={tw`font-bold`}>
             {subTotal.toLocaleString('pt-BR', {
@@ -23,7 +23,7 @@ function Price({subTotal, discount, shipping, total}: PriceProps) {
         </View>
       </View>
       <View style={tw`flex flex-row items-center justify-between`}>
-        <Text>Frete</Text>
+        <Text style={tw`text-gray-500`}>Frete:</Text>
         <View style={tw`flex flex-row items-center justify-between py-2`}>
           <Text style={tw`font-bold`}>
             {shipping
@@ -37,22 +37,20 @@ function Price({subTotal, discount, shipping, total}: PriceProps) {
           </Text>
         </View>
       </View>
-      {discount && (
-        <View style={tw`flex flex-row items-center justify-between`}>
-          <Text>Desconto</Text>
-          <View style={tw`flex flex-row items-center justify-between py-2`}>
-            <Text style={tw`font-bold`}>
-              {discount.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              })}
-            </Text>
-          </View>
+      <View style={tw`flex flex-row items-center justify-between`}>
+        <Text style={tw`text-gray-500`}>Desconto:</Text>
+        <View style={tw`flex flex-row items-center justify-between py-2`}>
+          <Text style={tw`font-bold`}>
+            {discount > 0 ? `-${discount.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}` : 'Nenhum'}
+          </Text>
         </View>
-      )}
+      </View>
       {total && (
         <View style={tw`flex flex-row items-center justify-between`}>
-          <Text>Valor total</Text>
+          <Text style={tw`text-gray-500`}>Valor total:</Text>
           <View style={tw`flex flex-row items-center justify-between py-2`}>
             <Text style={tw`font-bold`}>
               {total.toLocaleString('pt-BR', {
