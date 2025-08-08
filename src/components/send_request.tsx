@@ -80,7 +80,7 @@ const SendRequest = ({selectedAddress}: SendRequestProps) => {
   const filteredCustomers = useMemo(() => {
     try {
       const customers = usersResponse?.data || [];
-      
+
       // Filtrar para remover o usuário atual
       const customersWithoutCurrentUser = customers.filter(customer => {
         return customer?.id !== currentUser?.id;
@@ -95,10 +95,7 @@ const SendRequest = ({selectedAddress}: SendRequestProps) => {
         const username = customer?.username?.toLowerCase() || '';
         const search = searchText.toLowerCase();
 
-        return (
-          name.includes(search) ||
-          username.includes(search)
-        );
+        return name.includes(search) || username.includes(search);
       });
     } catch (error) {
       console.error('Erro ao filtrar clientes:', error);
@@ -128,53 +125,24 @@ const SendRequest = ({selectedAddress}: SendRequestProps) => {
       const totalPrice = subtotalPrice - discountPrice + shippingPrice;
 
       // 2. Usar endereço selecionado na etapa anterior ou buscar endereço principal como fallback
-      const addressToUse = selectedAddress || userAddressesData?.find(addr => addr);
+      const addressToUse =
+        selectedAddress || userAddressesData?.find(addr => addr);
 
-      // 3. Criar o pedido com os itens do carrinho (incluindo variantes quando disponíveis)
-      const orderData: any = {
-        items: cart.items.map(item => {
-          const orderItem: any = {
-            productId: item.id,
-            quantity: item.quantity,
-            price: item.price,
-            // Adicionar informações extras do produto disponíveis no carrinho
-            name: item.name,
-            image: item.image,
-          };
-
-          // Incluir informações da variante se disponível
-          if (item.variant) {
-            orderItem.variant = {
-              id: item.variant.id,
-              value: item.variant.value,
-              unit: item.variant.unit,
-              type: item.variant.type,
-            };
-          }
-          
-
-          return orderItem;
-        }),
-        type: 'delivery' as const,
-        // Não incluir payment para que fique pendente de pagamento
+      // 3. Criar o pedido com os itens do carrinho usando a nova estrutura da API
+      const orderData = {
+        items: cart.items.map(item => ({
+          product_id: item.id,
+          product_variant_id: item.variant?.id, // opcional - se tiver variante
+          quantity: item.quantity,
+          unit_price: item.price, // preço que o cliente viu no momento da compra
+        })),
+        type: 'delivery',
+        addressId: addressToUse?.id || selectedAddress?.id,
       };
-
-
-      // 4. Incluir informações de shipping se endereço estiver disponível
-      if (addressToUse) {
-        orderData.shipping = {
-          address: `${addressToUse.streetName}, ${addressToUse.number}${addressToUse.complement ? `, ${addressToUse.complement}` : ''}`,
-          city: addressToUse.city,
-          state: addressToUse.state,
-          zipCode: addressToUse.zipCode,
-          method: 'standard' as const,
-        };
-      }
 
       const createdOrder = await createOrderMutation.mutateAsync({
         data: orderData,
       });
-
 
       if (!createdOrder?.id) {
         throw new Error('Erro ao criar pedido - ID não retornado');

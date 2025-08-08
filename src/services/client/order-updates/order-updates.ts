@@ -44,7 +44,7 @@ export const postOrderUpdates = (
 ) => {
   return axiosInstance<PostOrderUpdates201>(
     {
-      url: '/order-updates',
+      url: `/order-updates`,
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postOrderUpdatesBody,
@@ -147,13 +147,13 @@ export const getOrderUpdates = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetOrderUpdates200>(
-    {url: '/order-updates', method: 'GET', params, signal},
+    {url: `/order-updates`, method: 'GET', params, signal},
     options,
   );
 };
 
 export const getGetOrderUpdatesQueryKey = (params?: GetOrderUpdatesParams) => {
-  return ['/order-updates', ...(params ? [params] : [])] as const;
+  return [`/order-updates`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetOrderUpdatesQueryOptions = <

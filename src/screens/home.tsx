@@ -112,8 +112,7 @@ function Home() {
           </View>
 
           <View>
-            <Notification
-            />
+            <Notification />
           </View>
 
           {/* Banners */}

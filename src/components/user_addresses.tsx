@@ -42,7 +42,11 @@ interface AddressFormData {
   isMain?: boolean;
 }
 
-export function UserAddresses() {
+interface UserAddressesProps {
+  onContinue?: (addressId: number) => void;
+}
+
+export function UserAddresses({onContinue}: UserAddressesProps) {
   const [selectedAddressId, setSelectedAddressId] = React.useState<
     number | null
   >(null);
@@ -106,17 +110,19 @@ export function UserAddresses() {
 
   const fetchAddressFromCep = async (cep: string) => {
     const cleanCep = removeCepMask(cep);
-    
+
     if (cleanCep.length !== 8) {
       return;
     }
 
     setIsLoadingCep(true);
-    
+
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cleanCep}/json/`,
+      );
       const data = await response.json();
-      
+
       if (data.erro) {
         Alert.alert('Erro', 'CEP não encontrado');
         return;
@@ -127,10 +133,12 @@ export function UserAddresses() {
       setValue('neighborhood', data.bairro || '');
       setValue('city', data.localidade || '');
       setValue('state', data.uf || '');
-      
     } catch (error) {
       console.error('Erro ao buscar CEP:', error);
-      Alert.alert('Erro', 'Não foi possível buscar o CEP. Verifique sua conexão.');
+      Alert.alert(
+        'Erro',
+        'Não foi possível buscar o CEP. Verifique sua conexão.',
+      );
     } finally {
       setIsLoadingCep(false);
     }
@@ -176,7 +184,9 @@ export function UserAddresses() {
       return;
     }
 
-    const selectedAddress = addresses?.find(addr => addr.id === selectedAddressId);
+    const selectedAddress = addresses?.find(
+      addr => addr.id === selectedAddressId,
+    );
     navigation.navigate('ResumeOrder', {selectedAddress});
   };
 
@@ -383,9 +393,9 @@ export function UserAddresses() {
                     <View style={tw`flex-row items-center mb-1`}>
                       <Text style={tw`text-sm text-gray-500`}>CEP</Text>
                       {isLoadingCep && (
-                        <ActivityIndicator 
-                          size="small" 
-                          color="#6B7280" 
+                        <ActivityIndicator
+                          size="small"
+                          color="#6B7280"
                           style={tw`ml-2`}
                         />
                       )}
@@ -397,7 +407,7 @@ export function UserAddresses() {
                       onChangeText={text => {
                         const maskedValue = applyCepMask(text);
                         onChange(maskedValue);
-                        
+
                         // Buscar endereço automaticamente quando CEP estiver completo
                         const cleanCep = removeCepMask(maskedValue);
                         if (cleanCep.length === 8) {

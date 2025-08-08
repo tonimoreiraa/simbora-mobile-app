@@ -2,12 +2,15 @@ import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView} from 'react-native';
 import {UserAddresses} from '../components/user_addresses';
+import {useCart} from '../contexts/cart_provider';
+import {usePostOrders} from '../services/client/orders/orders';
 import tw from 'twrnc';
 
 type CheckoutSteps = 'shipping' | 'payment';
 
 export default function Checkout() {
   const navigation = useNavigation();
+  const cart = useCart();
   const [step, setStep] = useState<CheckoutSteps>('shipping');
 
   useEffect(() => {
@@ -18,11 +21,13 @@ export default function Checkout() {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-      {step == 'shipping' && (
-        <>
-          <UserAddresses />
-        </>
-      )}
+      <ScrollView style={tw`px-4`}>
+        {step == 'shipping' && (
+          <>
+            <UserAddresses />
+          </>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }

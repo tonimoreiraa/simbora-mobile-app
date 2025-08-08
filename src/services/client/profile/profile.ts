@@ -47,7 +47,7 @@ export const putProfile = (
   options?: SecondParameter<typeof axiosInstance>,
 ) => {
   return axiosInstance<PutProfile200>(
-    {url: '/profile', method: 'PUT', data: putProfileBody},
+    {url: `/profile`, method: 'PUT', data: putProfileBody},
     options,
   );
 };
@@ -152,13 +152,13 @@ export const getProfile = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetProfile200>(
-    {url: '/profile', method: 'GET', signal},
+    {url: `/profile`, method: 'GET', signal},
     options,
   );
 };
 
 export const getGetProfileQueryKey = () => {
-  return ['/profile'] as const;
+  return [`/profile`] as const;
 };
 
 export const getGetProfileQueryOptions = <

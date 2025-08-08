@@ -9,7 +9,7 @@
 export type PostOrders201Type =
   (typeof PostOrders201Type)[keyof typeof PostOrders201Type];
 
-
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostOrders201Type = {
   delivery: 'delivery',
   pickup: 'pickup',

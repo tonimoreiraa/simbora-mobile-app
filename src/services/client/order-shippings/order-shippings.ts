@@ -39,7 +39,7 @@ export const getOrderShippings = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<GetOrderShippings200>(
-    {url: '/order-shippings', method: 'GET', params, signal},
+    {url: `/order-shippings`, method: 'GET', params, signal},
     options,
   );
 };
@@ -47,7 +47,7 @@ export const getOrderShippings = (
 export const getGetOrderShippingsQueryKey = (
   params?: GetOrderShippingsParams,
 ) => {
-  return ['/order-shippings', ...(params ? [params] : [])] as const;
+  return [`/order-shippings`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetOrderShippingsQueryOptions = <
@@ -125,7 +125,7 @@ export const postOrderShippings = (
 ) => {
   return axiosInstance<void>(
     {
-      url: '/order-shippings',
+      url: `/order-shippings`,
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       data: postOrderShippingsBody,
