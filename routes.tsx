@@ -16,9 +16,10 @@ import MyOrders from './src/screens/my_orders';
 import Product from './src/screens/product';
 import Logo from './src/assets/LOGO.svg';
 import Checkout from './src/screens/checkout';
-import RemoveOrder from './src/screens/remove_order';
+import PickupOrder from './src/screens/pickup_order';
 import AllProducts from './src/screens/all-products';
 import CategoryProducts from './src/screens/category-products';
+import OrderDetail from './src/screens/order_detail';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -222,13 +223,13 @@ export default function Routes() {
         component={OrderResume}
       />
       <Stack.Screen
-        name="WithdrawOrder"
+        name="PickupOrder"
         options={{
           title: 'Apresente o QR Code',
           headerTitleStyle: tw`text-xl font-bold`,
           headerStyle: tw`bg-white`,
         }}
-        component={RemoveOrder}
+        component={PickupOrder}
       />
       <Stack.Screen
         name="AllProducts"
@@ -245,6 +246,14 @@ export default function Routes() {
           headerShown: false,
         }}
         component={CategoryProducts}
+      />
+      <Stack.Screen
+        name="OrderDetail"
+        options={{
+          title: 'Meu Pedido',
+          headerShown: false,
+        }}
+        component={OrderDetail}
       />
     </Stack.Navigator>
   );

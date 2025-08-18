@@ -4089,12 +4089,17 @@
                     "description": "Itens do pedido",
                     "items": {
                       "type": "object",
-                      "required": ["productId", "quantity", "price"],
+                      "required": ["product_id", "quantity", "unit_price"],
                       "properties": {
-                        "productId": {
+                        "product_id": {
                           "type": "integer",
                           "description": "ID do produto",
                           "example": 15
+                        },
+                        "product_variant_id": {
+                          "type": "integer",
+                          "description": "ID da variante do produto (opcional)",
+                          "example": 23
                         },
                         "quantity": {
                           "type": "integer",
@@ -4102,69 +4107,19 @@
                           "description": "Quantidade do produto",
                           "example": 2
                         },
-                        "price": {
+                        "unit_price": {
                           "type": "number",
                           "format": "decimal",
-                          "description": "Preço unitário do produto",
+                          "description": "Preço unitário do produto no momento da compra",
                           "example": 149.99
                         }
                       }
                     }
                   },
-                  "payment": {
-                    "type": "object",
-                    "description": "Informações de pagamento",
-                    "properties": {
-                      "method": {
-                        "type": "string",
-                        "enum": [
-                          "credit_card",
-                          "debit_card",
-                          "pix",
-                          "bank_transfer"
-                        ],
-                        "description": "Método de pagamento",
-                        "example": "credit_card"
-                      },
-                      "installments": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "description": "Número de parcelas",
-                        "example": 3
-                      }
-                    }
-                  },
-                  "shipping": {
-                    "type": "object",
-                    "description": "Informações de envio",
-                    "properties": {
-                      "address": {
-                        "type": "string",
-                        "description": "Endereço de entrega",
-                        "example": "Rua das Flores, 123"
-                      },
-                      "city": {
-                        "type": "string",
-                        "description": "Cidade",
-                        "example": "São Paulo"
-                      },
-                      "state": {
-                        "type": "string",
-                        "description": "Estado",
-                        "example": "SP"
-                      },
-                      "zipCode": {
-                        "type": "string",
-                        "description": "CEP",
-                        "example": "01234-567"
-                      },
-                      "method": {
-                        "type": "string",
-                        "enum": ["standard", "express", "same_day"],
-                        "description": "Método de envio",
-                        "example": "standard"
-                      }
-                    }
+                  "addressId": {
+                    "type": "integer",
+                    "description": "ID do endereço de entrega (opcional)",
+                    "example": 5
                   },
                   "type": {
                     "type": "string",
@@ -4204,28 +4159,35 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {"type": "integer", "example": 1},
                           "productId": {"type": "integer", "example": 15},
+                          "productVariantId": {
+                            "type": "integer",
+                            "nullable": true,
+                            "example": 23
+                          },
                           "quantity": {"type": "integer", "example": 2},
-                          "price": {
+                          "unitPrice": {
                             "type": "number",
                             "format": "decimal",
                             "example": 149.99
+                          },
+                          "totalPrice": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 299.98
+                          },
+                          "product": {
+                            "type": "object",
+                            "properties": {
+                              "id": {"type": "integer", "example": 15},
+                              "name": {
+                                "type": "string",
+                                "example": "Smartphone XYZ"
+                              }
+                            }
                           }
                         }
-                      }
-                    },
-                    "payment": {
-                      "type": "object",
-                      "nullable": true,
-                      "example": {"method": "credit_card", "installments": 3}
-                    },
-                    "shipping": {
-                      "type": "object",
-                      "nullable": true,
-                      "example": {
-                        "address": "Rua das Flores, 123",
-                        "city": "São Paulo",
-                        "method": "standard"
                       }
                     },
                     "createdAt": {

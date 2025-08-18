@@ -7,8 +7,6 @@
  */
 import type {PostOrders201Type} from './postOrders201Type';
 import type {PostOrders201ItemsItem} from './postOrders201ItemsItem';
-import type {PostOrders201Payment} from './postOrders201Payment';
-import type {PostOrders201Shipping} from './postOrders201Shipping';
 
 export type PostOrders201 = {
   id?: number;
@@ -17,10 +15,6 @@ export type PostOrders201 = {
   type?: PostOrders201Type;
   total?: number;
   items?: PostOrders201ItemsItem[];
-  /** @nullable */
-  payment?: PostOrders201Payment;
-  /** @nullable */
-  shipping?: PostOrders201Shipping;
   createdAt?: string;
   updatedAt?: string;
 };
