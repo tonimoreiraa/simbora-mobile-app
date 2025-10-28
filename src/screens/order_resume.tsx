@@ -28,6 +28,7 @@ function OrderResume() {
   const cart = useCart();
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
 
   // Buscar endereços do usuário
   const {data: addresses, isLoading: isLoadingAddresses} =
@@ -39,11 +40,24 @@ function OrderResume() {
   const createOrderMutation = usePostOrders({
     mutation: {
       onSuccess: response => {
-
         cart.clear();
-        (navigation.navigate as any)('ThankYou', {
-          orderId: response?.id,
-        });
+
+        // Se está compartilhando, vai para ThankYou
+        // Se está pagando diretamente, vai para OrderConfirmed
+        if (isSharing) {
+          (navigation.navigate as any)('ThankYou', {
+            orderId: response?.id,
+          });
+          setIsSharing(false);
+        } else {
+          (navigation.navigate as any)('OrderConfirmed', {
+            orderNumber: response?.id,
+            deliveryAddress: selectedAddress
+              ? `${selectedAddress.streetName}, ${selectedAddress.number || 'S/N'} - ${selectedAddress.city}, ${selectedAddress.state}`
+              : 'Endereço não informado',
+            estimatedTime: '30-45 minutos',
+          });
+        }
       },
       onError: (error: any) => {
         Alert.alert(
@@ -108,6 +122,9 @@ function OrderResume() {
       shareWithUserId: user.id, // Adiciona o ID do usuário para compartilhar
     };
 
+
+    // Marcar que está compartilhando para ir para ThankYou
+    setIsSharing(true);
 
     // Fechar modal antes de criar
     setShareModalVisible(false);
