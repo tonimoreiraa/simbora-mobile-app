@@ -76,7 +76,7 @@ const CategoryProducts = () => {
       categoryId: product?.categoryId || 0,
       tags: product?.tags || [],
       stock: product?.stock || 0,
-      supplier: product?.supplier?.name || 'Fornecedor não informado',
+      supplier: product?.supplier?.name
     };
   };
 

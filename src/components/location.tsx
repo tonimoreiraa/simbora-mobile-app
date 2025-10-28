@@ -59,7 +59,7 @@ export default function Location() {
     <View style={tw`flex flex-row items-center py-2 flex-shrink min-w-0`}>
       <MapPin size={20} color="gray" weight="fill" />
       <View style={tw`flex flex-row items-center px-1 flex-shrink min-w-0`}>
-        <Text style={tw`text-stone-300 text-sm flex-shrink-0`}>
+        <Text style={tw`text-stone-400 text-sm flex-shrink-0`}>
           Enviar para{' '}
         </Text>
         <TouchableOpacity disabled={isLoading} onPress={handlePress}>

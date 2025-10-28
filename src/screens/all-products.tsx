@@ -173,7 +173,7 @@ const AllProducts = () => {
       categoryId: product?.categoryId || 0,
       tags: product?.tags || null,
       stock: product?.stock || 0,
-      supplier: product?.supplier?.name || 'Fornecedor não informado', // ✅ Corrigido: extraindo apenas o nome
+      supplier: product?.supplier?.name
     };
   };
 

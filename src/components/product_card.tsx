@@ -67,11 +67,11 @@ const ProductCard = (product: Product) => {
               currency: 'BRL',
             })}
           </Text>
-          <View
+         {!!supplier?.length && <View
             style={tw`flex-row items-center border border-stone-200 rounded-lg p-2 gap-1`}>
             <Text style={tw`text-stone-500 text-[10px]`}>{supplier}</Text>
             <SealCheck weight="fill" size={8} color="#3C6EEF" />
-          </View>
+          </View>}
         </View>
       </View>
     </TouchableOpacity>
