@@ -20,6 +20,8 @@ import SendRequest from '../components/send_request';
 import AccountInput from '../components/create_account_input';
 import {useCart} from '../contexts/cart_provider';
 import {CreditCard, ShareNetwork, MapPin} from 'phosphor-react-native';
+import {ShareBudgetModal} from '../components/share_budget_modal';
+import type {GetUsers200DataItemOneOf} from '../services/client/models';
 import Animated, {
   withSpring,
   useSharedValue,
@@ -45,6 +47,7 @@ function OrderResume() {
   const form = useForm<PaymentFormData>();
 
   const [isEnabled, setIsEnabled] = useState(false);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const translateY = useSharedValue(400);
 
@@ -86,8 +89,12 @@ function OrderResume() {
   };
 
   const handleShareBudget = () => {
-    console.log('Compartilhando orçamento...');
-    // Lógica para compartilhar orçamento
+    setShareModalVisible(true);
+  };
+
+  const handleSelectUser = (user: GetUsers200DataItemOneOf) => {
+    console.log('Usuário selecionado:', user);
+    // TODO: Implementar lógica para compartilhar o orçamento com o usuário selecionado
   };
 
   const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
@@ -272,6 +279,13 @@ function OrderResume() {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        {/* Share Budget Modal */}
+        <ShareBudgetModal
+          visible={shareModalVisible}
+          onClose={() => setShareModalVisible(false)}
+          onSelectUser={handleSelectUser}
+        />
       </SafeAreaView>
     </GestureHandlerRootView>
   );
