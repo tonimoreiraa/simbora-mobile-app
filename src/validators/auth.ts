@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {PROFESSIONAL_TYPES} from '../constants/professional-types';
 
 const userRoles = z.enum(['customer', 'admin', 'professional', 'supplier'], {
   message: 'Selecione seu perfil',
@@ -27,22 +28,36 @@ export const signInSchema = z.object({
 
 export type SignInPayload = z.infer<typeof signInSchema>;
 
-export const signUpSchema = z.object({
-  name: z.string({message: 'Seu nome completo é obrigatório.'}),
-  email: z
-    .string({message: 'Seu e-mail é obrigatório'})
-    .email('E-mail inválido.'),
-  username: z
-    .string({message: 'Seu nome de usuário é obrigatório.'})
-    .min(3, 'Nome de usuário deve ter ao menos 3 caracteres.')
-    .max(30, 'Nome de usuário deve ter até 30 caracteres.')
-    .regex(
-      /^[a-z0-9._]+$/,
-      'Deve conter apenas letras minúsculas, números, underline e ponto.',
-    )
-    .regex(/^(?!.*\.\.)(?!.*\.$)[a-z0-9._]+$/, 'Nome de usuário inválido.'),
-  password: passwordSchema,
-  role: userRoles,
-});
+export const signUpSchema = z
+  .object({
+    name: z.string({message: 'Seu nome completo é obrigatório.'}),
+    email: z
+      .string({message: 'Seu e-mail é obrigatório'})
+      .email('E-mail inválido.'),
+    username: z
+      .string({message: 'Seu nome de usuário é obrigatório.'})
+      .min(3, 'Nome de usuário deve ter ao menos 3 caracteres.')
+      .max(30, 'Nome de usuário deve ter até 30 caracteres.')
+      .regex(
+        /^[a-z0-9._]+$/,
+        'Deve conter apenas letras minúsculas, números, underline e ponto.',
+      )
+      .regex(/^(?!.*\.\.)(?!.*\.$)[a-z0-9._]+$/, 'Nome de usuário inválido.'),
+    password: passwordSchema,
+    role: userRoles,
+    professionalType: z.enum(PROFESSIONAL_TYPES as unknown as readonly [string, ...string[]]).optional(),
+  })
+  .refine(
+    data => {
+      if (data.role === 'professional') {
+        return data.professionalType && data.professionalType.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: 'Selecione o tipo de profissional',
+      path: ['professionalType'],
+    },
+  );
 
 export type SignUpPayload = z.infer<typeof signUpSchema>;
