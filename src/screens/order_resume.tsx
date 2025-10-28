@@ -5,15 +5,15 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
-  TextInput,
-  Switch,
   Alert,
   ActivityIndicator,
 } from 'react-native';
 import tw from 'twrnc';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import {useCart} from '../contexts/cart_provider';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {ArrowLeft} from 'phosphor-react-native';
+import {CreditCard, ShareNetwork, MapPin} from 'phosphor-react-native';
+import {ShareBudgetModal} from '../components/share_budget_modal';
+import type {GetUsers200DataItem} from '../services/client/models';
 import {usePostOrders} from '../services/client/orders/orders';
 import {useGetUserAddresses} from '../services/client/user-addresses/user-addresses';
 
@@ -22,13 +22,12 @@ interface RouteParams {
 }
 
 function OrderResume() {
-  const [isForwardEnabled, setIsForwardEnabled] = useState(false);
-  const [professionalId, setProfessionalId] = useState('');
-
-  const cart = useCart();
-  const navigation = useNavigation<any>();
   const route = useRoute();
+  const navigation = useNavigation<any>();
   const {addressId} = (route.params as RouteParams) || {};
+  const cart = useCart();
+
+  const [shareModalVisible, setShareModalVisible] = useState(false);
 
   // Buscar endereços do usuário
   const {data: addresses, isLoading: isLoadingAddresses} = useGetUserAddresses();
@@ -38,7 +37,10 @@ function OrderResume() {
 
   const createOrderMutation = usePostOrders({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        console.log('✅ Pedido criado com sucesso! ID:', response?.id);
+        console.log('📦 Resposta completa:', JSON.stringify(response, null, 2));
+
         // Limpar carrinho e navegar imediatamente
         cart.clear();
         navigation.navigate('MyOrders');
@@ -49,7 +51,13 @@ function OrderResume() {
         }, 300);
       },
       onError: (error: any) => {
-        console.error('Erro ao criar pedido:', error);
+        console.error('❌ Erro ao criar pedido:', error);
+        console.error('📋 Detalhes do erro:', {
+          status: error?.response?.status,
+          message: error?.response?.data?.message,
+          errors: error?.response?.data?.errors,
+          data: error?.response?.data,
+        });
         Alert.alert(
           'Erro',
           error?.response?.data?.message || 'Não foi possível criar o pedido. Tente novamente.',
@@ -58,13 +66,7 @@ function OrderResume() {
     },
   });
 
-  // Cálculos do pedido
-  const subtotal = Number(cart.subTotal) || 0;
-  const discount = Number(cart.discounts) || 0;
-  const shipping = 0; // Pode ser calculado baseado no endereço ou método de envio
-  const total = subtotal - discount + shipping;
-
-  const handleCreateOrder = () => {
+  const handlePayment = () => {
     if (!addressId) {
       Alert.alert('Erro', 'Endereço não selecionado');
       return;
@@ -72,11 +74,6 @@ function OrderResume() {
 
     if (cart.items.length === 0) {
       Alert.alert('Erro', 'Carrinho vazio');
-      return;
-    }
-
-    if (isForwardEnabled && !professionalId) {
-      Alert.alert('Erro', 'Digite o ID do profissional para encaminhar o pedido');
       return;
     }
 
@@ -90,12 +87,38 @@ function OrderResume() {
       addressId: addressId,
       type: 'delivery' as const,
     };
+
+    console.log('📤 Enviando pedido:', JSON.stringify(orderData, null, 2));
+
     createOrderMutation.mutate({data: orderData});
+  };
+
+  const handleShareBudget = () => {
+    setShareModalVisible(true);
+  };
+
+  const handleSelectUser = (user: GetUsers200DataItem) => {
+    console.log('Usuário selecionado:', user);
+    // TODO: Implementar lógica para compartilhar o orçamento com o usuário selecionado
+  };
+
+  const handleShareSuccess = (userName: string) => {
+    // Navigate to thank you screen
+    (navigation.navigate as any)('ThankYou', {userName});
+  };
+
+  const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
+
+  const formatPrice = (value: number) => {
+    return value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   };
 
   if (isLoadingAddresses) {
     return (
-      <SafeAreaView style={tw`flex-1 bg-white`}>
+      <SafeAreaView style={tw`flex-1 bg-gray-50`}>
         <View style={tw`flex-1 justify-center items-center`}>
           <ActivityIndicator size="large" color="#3B82F6" />
           <Text style={tw`mt-2 text-gray-500`}>Carregando informações...</Text>
@@ -105,181 +128,194 @@ function OrderResume() {
   }
 
   return (
-    <SafeAreaView style={tw`flex-1 bg-white`}>
-      <ScrollView style={tw`flex-1`}>
-        <View style={tw`flex flex-col px-4 py-6`}>
-          {/* Header */}
-          <View style={tw`flex-row items-center mb-6`}>
-            <TouchableOpacity
-              style={tw`p-2 -ml-2`}
-              onPress={() => navigation.goBack()}>
-              <ArrowLeft size={24} color="#000" weight="regular" />
-            </TouchableOpacity>
-            <Text style={tw`text-2xl font-bold flex-1 text-center`}>
-              Resumo do Pedido
+    <SafeAreaView style={tw`flex-1 bg-gray-50`}>
+      <ScrollView
+        contentContainerStyle={tw`px-5 py-6 pb-8`}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Cabeçalho */}
+        <View style={tw`mb-6`}>
+          <Text style={tw`text-2xl font-bold text-gray-800 mb-1`}>
+            Resumo do Pedido
+          </Text>
+          <Text style={tw`text-sm text-gray-500`}>
+            Confira os detalhes antes de prosseguir
+          </Text>
+        </View>
+
+        {/* Endereço de Entrega */}
+        {selectedAddress && (
+          <View style={tw`bg-white border-neutral-100 border p-4 rounded-xl shadow-sm mb-4`}>
+            <View style={tw`flex-row items-center mb-2`}>
+              <MapPin size={20} color="#1F2937" weight="fill" style={tw`mr-2`} />
+              <Text style={tw`text-lg font-semibold text-gray-800`}>
+                Endereço de Entrega
+              </Text>
+            </View>
+            <Text style={tw`text-sm text-gray-600 leading-5`}>
+              {selectedAddress.streetName}
+              {selectedAddress.number && `, ${selectedAddress.number}`}
             </Text>
-            <View style={tw`w-8`} />
+            {selectedAddress.complement && (
+              <Text style={tw`text-sm text-gray-500 mt-1`}>
+                {selectedAddress.complement}
+              </Text>
+            )}
+            {selectedAddress.city && selectedAddress.state && (
+              <Text style={tw`text-sm text-gray-600 mt-1`}>
+                {selectedAddress.city} - {selectedAddress.state}
+              </Text>
+            )}
+          </View>
+        )}
+
+        {/* Itens do Pedido */}
+        <View style={tw`bg-white rounded-xl border border-neutral-100 mb-4 overflow-hidden`}>
+          <View style={tw`bg-neutral-100 px-4 py-3 border-b border-gray-200`}>
+            <Text style={tw`font-semibold text-gray-800`}>
+              Itens do Pedido ({cart.quantity})
+            </Text>
           </View>
 
-          {/* Endereço de Entrega */}
-          {selectedAddress && (
-            <View style={tw`w-full mb-4`}>
-              <Text style={tw`text-xl font-bold mb-3`}>Endereço de Entrega</Text>
-              <View style={tw`bg-stone-100 rounded-lg p-4`}>
-                <Text style={tw`font-semibold text-base mb-1`}>
-                  {selectedAddress.name}
-                </Text>
-                <Text style={tw`text-gray-600 text-sm`}>
-                  {selectedAddress.streetName}, {selectedAddress.number}
-                  {selectedAddress.complement ? `, ${selectedAddress.complement}` : ''}
-                </Text>
-                <Text style={tw`text-gray-600 text-sm`}>
-                  {selectedAddress.neighborhood}, {selectedAddress.city} - {selectedAddress.state}
-                </Text>
-                <Text style={tw`text-gray-600 text-sm`}>
-                  CEP: {selectedAddress.zipCode}
-                </Text>
+          {cart.items.map((item, index) => (
+            <View
+              key={`${item.id}-${index}`}
+              style={tw`px-4 py-3 ${
+                index < cart.items.length - 1 ? 'border-b border-gray-100' : ''
+              }`}
+            >
+              <View style={tw`flex-row justify-between items-start`}>
+                <View style={tw`flex-1 pr-3`}>
+                  <Text style={tw`text-sm font-medium text-gray-800 mb-1`}>
+                    {item.name}
+                  </Text>
+                  {item.variant && (
+                    <Text style={tw`text-xs text-gray-500 mb-1`}>
+                      {item.variant.value} {item.variant.unit}
+                    </Text>
+                  )}
+                  <Text style={tw`text-xs text-gray-500`}>
+                    Quantidade: {item.quantity}
+                  </Text>
+                </View>
+                <View style={tw`items-end`}>
+                  <Text style={tw`text-sm font-semibold text-gray-800`}>
+                    {formatPrice(item.price * item.quantity)}
+                  </Text>
+                  {item.quantity > 1 && (
+                    <Text style={tw`text-xs text-gray-500 mt-1`}>
+                      {formatPrice(item.price)} cada
+                    </Text>
+                  )}
+                </View>
               </View>
             </View>
-          )}
+          ))}
+        </View>
 
-          {/* Resumo de Preços */}
-          <View style={tw`w-full mt-2`}>
-            <View style={tw`flex w-full border border-stone-300 p-4 rounded-lg`}>
-              <View style={tw`flex flex-row items-center justify-between py-2`}>
-                <Text>Subtotal</Text>
-                <View style={tw`flex flex-row items-center justify-between`}>
-                  <Text style={tw`font-bold`}>
-                    {subtotal.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                  </Text>
-                </View>
-              </View>
-              <View style={tw`flex flex-row items-center justify-between`}>
-                <Text>Frete</Text>
-                <View style={tw`flex flex-row items-center justify-between py-2`}>
-                  <Text style={tw`font-bold`}>
-                    {shipping === 0 ? 'Grátis' : shipping.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                  </Text>
-                </View>
-              </View>
-              {discount > 0 && (
-                <View style={tw`flex flex-row items-center justify-between`}>
-                  <Text>Desconto</Text>
-                  <View style={tw`flex flex-row items-center justify-between py-2`}>
-                    <Text style={tw`font-bold`}>
-                      {discount.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
-                    </Text>
-                  </View>
-                </View>
-              )}
-              <View style={tw`border-t border-gray-200 mt-3 pt-3`}>
-                <View style={tw`flex flex-row items-center justify-between`}>
-                  <Text style={tw`text-lg font-bold`}>Valor total</Text>
-                  <View style={tw`flex flex-row items-center justify-between py-2`}>
-                    <Text style={tw`text-xl font-bold`}>
-                      {total.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+        {/* Resumo de Valores */}
+        <View style={tw`bg-white border border-neutral-100 rounded-xl shadow-sm mb-6 p-4`}>
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-600`}>Subtotal</Text>
+            <Text style={tw`text-sm font-medium text-gray-800`}>
+              {formatPrice(cart.subTotal)}
+            </Text>
           </View>
 
-          {/* Encaminhar Pedido */}
-          <View style={tw`w-full mt-6`}>
-            <View style={tw`flex-row items-center justify-between mb-3`}>
-              <Text style={tw`text-xl font-bold`}>Encaminhar Pedido</Text>
-              <Switch
-                trackColor={{false: '#767577', true: '#3183FF'}}
-                thumbColor="white"
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setIsForwardEnabled}
-                value={isForwardEnabled}
-              />
-            </View>
-
-            {isForwardEnabled && (
-              <View
-                style={tw`bg-stone-100 rounded-lg p-4`}>
-                <Text style={tw`text-sm text-gray-600 mb-2`}>
-                  ID do Profissional
-                </Text>
-                <TextInput
-                  style={tw`bg-white rounded-lg p-3 text-base`}
-                  placeholder="Digite o ID do profissional"
-                  value={professionalId}
-                  onChangeText={setProfessionalId}
-                  keyboardType="numeric"
-                />
-                <Text style={tw`text-xs text-gray-500 mt-2`}>
-                  O pedido será encaminhado para o profissional especificado
-                </Text>
-              </View>
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-600`}>Frete</Text>
+            {shippingCost === 0 ? (
+              <Text style={tw`text-sm font-medium text-green-600`}>
+                Grátis
+              </Text>
+            ) : (
+              <Text style={tw`text-sm font-medium text-gray-800`}>
+                {formatPrice(shippingCost)}
+              </Text>
             )}
           </View>
 
-          {/* Informações do Carrinho */}
-          <View style={tw`w-full mt-6`}>
-            <Text style={tw`text-xl font-bold mb-3`}>Itens do Pedido</Text>
-            <View style={tw`bg-stone-100 rounded-lg p-4`}>
-              {cart.items.map((item, index) => (
-                <View
-                  key={item.id}
-                  style={tw`${
-                    index !== 0 ? 'border-t border-gray-300 pt-3' : ''
-                  } ${index !== cart.items.length - 1 ? 'pb-3' : ''}`}>
-                  <View style={tw`flex-row justify-between items-center`}>
-                    <View style={tw`flex-1`}>
-                      <Text style={tw`font-semibold text-base`}>
-                        {item.name}
-                      </Text>
-                      <Text style={tw`text-gray-600 text-sm mt-1`}>
-                        Quantidade: {item.quantity}
-                      </Text>
-                    </View>
-                    <Text style={tw`font-bold text-base`}>
-                      {(item.price * item.quantity).toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      })}
-                    </Text>
-                  </View>
-                </View>
-              ))}
+          {cart.discounts > 0 && (
+            <View style={tw`flex-row justify-between mb-2`}>
+              <Text style={tw`text-sm text-gray-600`}>Descontos</Text>
+              <Text style={tw`text-sm font-medium text-green-600`}>
+                -{formatPrice(cart.discounts)}
+              </Text>
+            </View>
+          )}
+
+          <View style={tw`border-t border-gray-200 mt-3 pt-3`}>
+            <View style={tw`flex-row justify-between items-center`}>
+              <Text style={tw`text-lg font-bold text-gray-800`}>Total</Text>
+              <Text style={tw`text-xl font-bold text-gray-800`}>
+                {formatPrice(cart.total + shippingCost)}
+              </Text>
             </View>
           </View>
         </View>
+
+        {/* Cards de Ação */}
+        <View style={tw`gap-4`}>
+          {/* Card: Eu vou pagar */}
+          <TouchableOpacity
+            style={tw`bg-green-500 rounded-2xl p-6 shadow-lg active:scale-98 ${
+              createOrderMutation.isLoading ? 'opacity-50' : ''
+            }`}
+            onPress={handlePayment}
+            activeOpacity={0.8}
+            disabled={createOrderMutation.isLoading}
+          >
+            <View style={tw`flex-row items-center justify-between`}>
+              <View style={tw`flex-1`}>
+                <Text style={tw`text-2xl font-bold text-white mb-2`}>
+                  Eu vou pagar
+                </Text>
+                <Text style={tw`text-sm text-green-50 leading-5`}>
+                  {createOrderMutation.isLoading
+                    ? 'Criando pedido...'
+                    : 'Prosseguir para finalizar a compra e realizar o pagamento'}
+                </Text>
+              </View>
+              <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
+                {createOrderMutation.isLoading ? (
+                  <ActivityIndicator size={32} color="#FFFFFF" />
+                ) : (
+                  <CreditCard size={32} color="#FFFFFF" weight="bold" />
+                )}
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          {/* Card: Compartilhar Orçamento */}
+          <TouchableOpacity
+            style={tw`bg-blue-500 rounded-2xl p-6 shadow-lg active:scale-98`}
+            onPress={handleShareBudget}
+            activeOpacity={0.8}
+          >
+            <View style={tw`flex-row items-center justify-between`}>
+              <View style={tw`flex-1`}>
+                <Text style={tw`text-2xl font-bold text-white mb-2`}>
+                  Compartilhar orçamento
+                </Text>
+                <Text style={tw`text-sm text-blue-50 leading-5`}>
+                  Enviar para outro usuário aprovar e pagar. Será entregue no endereço escolhido
+                </Text>
+              </View>
+              <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
+                <ShareNetwork size={32} color="#FFFFFF" weight="bold" />
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
-      {/* Botão de Finalizar */}
-      <View style={tw`px-4 pb-6 pt-4 border-t border-gray-200`}>
-        <TouchableOpacity
-          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl ${
-            createOrderMutation.isLoading ? 'opacity-50' : ''
-          }`}
-          onPress={handleCreateOrder}
-          disabled={createOrderMutation.isLoading}>
-          {createOrderMutation.isLoading ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <Text style={tw`font-bold text-lg text-white`}>
-              {isForwardEnabled ? 'Encaminhar Pedido' : 'Criar Pedido'}
-            </Text>
-          )}
-        </TouchableOpacity>
-      </View>
+      {/* Share Budget Modal */}
+      <ShareBudgetModal
+        visible={shareModalVisible}
+        onClose={() => setShareModalVisible(false)}
+        onSelectUser={handleSelectUser}
+        onShareSuccess={handleShareSuccess}
+      />
     </SafeAreaView>
   );
 }
