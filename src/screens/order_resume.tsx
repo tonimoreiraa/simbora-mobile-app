@@ -9,15 +9,17 @@ import {
   Switch,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import tw from 'twrnc';
 import {useRoute} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
-import Price from '../components/price';
 import ShippingMethod from '../components/shipping_method';
 import DropDown from '../components/dropdown';
 import SendRequest from '../components/send_request';
 import AccountInput from '../components/create_account_input';
+import {useCart} from '../contexts/cart_provider';
+import {CreditCard, ShareNetwork, MapPin} from 'phosphor-react-native';
 import Animated, {
   withSpring,
   useSharedValue,
@@ -38,6 +40,7 @@ type PaymentFormData = {
 function OrderResume() {
   const route = useRoute();
   const {selectedAddress} = (route.params as {selectedAddress?: any}) || {};
+  const cart = useCart();
 
   const form = useForm<PaymentFormData>();
 
@@ -77,103 +80,199 @@ function OrderResume() {
     toggleDrawer();
   }, [isEnabled]);
 
+  const handlePayment = () => {
+    console.log('Iniciando pagamento...');
+    // Navegar para tela de pagamento
+  };
+
+  const handleShareBudget = () => {
+    console.log('Compartilhando orçamento...');
+    // Lógica para compartilhar orçamento
+  };
+
+  const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
+
+  const formatPrice = (value: number) => {
+    return value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaView style={tw`flex-1 bg-white`}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={tw`flex-1`}>
-          <ScrollView
-            contentContainerStyle={tw`flex-grow`}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}>
-            <View
-              style={tw`flex flex-col items-center justify-center px-4 h-full w-full`}>
-            <View style={tw`w-full mt-2`}>
-              <Price subTotal={39} discount={3} shipping={1} total={2} />
-            </View>
-            <View style={tw`mt-4`}>
-              <ShippingMethod />
-            </View>
-            <View style={tw`w-full mt-4`}>
-              <Text style={tw`text-xl font-bold`}>Encaminhar Pedido</Text>
-              <View
-                style={tw`flex flex-row items-center justify-between bg-stone-100 rounded p-2 mt-4 w-full`}>
-                <TextInput
-                  style={tw`text-black`}
-                  placeholderTextColor="#666"
-                  placeholder="Digite o ID do profissional"
-                />
-                <Switch
-                  trackColor={{false: '#767577', true: '#3183FF'}}
-                  thumbColor="white"
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-                />
+      <SafeAreaView style={tw`flex-1 bg-gray-50`}>
+        <ScrollView
+          contentContainerStyle={tw`px-5 py-6 pb-8`}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Cabeçalho */}
+          <View style={tw`mb-6`}>
+            <Text style={tw`text-2xl font-bold text-gray-800 mb-1`}>
+              Resumo do Pedido
+            </Text>
+            <Text style={tw`text-sm text-gray-500`}>
+              Confira os detalhes antes de prosseguir
+            </Text>
+          </View>
+
+          {/* Endereço de Entrega */}
+          {selectedAddress && (
+            <View style={tw`bg-white border-neutral-100 border p-4 rounded-xl shadow-sm mb-4`}>
+              <View style={tw`flex-row items-center mb-2`}>
+                <MapPin size={20} color="#1F2937" weight="fill" style={tw`mr-2`} />
+                <Text style={tw`text-lg font-semibold text-gray-800`}>
+                  Endereço de Entrega
+                </Text>
               </View>
+              <Text style={tw`text-sm text-gray-600 leading-5`}>
+                {selectedAddress.streetName}
+                {selectedAddress.number && `, ${selectedAddress.number}`}
+              </Text>
+              {selectedAddress.complement && (
+                <Text style={tw`text-sm text-gray-500 mt-1`}>
+                  {selectedAddress.complement}
+                </Text>
+              )}
+              {selectedAddress.city && selectedAddress.state && (
+                <Text style={tw`text-sm text-gray-600 mt-1`}>
+                  {selectedAddress.city} - {selectedAddress.state}
+                </Text>
+              )}
             </View>
-            <View style={tw` mt-6 w-full`}>
-              <Text style={tw`text-xl font-bold`}>Pagamento</Text>
-              <DropDown />
-              <View style={tw`gap-4 mt-4`}>
-                <AccountInput
-                  control={form.control}
-                  name="cardNumber"
-                  label="Número do cartão"
-                  keyboardType="numeric"
-                />
-                <AccountInput
-                  control={form.control}
-                  name="cardholderName"
-                  label="Nome do titular"
-                  autoCapitalize="words"
-                />
-                <View style={tw`flex flex-row gap-3`}>
-                  <View style={tw`flex-1`}>
-                    <AccountInput
-                      control={form.control}
-                      name="expirationDate"
-                      label="Vencimento"
-                      keyboardType="numeric"
-                    />
+          )}
+
+          {/* Itens do Pedido */}
+          <View style={tw`bg-white rounded-xl border border-neutral-100 mb-4 overflow-hidden`}>
+            <View style={tw`bg-neutral-100 px-4 py-3 border-b border-gray-200`}>
+              <Text style={tw`font-semibold text-gray-800`}>
+                Itens do Pedido ({cart.quantity})
+              </Text>
+            </View>
+
+            {cart.items.map((item, index) => (
+              <View
+                key={`${item.id}-${index}`}
+                style={tw`px-4 py-3 ${
+                  index < cart.items.length - 1 ? 'border-b border-gray-100' : ''
+                }`}
+              >
+                <View style={tw`flex-row justify-between items-start`}>
+                  <View style={tw`flex-1 pr-3`}>
+                    <Text style={tw`text-sm font-medium text-gray-800 mb-1`}>
+                      {item.name}
+                    </Text>
+                    {item.variant && (
+                      <Text style={tw`text-xs text-gray-500 mb-1`}>
+                        {item.variant.value} {item.variant.unit}
+                      </Text>
+                    )}
+                    <Text style={tw`text-xs text-gray-500`}>
+                      Quantidade: {item.quantity}
+                    </Text>
                   </View>
-                  <View style={tw`flex-1`}>
-                    <AccountInput
-                      control={form.control}
-                      name="cvv"
-                      label="CVV"
-                      keyboardType="numeric"
-                      isPassword
-                    />
+                  <View style={tw`items-end`}>
+                    <Text style={tw`text-sm font-semibold text-gray-800`}>
+                      {formatPrice(item.price * item.quantity)}
+                    </Text>
+                    {item.quantity > 1 && (
+                      <Text style={tw`text-xs text-gray-500 mt-1`}>
+                        {formatPrice(item.price)} cada
+                      </Text>
+                    )}
                   </View>
                 </View>
               </View>
-              <DropDown />
+            ))}
+          </View>
+
+          {/* Resumo de Valores */}
+          <View style={tw`bg-white border border-neutral-100 rounded-xl shadow-sm mb-6 p-4`}>
+            <View style={tw`flex-row justify-between mb-2`}>
+              <Text style={tw`text-sm text-gray-600`}>Subtotal</Text>
+              <Text style={tw`text-sm font-medium text-gray-800`}>
+                {formatPrice(cart.subTotal)}
+              </Text>
             </View>
-            <View style={tw`mb-26 w-full mt-4`}>
-              <TouchableOpacity
-                style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl`}>
-                <Text style={tw`font-bold text-lg text-white`}>
-                  Finalizar pedido
+
+            <View style={tw`flex-row justify-between mb-2`}>
+              <Text style={tw`text-sm text-gray-600`}>Frete</Text>
+              {shippingCost === 0 ? (
+                <Text style={tw`text-sm font-medium text-green-600`}>
+                  Grátis
                 </Text>
-              </TouchableOpacity>
+              ) : (
+                <Text style={tw`text-sm font-medium text-gray-800`}>
+                  {formatPrice(shippingCost)}
+                </Text>
+              )}
             </View>
+
+            {cart.discounts > 0 && (
+              <View style={tw`flex-row justify-between mb-2`}>
+                <Text style={tw`text-sm text-gray-600`}>Descontos</Text>
+                <Text style={tw`text-sm font-medium text-green-600`}>
+                  -{formatPrice(cart.discounts)}
+                </Text>
+              </View>
+            )}
+
+            <View style={tw`border-t border-gray-200 mt-3 pt-3`}>
+              <View style={tw`flex-row justify-between items-center`}>
+                <Text style={tw`text-lg font-bold text-gray-800`}>Total</Text>
+                <Text style={tw`text-xl font-bold text-gray-800`}>
+                  {formatPrice(cart.total + shippingCost)}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Cards de Ação */}
+          <View style={tw`gap-4`}>
+            {/* Card: Eu vou pagar */}
+            <TouchableOpacity
+              style={tw`bg-green-500 rounded-2xl p-6 shadow-lg active:scale-98`}
+              onPress={handlePayment}
+              activeOpacity={0.8}
+            >
+              <View style={tw`flex-row items-center justify-between`}>
+                <View style={tw`flex-1`}>
+                  <Text style={tw`text-2xl font-bold text-white mb-2`}>
+                    Eu vou pagar
+                  </Text>
+                  <Text style={tw`text-sm text-green-50 leading-5`}>
+                    Prosseguir para finalizar a compra e realizar o pagamento
+                  </Text>
+                </View>
+                <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
+                  <CreditCard size={32} color="#FFFFFF" weight="bold" />
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            {/* Card: Compartilhar Orçamento */}
+            <TouchableOpacity
+              style={tw`bg-blue-500 rounded-2xl p-6 shadow-lg active:scale-98`}
+              onPress={handleShareBudget}
+              activeOpacity={0.8}
+            >
+              <View style={tw`flex-row items-center justify-between`}>
+                <View style={tw`flex-1`}>
+                  <Text style={tw`text-2xl font-bold text-white mb-2`}>
+                    Compartilhar orçamento
+                  </Text>
+                  <Text style={tw`text-sm text-blue-50 leading-5`}>
+                    Enviar para outro usuário aprovar e pagar. Será entregue no endereço escolhido
+                  </Text>
+                </View>
+                <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
+                  <ShareNetwork size={32} color="#FFFFFF" weight="bold" />
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
-        </KeyboardAvoidingView>
       </SafeAreaView>
-      {/** Bottom Drawer **/}
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View
-          style={[
-            tw`absolute bottom-0 left-0 w-full bg-white rounded-tl-lg rounded-tr-lg`,
-            animatedStyle,
-          ]}>
-          <View style={tw``}>
-            <SendRequest selectedAddress={selectedAddress} />
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
     </GestureHandlerRootView>
   );
 }
