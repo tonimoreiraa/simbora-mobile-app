@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostProducts201VariantsItemType} from './postProducts201VariantsItemType';
+import type { PostProducts201VariantsItemType } from './postProducts201VariantsItemType';
 
 export type PostProducts201VariantsItem = {
   id?: number;

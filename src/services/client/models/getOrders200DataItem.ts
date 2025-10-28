@@ -5,10 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetOrders200DataItemCustomer} from './getOrders200DataItemCustomer';
-import type {GetOrders200DataItemPayment} from './getOrders200DataItemPayment';
-import type {GetOrders200DataItemShipping} from './getOrders200DataItemShipping';
-import type {GetOrders200DataItemLastUpdate} from './getOrders200DataItemLastUpdate';
+import type { GetOrders200DataItemCustomer } from './getOrders200DataItemCustomer';
+import type { GetOrders200DataItemPayment } from './getOrders200DataItemPayment';
+import type { GetOrders200DataItemShipping } from './getOrders200DataItemShipping';
+import type { GetOrders200DataItemLastUpdate } from './getOrders200DataItemLastUpdate';
 
 export type GetOrders200DataItem = {
   id?: number;

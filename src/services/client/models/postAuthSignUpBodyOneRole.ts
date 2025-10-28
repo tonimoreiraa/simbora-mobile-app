@@ -9,8 +9,8 @@
 /**
  * Papel do usuário no sistema
  */
-export type PostAuthSignUpBodyOneRole =
-  (typeof PostAuthSignUpBodyOneRole)[keyof typeof PostAuthSignUpBodyOneRole];
+export type PostAuthSignUpBodyOneRole = typeof PostAuthSignUpBodyOneRole[keyof typeof PostAuthSignUpBodyOneRole];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostAuthSignUpBodyOneRole = {

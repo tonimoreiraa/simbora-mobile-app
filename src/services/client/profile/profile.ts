@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -28,192 +31,141 @@ import type {
   PutProfile422,
   PutProfile500,
   PutProfileBodyOne,
-  PutProfileBodyTwo,
+  PutProfileBodyTwo
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Atualiza os dados do perfil do usuário autenticado, incluindo upload opcional de avatar
  * @summary Atualizar perfil do usuário
  */
 export const putProfile = (
-  putProfileBody:
-    | BodyType<PutProfileBodyOne | PutProfileBodyTwo>
-    | PutProfileBodyTwo,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<PutProfile200>(
-    {url: `/profile`, method: 'PUT', data: putProfileBody},
-    options,
-  );
-};
+    putProfileBody: BodyType<PutProfileBodyOne | PutProfileBodyTwo>| PutProfileBodyTwo,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<PutProfile200>(
+      {url: `/profile`, method: 'PUT',
+      data: putProfileBody
+    },
+      options);
+    }
+  
 
-export const getPutProfileMutationOptions = <
-  TError = ErrorType<
-    | PutProfile400
-    | PutProfile401
-    | PutProfile409
-    | PutProfile413
-    | PutProfile422
-    | PutProfile500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putProfile>>,
-    TError,
-    {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putProfile>>,
-  TError,
-  {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>},
-  TContext
-> => {
-  const mutationKey = ['putProfile'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutProfileMutationOptions = <TError = ErrorType<PutProfile400 | PutProfile401 | PutProfile409 | PutProfile413 | PutProfile422 | PutProfile500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>}, TContext> => {
+
+const mutationKey = ['putProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putProfile>>,
-    {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return putProfile(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putProfile>>, {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PutProfileMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putProfile>>
->;
-export type PutProfileMutationBody = BodyType<
-  PutProfileBodyOne | PutProfileBodyTwo
->;
-export type PutProfileMutationError = ErrorType<
-  | PutProfile400
-  | PutProfile401
-  | PutProfile409
-  | PutProfile413
-  | PutProfile422
-  | PutProfile500
->;
+          return  putProfile(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutProfileMutationResult = NonNullable<Awaited<ReturnType<typeof putProfile>>>
+    export type PutProfileMutationBody = BodyType<PutProfileBodyOne | PutProfileBodyTwo>
+    export type PutProfileMutationError = ErrorType<PutProfile400 | PutProfile401 | PutProfile409 | PutProfile413 | PutProfile422 | PutProfile500>
+
+    /**
  * @summary Atualizar perfil do usuário
  */
-export const usePutProfile = <
-  TError = ErrorType<
-    | PutProfile400
-    | PutProfile401
-    | PutProfile409
-    | PutProfile413
-    | PutProfile422
-    | PutProfile500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putProfile>>,
-    TError,
-    {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putProfile>>,
-  TError,
-  {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>},
-  TContext
-> => {
-  const mutationOptions = getPutProfileMutationOptions(options);
+export const usePutProfile = <TError = ErrorType<PutProfile400 | PutProfile401 | PutProfile409 | PutProfile413 | PutProfile422 | PutProfile500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putProfile>>,
+        TError,
+        {data: BodyType<PutProfileBodyOne | PutProfileBodyTwo>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutProfileMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna os dados completos do perfil do usuário autenticado, incluindo endereços associados
  * @summary Obter perfil do usuário
  */
 export const getProfile = (
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetProfile200>(
-    {url: `/profile`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetProfile200>(
+      {url: `/profile`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetProfileQueryKey = () => {
-  return [`/profile`] as const;
-};
+    return [`/profile`] as const;
+    }
 
-export const getGetProfileQueryOptions = <
-  TData = Awaited<ReturnType<typeof getProfile>>,
-  TError = ErrorType<GetProfile401 | GetProfile500>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getProfile>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+    
+export const getGetProfileQueryOptions = <TData = Awaited<ReturnType<typeof getProfile>>, TError = ErrorType<GetProfile401 | GetProfile500>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProfile>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetProfileQueryKey();
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getProfile>>> = ({
-    signal,
-  }) => getProfile(requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetProfileQueryKey();
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getProfile>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetProfileQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getProfile>>
->;
-export type GetProfileQueryError = ErrorType<GetProfile401 | GetProfile500>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProfile>>> = ({ signal }) => getProfile(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProfile>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getProfile>>>
+export type GetProfileQueryError = ErrorType<GetProfile401 | GetProfile500>
+
 
 /**
  * @summary Obter perfil do usuário
  */
 
-export function useGetProfile<
-  TData = Awaited<ReturnType<typeof getProfile>>,
-  TError = ErrorType<GetProfile401 | GetProfile500>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getProfile>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetProfileQueryOptions(options);
+export function useGetProfile<TData = Awaited<ReturnType<typeof getProfile>>, TError = ErrorType<GetProfile401 | GetProfile500>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProfile>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetProfileQueryOptions(options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

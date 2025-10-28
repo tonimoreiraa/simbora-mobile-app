@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetCouponsVerifyCode422Errors} from './getCouponsVerifyCode422Errors';
+import type { GetCouponsVerifyCode422Errors } from './getCouponsVerifyCode422Errors';
 
 export type GetCouponsVerifyCode422 = {
   message?: string;

@@ -7,20 +7,20 @@
  */
 
 export type GetCouponsParams = {
-  /**
-   * Filtro de busca por código do cupom (case insensitive)
-   */
-  query?: string;
-  /**
-   * Filtrar apenas cupons ativos
-   */
-  active?: boolean;
-  /**
-   * Filtrar por ID da categoria
-   */
-  categoryId?: number;
-  /**
-   * Filtrar por ID do fornecedor
-   */
-  supplierId?: number;
+/**
+ * Filtro de busca por código do cupom (case insensitive)
+ */
+query?: string;
+/**
+ * Filtrar apenas cupons ativos
+ */
+active?: boolean;
+/**
+ * Filtrar por ID da categoria
+ */
+categoryId?: number;
+/**
+ * Filtrar por ID do fornecedor
+ */
+supplierId?: number;
 };

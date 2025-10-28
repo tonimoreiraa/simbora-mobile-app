@@ -7,8 +7,8 @@
  */
 
 export type GetCategoriesParams = {
-  /**
-   * ID da categoria pai para filtrar subcategorias
-   */
-  categoryId?: number;
+/**
+ * ID da categoria pai para filtrar subcategorias
+ */
+categoryId?: number;
 };

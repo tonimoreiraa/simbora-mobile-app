@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostOrdersBodyItemsItem} from './postOrdersBodyItemsItem';
-import type {PostOrdersBodyType} from './postOrdersBodyType';
+import type { PostOrdersBodyItemsItem } from './postOrdersBodyItemsItem';
+import type { PostOrdersBodyType } from './postOrdersBodyType';
 
 export type PostOrdersBody = {
   /** Itens do pedido */

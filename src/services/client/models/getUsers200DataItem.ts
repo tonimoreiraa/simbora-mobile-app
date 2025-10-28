@@ -5,9 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetUsers200DataItemOneOf} from './getUsers200DataItemOneOf';
-import type {GetUsers200DataItemOneOfThree} from './getUsers200DataItemOneOfThree';
+import type { GetUsers200DataItemOneOf } from './getUsers200DataItemOneOf';
+import type { GetUsers200DataItemOneOfThree } from './getUsers200DataItemOneOfThree';
 
-export type GetUsers200DataItem =
-  | GetUsers200DataItemOneOf
-  | GetUsers200DataItemOneOfThree;
+export type GetUsers200DataItem = GetUsers200DataItemOneOf | GetUsers200DataItemOneOfThree;

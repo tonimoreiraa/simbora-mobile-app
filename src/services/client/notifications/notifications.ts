@@ -5,98 +5,91 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useQuery} from 'react-query';
+import {
+  useQuery
+} from 'react-query';
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
   GetNotifications200,
   GetNotifications401,
-  GetNotifications500,
+  GetNotifications500
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Retorna todas as notificações (pedidos compartilhados) não visualizadas do usuário autenticado
  * @summary Listar notificações não visualizadas
  */
 export const getNotifications = (
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetNotifications200>(
-    {url: `/notifications`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetNotifications200>(
+      {url: `/notifications`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetNotificationsQueryKey = () => {
-  return [`/notifications`] as const;
-};
+    return [`/notifications`] as const;
+    }
 
-export const getGetNotificationsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNotifications>>,
-  TError = ErrorType<GetNotifications401 | GetNotifications500>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getNotifications>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+    
+export const getGetNotificationsQueryOptions = <TData = Awaited<ReturnType<typeof getNotifications>>, TError = ErrorType<GetNotifications401 | GetNotifications500>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getNotifications>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetNotificationsQueryKey();
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getNotifications>>
-  > = ({signal}) => getNotifications(requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationsQueryKey();
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getNotifications>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetNotificationsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getNotifications>>
->;
-export type GetNotificationsQueryError = ErrorType<
-  GetNotifications401 | GetNotifications500
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotifications>>> = ({ signal }) => getNotifications(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotifications>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetNotificationsQueryResult = NonNullable<Awaited<ReturnType<typeof getNotifications>>>
+export type GetNotificationsQueryError = ErrorType<GetNotifications401 | GetNotifications500>
+
 
 /**
  * @summary Listar notificações não visualizadas
  */
 
-export function useGetNotifications<
-  TData = Awaited<ReturnType<typeof getNotifications>>,
-  TError = ErrorType<GetNotifications401 | GetNotifications500>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getNotifications>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetNotificationsQueryOptions(options);
+export function useGetNotifications<TData = Awaited<ReturnType<typeof getNotifications>>, TError = ErrorType<GetNotifications401 | GetNotifications500>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getNotifications>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetNotificationsQueryOptions(options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

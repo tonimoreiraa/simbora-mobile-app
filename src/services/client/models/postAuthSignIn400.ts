@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignIn400Errors} from './postAuthSignIn400Errors';
+import type { PostAuthSignIn400Errors } from './postAuthSignIn400Errors';
 
 export type PostAuthSignIn400 = {
   message?: string;

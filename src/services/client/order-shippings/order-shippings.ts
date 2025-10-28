@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -21,437 +24,336 @@ import type {
   GetOrderShippingsId200,
   GetOrderShippingsParams,
   PostOrderShippingsBody,
-  PutOrderShippingsIdBody,
+  PutOrderShippingsIdBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista informações de envio dos pedidos com filtros por usuário/role
  * @summary Listar envios de pedidos
  */
 export const getOrderShippings = (
-  params?: GetOrderShippingsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetOrderShippingsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderShippings200>(
-    {url: `/order-shippings`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderShippings200>(
+      {url: `/order-shippings`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderShippingsQueryKey = (
-  params?: GetOrderShippingsParams,
+export const getGetOrderShippingsQueryKey = (params?: GetOrderShippingsParams,) => {
+    return [`/order-shippings`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetOrderShippingsQueryOptions = <TData = Awaited<ReturnType<typeof getOrderShippings>>, TError = ErrorType<void>>(params?: GetOrderShippingsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderShippings>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  return [`/order-shippings`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetOrderShippingsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderShippings>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderShippingsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderShippings>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetOrderShippingsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderShippingsQueryKey(params);
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderShippings>>
-  > = ({signal}) => getOrderShippings(params, requestOptions, signal);
+  
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderShippings>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderShippings>>> = ({ signal }) => getOrderShippings(params, requestOptions, signal);
 
-export type GetOrderShippingsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderShippings>>
->;
-export type GetOrderShippingsQueryError = ErrorType<void>;
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderShippings>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderShippingsQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderShippings>>>
+export type GetOrderShippingsQueryError = ErrorType<void>
+
 
 /**
  * @summary Listar envios de pedidos
  */
 
-export function useGetOrderShippings<
-  TData = Awaited<ReturnType<typeof getOrderShippings>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderShippingsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderShippings>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderShippingsQueryOptions(params, options);
+export function useGetOrderShippings<TData = Awaited<ReturnType<typeof getOrderShippings>>, TError = ErrorType<void>>(
+ params?: GetOrderShippingsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderShippings>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderShippingsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria informações de envio para um pedido
  * @summary Criar envio para pedido
  */
 export const postOrderShippings = (
-  postOrderShippingsBody: BodyType<PostOrderShippingsBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postOrderShippingsBody: BodyType<PostOrderShippingsBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<void>(
-    {
-      url: `/order-shippings`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postOrderShippingsBody,
-      signal,
+      
+      
+      return axiosInstance<void>(
+      {url: `/order-shippings`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postOrderShippingsBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostOrderShippingsMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderShippings>>,
-    TError,
-    {data: BodyType<PostOrderShippingsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postOrderShippings>>,
-  TError,
-  {data: BodyType<PostOrderShippingsBody>},
-  TContext
-> => {
-  const mutationKey = ['postOrderShippings'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostOrderShippingsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderShippings>>, TError,{data: BodyType<PostOrderShippingsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postOrderShippings>>, TError,{data: BodyType<PostOrderShippingsBody>}, TContext> => {
+
+const mutationKey = ['postOrderShippings'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postOrderShippings>>,
-    {data: BodyType<PostOrderShippingsBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postOrderShippings(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postOrderShippings>>, {data: BodyType<PostOrderShippingsBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostOrderShippingsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postOrderShippings>>
->;
-export type PostOrderShippingsMutationBody = BodyType<PostOrderShippingsBody>;
-export type PostOrderShippingsMutationError = ErrorType<void>;
+          return  postOrderShippings(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostOrderShippingsMutationResult = NonNullable<Awaited<ReturnType<typeof postOrderShippings>>>
+    export type PostOrderShippingsMutationBody = BodyType<PostOrderShippingsBody>
+    export type PostOrderShippingsMutationError = ErrorType<void>
+
+    /**
  * @summary Criar envio para pedido
  */
-export const usePostOrderShippings = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderShippings>>,
-    TError,
-    {data: BodyType<PostOrderShippingsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postOrderShippings>>,
-  TError,
-  {data: BodyType<PostOrderShippingsBody>},
-  TContext
-> => {
-  const mutationOptions = getPostOrderShippingsMutationOptions(options);
+export const usePostOrderShippings = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderShippings>>, TError,{data: BodyType<PostOrderShippingsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postOrderShippings>>,
+        TError,
+        {data: BodyType<PostOrderShippingsBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostOrderShippingsMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna detalhes do envio de um pedido específico
  * @summary Buscar envio por ID do pedido
  */
 export const getOrderShippingsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderShippingsId200>(
-    {url: `/order-shippings/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderShippingsId200>(
+      {url: `/order-shippings/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderShippingsIdQueryKey = (id: number) => {
-  return [`/order-shippings/${id}`] as const;
-};
+export const getGetOrderShippingsIdQueryKey = (id: number,) => {
+    return [`/order-shippings/${id}`] as const;
+    }
 
-export const getGetOrderShippingsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderShippingsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderShippingsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrderShippingsIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderShippingsId>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderShippingsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrderShippingsIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderShippingsId>>
-  > = ({signal}) => getOrderShippingsId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderShippingsIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderShippingsId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrderShippingsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderShippingsId>>
->;
-export type GetOrderShippingsIdQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderShippingsId>>> = ({ signal }) => getOrderShippingsId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderShippingsId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderShippingsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderShippingsId>>>
+export type GetOrderShippingsIdQueryError = ErrorType<void>
+
 
 /**
  * @summary Buscar envio por ID do pedido
  */
 
-export function useGetOrderShippingsId<
-  TData = Awaited<ReturnType<typeof getOrderShippingsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderShippingsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderShippingsIdQueryOptions(id, options);
+export function useGetOrderShippingsId<TData = Awaited<ReturnType<typeof getOrderShippingsId>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderShippingsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderShippingsIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Atualiza informações de envio de um pedido
  * @summary Atualizar envio do pedido
  */
 export const putOrderShippingsId = (
-  id: number,
-  putOrderShippingsIdBody: BodyType<PutOrderShippingsIdBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<void>(
-    {
-      url: `/order-shippings/${id}`,
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      data: putOrderShippingsIdBody,
+    id: number,
+    putOrderShippingsIdBody: BodyType<PutOrderShippingsIdBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/order-shippings/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: putOrderShippingsIdBody
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPutOrderShippingsIdMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putOrderShippingsId>>,
-    TError,
-    {id: number; data: BodyType<PutOrderShippingsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putOrderShippingsId>>,
-  TError,
-  {id: number; data: BodyType<PutOrderShippingsIdBody>},
-  TContext
-> => {
-  const mutationKey = ['putOrderShippingsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutOrderShippingsIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putOrderShippingsId>>, TError,{id: number;data: BodyType<PutOrderShippingsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putOrderShippingsId>>, TError,{id: number;data: BodyType<PutOrderShippingsIdBody>}, TContext> => {
+
+const mutationKey = ['putOrderShippingsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putOrderShippingsId>>,
-    {id: number; data: BodyType<PutOrderShippingsIdBody>}
-  > = props => {
-    const {id, data} = props ?? {};
+      
 
-    return putOrderShippingsId(id, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putOrderShippingsId>>, {id: number;data: BodyType<PutOrderShippingsIdBody>}> = (props) => {
+          const {id,data} = props ?? {};
 
-export type PutOrderShippingsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putOrderShippingsId>>
->;
-export type PutOrderShippingsIdMutationBody = BodyType<PutOrderShippingsIdBody>;
-export type PutOrderShippingsIdMutationError = ErrorType<void>;
+          return  putOrderShippingsId(id,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutOrderShippingsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putOrderShippingsId>>>
+    export type PutOrderShippingsIdMutationBody = BodyType<PutOrderShippingsIdBody>
+    export type PutOrderShippingsIdMutationError = ErrorType<void>
+
+    /**
  * @summary Atualizar envio do pedido
  */
-export const usePutOrderShippingsId = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putOrderShippingsId>>,
-    TError,
-    {id: number; data: BodyType<PutOrderShippingsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putOrderShippingsId>>,
-  TError,
-  {id: number; data: BodyType<PutOrderShippingsIdBody>},
-  TContext
-> => {
-  const mutationOptions = getPutOrderShippingsIdMutationOptions(options);
+export const usePutOrderShippingsId = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putOrderShippingsId>>, TError,{id: number;data: BodyType<PutOrderShippingsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putOrderShippingsId>>,
+        TError,
+        {id: number;data: BodyType<PutOrderShippingsIdBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutOrderShippingsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Remove informações de envio de um pedido (apenas admins)
  * @summary Excluir envio do pedido
  */
 export const deleteOrderShippingsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<void>(
-    {url: `/order-shippings/${id}`, method: 'DELETE'},
-    options,
-  );
-};
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/order-shippings/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteOrderShippingsIdMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteOrderShippingsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteOrderShippingsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationKey = ['deleteOrderShippingsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getDeleteOrderShippingsIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOrderShippingsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteOrderShippingsId>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteOrderShippingsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteOrderShippingsId>>,
-    {id: number}
-  > = props => {
-    const {id} = props ?? {};
+      
 
-    return deleteOrderShippingsId(id, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteOrderShippingsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
 
-export type DeleteOrderShippingsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteOrderShippingsId>>
->;
+          return  deleteOrderShippingsId(id,requestOptions)
+        }
 
-export type DeleteOrderShippingsIdMutationError = ErrorType<void>;
+        
 
-/**
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteOrderShippingsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteOrderShippingsId>>>
+    
+    export type DeleteOrderShippingsIdMutationError = ErrorType<void>
+
+    /**
  * @summary Excluir envio do pedido
  */
-export const useDeleteOrderShippingsId = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteOrderShippingsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteOrderShippingsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationOptions = getDeleteOrderShippingsIdMutationOptions(options);
+export const useDeleteOrderShippingsId = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOrderShippingsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteOrderShippingsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getDeleteOrderShippingsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

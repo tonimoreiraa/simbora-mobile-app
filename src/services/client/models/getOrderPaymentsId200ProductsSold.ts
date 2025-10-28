@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetOrderPaymentsId200ProductsSold = {[key: string]: unknown};
+export type GetOrderPaymentsId200ProductsSold = { [key: string]: unknown };

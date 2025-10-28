@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetAuthSession200Role} from './getAuthSession200Role';
+import type { GetAuthSession200Role } from './getAuthSession200Role';
 
 export type GetAuthSession200 = {
   /** ID único do usuário */

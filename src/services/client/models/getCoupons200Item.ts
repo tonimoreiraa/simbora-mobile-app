@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetCoupons200ItemType} from './getCoupons200ItemType';
+import type { GetCoupons200ItemType } from './getCoupons200ItemType';
 
 export type GetCoupons200Item = {
   /** ID único do cupom */

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostSuppliers400ErrorsItem} from './postSuppliers400ErrorsItem';
+import type { PostSuppliers400ErrorsItem } from './postSuppliers400ErrorsItem';
 
 export type PostSuppliers400 = {
   message?: string;

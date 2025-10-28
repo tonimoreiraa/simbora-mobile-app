@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -29,349 +32,270 @@ import type {
   PostUserAddresses400,
   PostUserAddresses401,
   PostUserAddresses422,
-  PostUserAddressesBody,
+  PostUserAddressesBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Retorna todos os endereços cadastrados pelo usuário autenticado
  * @summary Listar endereços do usuário
  */
 export const getUserAddresses = (
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetUserAddresses200Item[]>(
-    {url: `/user-addresses`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetUserAddresses200Item[]>(
+      {url: `/user-addresses`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 export const getGetUserAddressesQueryKey = () => {
-  return [`/user-addresses`] as const;
-};
+    return [`/user-addresses`] as const;
+    }
 
-export const getGetUserAddressesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUserAddresses>>,
-  TError = ErrorType<GetUserAddresses401>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getUserAddresses>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+    
+export const getGetUserAddressesQueryOptions = <TData = Awaited<ReturnType<typeof getUserAddresses>>, TError = ErrorType<GetUserAddresses401>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserAddresses>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetUserAddressesQueryKey();
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getUserAddresses>>
-  > = ({signal}) => getUserAddresses(requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetUserAddressesQueryKey();
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getUserAddresses>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetUserAddressesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUserAddresses>>
->;
-export type GetUserAddressesQueryError = ErrorType<GetUserAddresses401>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserAddresses>>> = ({ signal }) => getUserAddresses(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserAddresses>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetUserAddressesQueryResult = NonNullable<Awaited<ReturnType<typeof getUserAddresses>>>
+export type GetUserAddressesQueryError = ErrorType<GetUserAddresses401>
+
 
 /**
  * @summary Listar endereços do usuário
  */
 
-export function useGetUserAddresses<
-  TData = Awaited<ReturnType<typeof getUserAddresses>>,
-  TError = ErrorType<GetUserAddresses401>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getUserAddresses>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetUserAddressesQueryOptions(options);
+export function useGetUserAddresses<TData = Awaited<ReturnType<typeof getUserAddresses>>, TError = ErrorType<GetUserAddresses401>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserAddresses>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetUserAddressesQueryOptions(options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Adiciona um novo endereço para o usuário autenticado
  * @summary Criar novo endereço
  */
 export const postUserAddresses = (
-  postUserAddressesBody: BodyType<PostUserAddressesBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postUserAddressesBody: BodyType<PostUserAddressesBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostUserAddresses201>(
-    {
-      url: `/user-addresses`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postUserAddressesBody,
-      signal,
+      
+      
+      return axiosInstance<PostUserAddresses201>(
+      {url: `/user-addresses`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postUserAddressesBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostUserAddressesMutationOptions = <
-  TError = ErrorType<
-    PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postUserAddresses>>,
-    TError,
-    {data: BodyType<PostUserAddressesBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postUserAddresses>>,
-  TError,
-  {data: BodyType<PostUserAddressesBody>},
-  TContext
-> => {
-  const mutationKey = ['postUserAddresses'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostUserAddressesMutationOptions = <TError = ErrorType<PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postUserAddresses>>, TError,{data: BodyType<PostUserAddressesBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postUserAddresses>>, TError,{data: BodyType<PostUserAddressesBody>}, TContext> => {
+
+const mutationKey = ['postUserAddresses'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postUserAddresses>>,
-    {data: BodyType<PostUserAddressesBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postUserAddresses(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postUserAddresses>>, {data: BodyType<PostUserAddressesBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostUserAddressesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postUserAddresses>>
->;
-export type PostUserAddressesMutationBody = BodyType<PostUserAddressesBody>;
-export type PostUserAddressesMutationError = ErrorType<
-  PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
->;
+          return  postUserAddresses(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostUserAddressesMutationResult = NonNullable<Awaited<ReturnType<typeof postUserAddresses>>>
+    export type PostUserAddressesMutationBody = BodyType<PostUserAddressesBody>
+    export type PostUserAddressesMutationError = ErrorType<PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422>
+
+    /**
  * @summary Criar novo endereço
  */
-export const usePostUserAddresses = <
-  TError = ErrorType<
-    PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postUserAddresses>>,
-    TError,
-    {data: BodyType<PostUserAddressesBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postUserAddresses>>,
-  TError,
-  {data: BodyType<PostUserAddressesBody>},
-  TContext
-> => {
-  const mutationOptions = getPostUserAddressesMutationOptions(options);
+export const usePostUserAddresses = <TError = ErrorType<PostUserAddresses400 | PostUserAddresses401 | PostUserAddresses422>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postUserAddresses>>, TError,{data: BodyType<PostUserAddressesBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postUserAddresses>>,
+        TError,
+        {data: BodyType<PostUserAddressesBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostUserAddressesMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna um endereço específico do usuário autenticado
  * @summary Buscar endereço por ID
  */
 export const getUserAddressesId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetUserAddressesId200>(
-    {url: `/user-addresses/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetUserAddressesId200>(
+      {url: `/user-addresses/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetUserAddressesIdQueryKey = (id: number) => {
-  return [`/user-addresses/${id}`] as const;
-};
+export const getGetUserAddressesIdQueryKey = (id: number,) => {
+    return [`/user-addresses/${id}`] as const;
+    }
 
-export const getGetUserAddressesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUserAddressesId>>,
-  TError = ErrorType<GetUserAddressesId401 | GetUserAddressesId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUserAddressesId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetUserAddressesIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserAddressesId>>, TError = ErrorType<GetUserAddressesId401 | GetUserAddressesId404>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserAddressesId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetUserAddressesIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getUserAddressesId>>
-  > = ({signal}) => getUserAddressesId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetUserAddressesIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getUserAddressesId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetUserAddressesIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUserAddressesId>>
->;
-export type GetUserAddressesIdQueryError = ErrorType<
-  GetUserAddressesId401 | GetUserAddressesId404
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserAddressesId>>> = ({ signal }) => getUserAddressesId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserAddressesId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetUserAddressesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserAddressesId>>>
+export type GetUserAddressesIdQueryError = ErrorType<GetUserAddressesId401 | GetUserAddressesId404>
+
 
 /**
  * @summary Buscar endereço por ID
  */
 
-export function useGetUserAddressesId<
-  TData = Awaited<ReturnType<typeof getUserAddressesId>>,
-  TError = ErrorType<GetUserAddressesId401 | GetUserAddressesId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUserAddressesId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetUserAddressesIdQueryOptions(id, options);
+export function useGetUserAddressesId<TData = Awaited<ReturnType<typeof getUserAddressesId>>, TError = ErrorType<GetUserAddressesId401 | GetUserAddressesId404>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUserAddressesId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetUserAddressesIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Remove um endereço específico do usuário autenticado
  * @summary Deletar endereço
  */
 export const deleteUserAddressesId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<DeleteUserAddressesId200>(
-    {url: `/user-addresses/${id}`, method: 'DELETE'},
-    options,
-  );
-};
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<DeleteUserAddressesId200>(
+      {url: `/user-addresses/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteUserAddressesIdMutationOptions = <
-  TError = ErrorType<DeleteUserAddressesId401 | DeleteUserAddressesId404>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteUserAddressesId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteUserAddressesId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationKey = ['deleteUserAddressesId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getDeleteUserAddressesIdMutationOptions = <TError = ErrorType<DeleteUserAddressesId401 | DeleteUserAddressesId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserAddressesId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteUserAddressesId>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteUserAddressesId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteUserAddressesId>>,
-    {id: number}
-  > = props => {
-    const {id} = props ?? {};
+      
 
-    return deleteUserAddressesId(id, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteUserAddressesId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
 
-export type DeleteUserAddressesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteUserAddressesId>>
->;
+          return  deleteUserAddressesId(id,requestOptions)
+        }
 
-export type DeleteUserAddressesIdMutationError = ErrorType<
-  DeleteUserAddressesId401 | DeleteUserAddressesId404
->;
+        
 
-/**
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteUserAddressesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteUserAddressesId>>>
+    
+    export type DeleteUserAddressesIdMutationError = ErrorType<DeleteUserAddressesId401 | DeleteUserAddressesId404>
+
+    /**
  * @summary Deletar endereço
  */
-export const useDeleteUserAddressesId = <
-  TError = ErrorType<DeleteUserAddressesId401 | DeleteUserAddressesId404>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteUserAddressesId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteUserAddressesId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationOptions = getDeleteUserAddressesIdMutationOptions(options);
+export const useDeleteUserAddressesId = <TError = ErrorType<DeleteUserAddressesId401 | DeleteUserAddressesId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserAddressesId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteUserAddressesId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getDeleteUserAddressesIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

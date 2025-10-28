@@ -7,16 +7,16 @@
  */
 
 export type GetProductVariantsParams = {
-  /**
-   * Filtrar por ID do produto
-   */
-  productId?: number;
-  /**
-   * Filtrar por tipo de variante
-   */
-  variantTypeId?: number;
-  /**
-   * Filtrar por valor da variante
-   */
-  value?: string;
+/**
+ * Filtrar por ID do produto
+ */
+productId?: number;
+/**
+ * Filtrar por tipo de variante
+ */
+variantTypeId?: number;
+/**
+ * Filtrar por valor da variante
+ */
+value?: string;
 };

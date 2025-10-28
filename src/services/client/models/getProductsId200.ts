@@ -5,10 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetProductsId200Category} from './getProductsId200Category';
-import type {GetProductsId200Supplier} from './getProductsId200Supplier';
-import type {GetProductsId200VariantsItem} from './getProductsId200VariantsItem';
-import type {GetProductsId200ImagesItem} from './getProductsId200ImagesItem';
+import type { GetProductsId200Category } from './getProductsId200Category';
+import type { GetProductsId200Supplier } from './getProductsId200Supplier';
+import type { GetProductsId200VariantsItem } from './getProductsId200VariantsItem';
+import type { GetProductsId200ImagesItem } from './getProductsId200ImagesItem';
 
 export type GetProductsId200 = {
   id?: number;

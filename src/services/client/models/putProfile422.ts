@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PutProfile422Errors} from './putProfile422Errors';
+import type { PutProfile422Errors } from './putProfile422Errors';
 
 export type PutProfile422 = {
   message?: string;

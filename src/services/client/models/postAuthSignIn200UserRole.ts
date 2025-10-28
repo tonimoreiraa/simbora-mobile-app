@@ -9,8 +9,8 @@
 /**
  * Papel do usuário no sistema
  */
-export type PostAuthSignIn200UserRole =
-  (typeof PostAuthSignIn200UserRole)[keyof typeof PostAuthSignIn200UserRole];
+export type PostAuthSignIn200UserRole = typeof PostAuthSignIn200UserRole[keyof typeof PostAuthSignIn200UserRole];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostAuthSignIn200UserRole = {

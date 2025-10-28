@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUp422Errors} from './postAuthSignUp422Errors';
+import type { PostAuthSignUp422Errors } from './postAuthSignUp422Errors';
 
 export type PostAuthSignUp422 = {
   message?: string;

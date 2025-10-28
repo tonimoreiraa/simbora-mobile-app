@@ -9,6 +9,4 @@
 /**
  * @nullable
  */
-export type GetOrdersOrderIdActivityLogs200ItemMetadata = {
-  [key: string]: unknown;
-} | null;
+export type GetOrdersOrderIdActivityLogs200ItemMetadata = { [key: string]: unknown } | null;

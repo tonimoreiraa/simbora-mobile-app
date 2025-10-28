@@ -5,11 +5,13 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation} from 'react-query';
+import {
+  useMutation
+} from 'react-query';
 import type {
   MutationFunction,
   UseMutationOptions,
-  UseMutationResult,
+  UseMutationResult
 } from 'react-query';
 
 import type {
@@ -22,201 +24,144 @@ import type {
   PostOrderSharesShare400,
   PostOrderSharesShare401,
   PostOrderSharesShare404,
-  PostOrderSharesShareBody,
+  PostOrderSharesShareBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Permite que um usuário compartilhe um pedido com outro usuário, criando uma notificação
  * @summary Compartilhar pedido com outro usuário
  */
 export const postOrderSharesShare = (
-  postOrderSharesShareBody: BodyType<PostOrderSharesShareBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postOrderSharesShareBody: BodyType<PostOrderSharesShareBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostOrderSharesShare201>(
-    {
-      url: `/order-shares/share`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postOrderSharesShareBody,
-      signal,
+      
+      
+      return axiosInstance<PostOrderSharesShare201>(
+      {url: `/order-shares/share`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postOrderSharesShareBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostOrderSharesShareMutationOptions = <
-  TError = ErrorType<
-    PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderSharesShare>>,
-    TError,
-    {data: BodyType<PostOrderSharesShareBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postOrderSharesShare>>,
-  TError,
-  {data: BodyType<PostOrderSharesShareBody>},
-  TContext
-> => {
-  const mutationKey = ['postOrderSharesShare'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostOrderSharesShareMutationOptions = <TError = ErrorType<PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderSharesShare>>, TError,{data: BodyType<PostOrderSharesShareBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postOrderSharesShare>>, TError,{data: BodyType<PostOrderSharesShareBody>}, TContext> => {
+
+const mutationKey = ['postOrderSharesShare'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postOrderSharesShare>>,
-    {data: BodyType<PostOrderSharesShareBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postOrderSharesShare(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postOrderSharesShare>>, {data: BodyType<PostOrderSharesShareBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostOrderSharesShareMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postOrderSharesShare>>
->;
-export type PostOrderSharesShareMutationBody =
-  BodyType<PostOrderSharesShareBody>;
-export type PostOrderSharesShareMutationError = ErrorType<
-  PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404
->;
+          return  postOrderSharesShare(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostOrderSharesShareMutationResult = NonNullable<Awaited<ReturnType<typeof postOrderSharesShare>>>
+    export type PostOrderSharesShareMutationBody = BodyType<PostOrderSharesShareBody>
+    export type PostOrderSharesShareMutationError = ErrorType<PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404>
+
+    /**
  * @summary Compartilhar pedido com outro usuário
  */
-export const usePostOrderSharesShare = <
-  TError = ErrorType<
-    PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderSharesShare>>,
-    TError,
-    {data: BodyType<PostOrderSharesShareBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postOrderSharesShare>>,
-  TError,
-  {data: BodyType<PostOrderSharesShareBody>},
-  TContext
-> => {
-  const mutationOptions = getPostOrderSharesShareMutationOptions(options);
+export const usePostOrderSharesShare = <TError = ErrorType<PostOrderSharesShare400 | PostOrderSharesShare401 | PostOrderSharesShare404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderSharesShare>>, TError,{data: BodyType<PostOrderSharesShareBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postOrderSharesShare>>,
+        TError,
+        {data: BodyType<PostOrderSharesShareBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostOrderSharesShareMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Marca uma notificação de compartilhamento como visualizada pelo usuário destinatário
  * @summary Marcar compartilhamento como visualizado
  */
 export const patchOrderSharesView = (
-  patchOrderSharesViewBody: BodyType<PatchOrderSharesViewBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<PatchOrderSharesView200>(
-    {
-      url: `/order-shares/view`,
-      method: 'PATCH',
-      headers: {'Content-Type': 'application/json'},
-      data: patchOrderSharesViewBody,
+    patchOrderSharesViewBody: BodyType<PatchOrderSharesViewBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<PatchOrderSharesView200>(
+      {url: `/order-shares/view`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: patchOrderSharesViewBody
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPatchOrderSharesViewMutationOptions = <
-  TError = ErrorType<
-    PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchOrderSharesView>>,
-    TError,
-    {data: BodyType<PatchOrderSharesViewBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof patchOrderSharesView>>,
-  TError,
-  {data: BodyType<PatchOrderSharesViewBody>},
-  TContext
-> => {
-  const mutationKey = ['patchOrderSharesView'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPatchOrderSharesViewMutationOptions = <TError = ErrorType<PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchOrderSharesView>>, TError,{data: BodyType<PatchOrderSharesViewBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchOrderSharesView>>, TError,{data: BodyType<PatchOrderSharesViewBody>}, TContext> => {
+
+const mutationKey = ['patchOrderSharesView'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchOrderSharesView>>,
-    {data: BodyType<PatchOrderSharesViewBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return patchOrderSharesView(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchOrderSharesView>>, {data: BodyType<PatchOrderSharesViewBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PatchOrderSharesViewMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchOrderSharesView>>
->;
-export type PatchOrderSharesViewMutationBody =
-  BodyType<PatchOrderSharesViewBody>;
-export type PatchOrderSharesViewMutationError = ErrorType<
-  PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404
->;
+          return  patchOrderSharesView(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchOrderSharesViewMutationResult = NonNullable<Awaited<ReturnType<typeof patchOrderSharesView>>>
+    export type PatchOrderSharesViewMutationBody = BodyType<PatchOrderSharesViewBody>
+    export type PatchOrderSharesViewMutationError = ErrorType<PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404>
+
+    /**
  * @summary Marcar compartilhamento como visualizado
  */
-export const usePatchOrderSharesView = <
-  TError = ErrorType<
-    PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchOrderSharesView>>,
-    TError,
-    {data: BodyType<PatchOrderSharesViewBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof patchOrderSharesView>>,
-  TError,
-  {data: BodyType<PatchOrderSharesViewBody>},
-  TContext
-> => {
-  const mutationOptions = getPatchOrderSharesViewMutationOptions(options);
+export const usePatchOrderSharesView = <TError = ErrorType<PatchOrderSharesView400 | PatchOrderSharesView401 | PatchOrderSharesView404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchOrderSharesView>>, TError,{data: BodyType<PatchOrderSharesViewBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patchOrderSharesView>>,
+        TError,
+        {data: BodyType<PatchOrderSharesViewBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getPatchOrderSharesViewMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

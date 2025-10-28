@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetCouponsId200Type} from './getCouponsId200Type';
+import type { GetCouponsId200Type } from './getCouponsId200Type';
 
 export type GetCouponsId200 = {
   id?: number;

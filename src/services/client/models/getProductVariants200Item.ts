@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetProductVariants200ItemProduct} from './getProductVariants200ItemProduct';
-import type {GetProductVariants200ItemType} from './getProductVariants200ItemType';
+import type { GetProductVariants200ItemProduct } from './getProductVariants200ItemProduct';
+import type { GetProductVariants200ItemType } from './getProductVariants200ItemType';
 
 export type GetProductVariants200Item = {
   /** ID único da variante */

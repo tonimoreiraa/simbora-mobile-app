@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostUserAddresses422Errors = {[key: string]: unknown};
+export type PostUserAddresses422Errors = { [key: string]: unknown };

@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetProfile200Role} from './getProfile200Role';
-import type {GetProfile200AddressesItem} from './getProfile200AddressesItem';
+import type { GetProfile200Role } from './getProfile200Role';
+import type { GetProfile200AddressesItem } from './getProfile200AddressesItem';
 
 export type GetProfile200 = {
   /** ID único do usuário */

@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -22,308 +25,218 @@ import type {
   GetUsersUserIdActivityLogs200Item,
   GetUsersUserIdActivityLogsParams,
   PostOrdersOrderIdActivityLogs201,
-  PostOrdersOrderIdActivityLogsBody,
+  PostOrdersOrderIdActivityLogsBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Retorna o histórico de atividades de um pedido específico
  * @summary Obter logs de atividade de um pedido
  */
 export const getOrdersOrderIdActivityLogs = (
-  orderId: number,
-  params?: GetOrdersOrderIdActivityLogsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    orderId: number,
+    params?: GetOrdersOrderIdActivityLogsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrdersOrderIdActivityLogs200Item[]>(
-    {url: `/orders/${orderId}/activity-logs`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrdersOrderIdActivityLogs200Item[]>(
+      {url: `/orders/${orderId}/activity-logs`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrdersOrderIdActivityLogsQueryKey = (
-  orderId: number,
-  params?: GetOrdersOrderIdActivityLogsParams,
+export const getGetOrdersOrderIdActivityLogsQueryKey = (orderId: number,
+    params?: GetOrdersOrderIdActivityLogsParams,) => {
+    return [`/orders/${orderId}/activity-logs`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetOrdersOrderIdActivityLogsQueryOptions = <TData = Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>, TError = ErrorType<void>>(orderId: number,
+    params?: GetOrdersOrderIdActivityLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  return [
-    `/orders/${orderId}/activity-logs`,
-    ...(params ? [params] : []),
-  ] as const;
-};
 
-export const getGetOrdersOrderIdActivityLogsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>,
-  TError = ErrorType<void>,
->(
-  orderId: number,
-  params?: GetOrdersOrderIdActivityLogsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetOrdersOrderIdActivityLogsQueryKey(orderId, params);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrdersOrderIdActivityLogsQueryKey(orderId,params);
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>
-  > = ({signal}) =>
-    getOrdersOrderIdActivityLogs(orderId, params, requestOptions, signal);
+  
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!orderId,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>> = ({ signal }) => getOrdersOrderIdActivityLogs(orderId,params, requestOptions, signal);
 
-export type GetOrdersOrderIdActivityLogsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>
->;
-export type GetOrdersOrderIdActivityLogsQueryError = ErrorType<void>;
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(orderId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrdersOrderIdActivityLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>>
+export type GetOrdersOrderIdActivityLogsQueryError = ErrorType<void>
+
 
 /**
  * @summary Obter logs de atividade de um pedido
  */
 
-export function useGetOrdersOrderIdActivityLogs<
-  TData = Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>,
-  TError = ErrorType<void>,
->(
-  orderId: number,
-  params?: GetOrdersOrderIdActivityLogsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrdersOrderIdActivityLogsQueryOptions(
-    orderId,
-    params,
-    options,
-  );
+export function useGetOrdersOrderIdActivityLogs<TData = Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>, TError = ErrorType<void>>(
+ orderId: number,
+    params?: GetOrdersOrderIdActivityLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrdersOrderIdActivityLogs>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrdersOrderIdActivityLogsQueryOptions(orderId,params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria um log de atividade customizado para um pedido. Apenas admins e suppliers podem criar logs.
  * @summary Criar log de atividade customizado
  */
 export const postOrdersOrderIdActivityLogs = (
-  orderId: number,
-  postOrdersOrderIdActivityLogsBody: BodyType<PostOrdersOrderIdActivityLogsBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    orderId: number,
+    postOrdersOrderIdActivityLogsBody: BodyType<PostOrdersOrderIdActivityLogsBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostOrdersOrderIdActivityLogs201>(
-    {
-      url: `/orders/${orderId}/activity-logs`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postOrdersOrderIdActivityLogsBody,
-      signal,
+      
+      
+      return axiosInstance<PostOrdersOrderIdActivityLogs201>(
+      {url: `/orders/${orderId}/activity-logs`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postOrdersOrderIdActivityLogsBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostOrdersOrderIdActivityLogsMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
-    TError,
-    {orderId: number; data: BodyType<PostOrdersOrderIdActivityLogsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
-  TError,
-  {orderId: number; data: BodyType<PostOrdersOrderIdActivityLogsBody>},
-  TContext
-> => {
-  const mutationKey = ['postOrdersOrderIdActivityLogs'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostOrdersOrderIdActivityLogsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>, TError,{orderId: number;data: BodyType<PostOrdersOrderIdActivityLogsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>, TError,{orderId: number;data: BodyType<PostOrdersOrderIdActivityLogsBody>}, TContext> => {
+
+const mutationKey = ['postOrdersOrderIdActivityLogs'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
-    {orderId: number; data: BodyType<PostOrdersOrderIdActivityLogsBody>}
-  > = props => {
-    const {orderId, data} = props ?? {};
+      
 
-    return postOrdersOrderIdActivityLogs(orderId, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>, {orderId: number;data: BodyType<PostOrdersOrderIdActivityLogsBody>}> = (props) => {
+          const {orderId,data} = props ?? {};
 
-export type PostOrdersOrderIdActivityLogsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>
->;
-export type PostOrdersOrderIdActivityLogsMutationBody =
-  BodyType<PostOrdersOrderIdActivityLogsBody>;
-export type PostOrdersOrderIdActivityLogsMutationError = ErrorType<void>;
+          return  postOrdersOrderIdActivityLogs(orderId,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostOrdersOrderIdActivityLogsMutationResult = NonNullable<Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>>
+    export type PostOrdersOrderIdActivityLogsMutationBody = BodyType<PostOrdersOrderIdActivityLogsBody>
+    export type PostOrdersOrderIdActivityLogsMutationError = ErrorType<void>
+
+    /**
  * @summary Criar log de atividade customizado
  */
-export const usePostOrdersOrderIdActivityLogs = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
-    TError,
-    {orderId: number; data: BodyType<PostOrdersOrderIdActivityLogsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
-  TError,
-  {orderId: number; data: BodyType<PostOrdersOrderIdActivityLogsBody>},
-  TContext
-> => {
-  const mutationOptions =
-    getPostOrdersOrderIdActivityLogsMutationOptions(options);
+export const usePostOrdersOrderIdActivityLogs = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>, TError,{orderId: number;data: BodyType<PostOrdersOrderIdActivityLogsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postOrdersOrderIdActivityLogs>>,
+        TError,
+        {orderId: number;data: BodyType<PostOrdersOrderIdActivityLogsBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostOrdersOrderIdActivityLogsMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna o histórico de atividades de um usuário específico. Apenas admins ou o próprio usuário podem acessar.
  * @summary Obter logs de atividade de um usuário
  */
 export const getUsersUserIdActivityLogs = (
-  userId: number,
-  params?: GetUsersUserIdActivityLogsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    userId: number,
+    params?: GetUsersUserIdActivityLogsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetUsersUserIdActivityLogs200Item[]>(
-    {url: `/users/${userId}/activity-logs`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetUsersUserIdActivityLogs200Item[]>(
+      {url: `/users/${userId}/activity-logs`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetUsersUserIdActivityLogsQueryKey = (
-  userId: number,
-  params?: GetUsersUserIdActivityLogsParams,
+export const getGetUsersUserIdActivityLogsQueryKey = (userId: number,
+    params?: GetUsersUserIdActivityLogsParams,) => {
+    return [`/users/${userId}/activity-logs`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetUsersUserIdActivityLogsQueryOptions = <TData = Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>, TError = ErrorType<void>>(userId: number,
+    params?: GetUsersUserIdActivityLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  return [
-    `/users/${userId}/activity-logs`,
-    ...(params ? [params] : []),
-  ] as const;
-};
 
-export const getGetUsersUserIdActivityLogsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>,
-  TError = ErrorType<void>,
->(
-  userId: number,
-  params?: GetUsersUserIdActivityLogsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetUsersUserIdActivityLogsQueryKey(userId, params);
+  const queryKey =  queryOptions?.queryKey ?? getGetUsersUserIdActivityLogsQueryKey(userId,params);
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>
-  > = ({signal}) =>
-    getUsersUserIdActivityLogs(userId, params, requestOptions, signal);
+  
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!userId,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>> = ({ signal }) => getUsersUserIdActivityLogs(userId,params, requestOptions, signal);
 
-export type GetUsersUserIdActivityLogsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>
->;
-export type GetUsersUserIdActivityLogsQueryError = ErrorType<void>;
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetUsersUserIdActivityLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>>
+export type GetUsersUserIdActivityLogsQueryError = ErrorType<void>
+
 
 /**
  * @summary Obter logs de atividade de um usuário
  */
 
-export function useGetUsersUserIdActivityLogs<
-  TData = Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>,
-  TError = ErrorType<void>,
->(
-  userId: number,
-  params?: GetUsersUserIdActivityLogsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetUsersUserIdActivityLogsQueryOptions(
-    userId,
-    params,
-    options,
-  );
+export function useGetUsersUserIdActivityLogs<TData = Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>, TError = ErrorType<void>>(
+ userId: number,
+    params?: GetUsersUserIdActivityLogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUsersUserIdActivityLogs>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetUsersUserIdActivityLogsQueryOptions(userId,params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+
