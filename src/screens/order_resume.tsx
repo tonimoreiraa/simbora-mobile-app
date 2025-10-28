@@ -55,7 +55,7 @@ function OrderResume() {
             deliveryAddress: selectedAddress
               ? `${selectedAddress.streetName}, ${selectedAddress.number || 'S/N'} - ${selectedAddress.city}, ${selectedAddress.state}`
               : 'Endereço não informado',
-            estimatedTime: '30-45 minutos',
+            estimatedTime: '1 dia',
           });
         }
       },

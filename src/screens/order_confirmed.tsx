@@ -103,7 +103,7 @@ function OrderConfirmed() {
           {orderNumber && (
             <View style={tw`bg-gray-100 rounded-xl px-4 py-2 mb-4`}>
               <Text style={tw`text-sm text-gray-500`}>Número do pedido</Text>
-              <Text style={tw`text-2xl font-bold text-gray-800`}>
+              <Text style={tw`text-2xl font-bold text-gray-800 text-center`}>
                 #{orderNumber}
               </Text>
             </View>
