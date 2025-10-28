@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -27,265 +30,208 @@ import type {
   PostOrders201,
   PostOrders400,
   PostOrders401,
-  PostOrdersBody,
+  PostOrdersBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista pedidos do usuário (ou todos se for admin) com paginação e filtros
  * @summary Listar pedidos
  */
 export const getOrders = (
-  params?: GetOrdersParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetOrdersParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrders200>(
-    {url: `/orders`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrders200>(
+      {url: `/orders`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrdersQueryKey = (params?: GetOrdersParams) => {
-  return [`/orders`, ...(params ? [params] : [])] as const;
-};
+export const getGetOrdersQueryKey = (params?: GetOrdersParams,) => {
+    return [`/orders`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetOrdersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrders>>,
-  TError = ErrorType<GetOrders401>,
->(
-  params?: GetOrdersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrdersQueryOptions = <TData = Awaited<ReturnType<typeof getOrders>>, TError = ErrorType<GetOrders401>>(params?: GetOrdersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({
-    signal,
-  }) => getOrders(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrders>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrdersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrders>>
->;
-export type GetOrdersQueryError = ErrorType<GetOrders401>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({ signal }) => getOrders(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>
+export type GetOrdersQueryError = ErrorType<GetOrders401>
+
 
 /**
  * @summary Listar pedidos
  */
 
-export function useGetOrders<
-  TData = Awaited<ReturnType<typeof getOrders>>,
-  TError = ErrorType<GetOrders401>,
->(
-  params?: GetOrdersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrders>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrdersQueryOptions(params, options);
+export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = ErrorType<GetOrders401>>(
+ params?: GetOrdersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrdersQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria um novo pedido para o usuário autenticado
  * @summary Criar novo pedido
  */
 export const postOrders = (
-  postOrdersBody: BodyType<PostOrdersBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postOrdersBody: BodyType<PostOrdersBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostOrders201>(
-    {
-      url: `/orders`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postOrdersBody,
-      signal,
+      
+      
+      return axiosInstance<PostOrders201>(
+      {url: `/orders`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postOrdersBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostOrdersMutationOptions = <
-  TError = ErrorType<PostOrders400 | PostOrders401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrders>>,
-    TError,
-    {data: BodyType<PostOrdersBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postOrders>>,
-  TError,
-  {data: BodyType<PostOrdersBody>},
-  TContext
-> => {
-  const mutationKey = ['postOrders'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostOrdersMutationOptions = <TError = ErrorType<PostOrders400 | PostOrders401>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrders>>, TError,{data: BodyType<PostOrdersBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postOrders>>, TError,{data: BodyType<PostOrdersBody>}, TContext> => {
+
+const mutationKey = ['postOrders'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postOrders>>,
-    {data: BodyType<PostOrdersBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postOrders(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postOrders>>, {data: BodyType<PostOrdersBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostOrdersMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postOrders>>
->;
-export type PostOrdersMutationBody = BodyType<PostOrdersBody>;
-export type PostOrdersMutationError = ErrorType<PostOrders400 | PostOrders401>;
+          return  postOrders(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostOrdersMutationResult = NonNullable<Awaited<ReturnType<typeof postOrders>>>
+    export type PostOrdersMutationBody = BodyType<PostOrdersBody>
+    export type PostOrdersMutationError = ErrorType<PostOrders400 | PostOrders401>
+
+    /**
  * @summary Criar novo pedido
  */
-export const usePostOrders = <
-  TError = ErrorType<PostOrders400 | PostOrders401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrders>>,
-    TError,
-    {data: BodyType<PostOrdersBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postOrders>>,
-  TError,
-  {data: BodyType<PostOrdersBody>},
-  TContext
-> => {
-  const mutationOptions = getPostOrdersMutationOptions(options);
+export const usePostOrders = <TError = ErrorType<PostOrders400 | PostOrders401>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrders>>, TError,{data: BodyType<PostOrdersBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postOrders>>,
+        TError,
+        {data: BodyType<PostOrdersBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostOrdersMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna detalhes completos de um pedido específico com itens, pagamento, envio e atualizações
  * @summary Buscar pedido por ID
  */
 export const getOrdersId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrdersId200>(
-    {url: `/orders/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrdersId200>(
+      {url: `/orders/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetOrdersIdQueryKey = (id: number) => {
-  return [`/orders/${id}`] as const;
-};
+export const getGetOrdersIdQueryKey = (id: number,) => {
+    return [`/orders/${id}`] as const;
+    }
 
-export const getGetOrdersIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrdersId>>,
-  TError = ErrorType<GetOrdersId401 | GetOrdersId403 | GetOrdersId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrdersId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrdersIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrdersId>>, TError = ErrorType<GetOrdersId401 | GetOrdersId403 | GetOrdersId404>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrdersId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrdersIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrdersId>>> = ({
-    signal,
-  }) => getOrdersId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrdersIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrdersId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrdersIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrdersId>>
->;
-export type GetOrdersIdQueryError = ErrorType<
-  GetOrdersId401 | GetOrdersId403 | GetOrdersId404
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrdersId>>> = ({ signal }) => getOrdersId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrdersId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrdersIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrdersId>>>
+export type GetOrdersIdQueryError = ErrorType<GetOrdersId401 | GetOrdersId403 | GetOrdersId404>
+
 
 /**
  * @summary Buscar pedido por ID
  */
 
-export function useGetOrdersId<
-  TData = Awaited<ReturnType<typeof getOrdersId>>,
-  TError = ErrorType<GetOrdersId401 | GetOrdersId403 | GetOrdersId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrdersId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrdersIdQueryOptions(id, options);
+export function useGetOrdersId<TData = Awaited<ReturnType<typeof getOrdersId>>, TError = ErrorType<GetOrdersId401 | GetOrdersId403 | GetOrdersId404>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrdersId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrdersIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

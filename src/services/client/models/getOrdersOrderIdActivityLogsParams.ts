@@ -7,10 +7,10 @@
  */
 
 export type GetOrdersOrderIdActivityLogsParams = {
-  /**
-   * Número máximo de logs a retornar
-   * @minimum 1
-   * @maximum 100
-   */
-  limit?: number;
+/**
+ * Número máximo de logs a retornar
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
 };

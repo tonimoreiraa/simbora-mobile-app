@@ -5,26 +5,26 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetOrdersStatus} from './getOrdersStatus';
+import type { GetOrdersStatus } from './getOrdersStatus';
 
 export type GetOrdersParams = {
-  /**
-   * Número da página
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Itens por página (máximo 100)
-   * @minimum 1
-   * @maximum 100
-   */
-  perPage?: number;
-  /**
-   * Filtrar por status do pedido
-   */
-  status?: GetOrdersStatus;
-  /**
-   * Incluir detalhes dos itens, pagamento e envio
-   */
-  withDetails?: boolean;
+/**
+ * Número da página
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Itens por página (máximo 100)
+ * @minimum 1
+ * @maximum 100
+ */
+perPage?: number;
+/**
+ * Filtrar por status do pedido
+ */
+status?: GetOrdersStatus;
+/**
+ * Incluir detalhes dos itens, pagamento e envio
+ */
+withDetails?: boolean;
 };

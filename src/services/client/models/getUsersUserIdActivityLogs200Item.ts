@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetUsersUserIdActivityLogs200ItemOrder} from './getUsersUserIdActivityLogs200ItemOrder';
+import type { GetUsersUserIdActivityLogs200ItemOrder } from './getUsersUserIdActivityLogs200ItemOrder';
 
 export type GetUsersUserIdActivityLogs200Item = {
   id?: number;

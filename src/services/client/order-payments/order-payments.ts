@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -22,350 +25,272 @@ import type {
   GetOrderPaymentsIdAnalytics200,
   GetOrderPaymentsParams,
   PutOrderPaymentsIdUpdateStatus200,
-  PutOrderPaymentsIdUpdateStatusBody,
+  PutOrderPaymentsIdUpdateStatusBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista pagamentos de pedidos com filtros. Admins veem todos, suppliers veem apenas seus pagamentos, customers veem apenas seus pagamentos.
  * @summary Listar pagamentos
  */
 export const getOrderPayments = (
-  params?: GetOrderPaymentsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetOrderPaymentsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderPayments200>(
-    {url: `/order-payments`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderPayments200>(
+      {url: `/order-payments`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderPaymentsQueryKey = (
-  params?: GetOrderPaymentsParams,
+export const getGetOrderPaymentsQueryKey = (params?: GetOrderPaymentsParams,) => {
+    return [`/order-payments`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetOrderPaymentsQueryOptions = <TData = Awaited<ReturnType<typeof getOrderPayments>>, TError = ErrorType<void>>(params?: GetOrderPaymentsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPayments>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  return [`/order-payments`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetOrderPaymentsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderPayments>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderPaymentsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPayments>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetOrderPaymentsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderPaymentsQueryKey(params);
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderPayments>>
-  > = ({signal}) => getOrderPayments(params, requestOptions, signal);
+  
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderPayments>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderPayments>>> = ({ signal }) => getOrderPayments(params, requestOptions, signal);
 
-export type GetOrderPaymentsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderPayments>>
->;
-export type GetOrderPaymentsQueryError = ErrorType<void>;
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderPayments>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderPaymentsQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderPayments>>>
+export type GetOrderPaymentsQueryError = ErrorType<void>
+
 
 /**
  * @summary Listar pagamentos
  */
 
-export function useGetOrderPayments<
-  TData = Awaited<ReturnType<typeof getOrderPayments>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderPaymentsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPayments>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderPaymentsQueryOptions(params, options);
+export function useGetOrderPayments<TData = Awaited<ReturnType<typeof getOrderPayments>>, TError = ErrorType<void>>(
+ params?: GetOrderPaymentsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPayments>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderPaymentsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Retorna detalhes completos de um pagamento específico
  * @summary Buscar pagamento por ID
  */
 export const getOrderPaymentsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderPaymentsId200>(
-    {url: `/order-payments/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderPaymentsId200>(
+      {url: `/order-payments/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderPaymentsIdQueryKey = (id: number) => {
-  return [`/order-payments/${id}`] as const;
-};
+export const getGetOrderPaymentsIdQueryKey = (id: number,) => {
+    return [`/order-payments/${id}`] as const;
+    }
 
-export const getGetOrderPaymentsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderPaymentsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPaymentsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrderPaymentsIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderPaymentsId>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrderPaymentsIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderPaymentsId>>
-  > = ({signal}) => getOrderPaymentsId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderPaymentsIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderPaymentsId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrderPaymentsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderPaymentsId>>
->;
-export type GetOrderPaymentsIdQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderPaymentsId>>> = ({ signal }) => getOrderPaymentsId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderPaymentsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderPaymentsId>>>
+export type GetOrderPaymentsIdQueryError = ErrorType<void>
+
 
 /**
  * @summary Buscar pagamento por ID
  */
 
-export function useGetOrderPaymentsId<
-  TData = Awaited<ReturnType<typeof getOrderPaymentsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPaymentsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderPaymentsIdQueryOptions(id, options);
+export function useGetOrderPaymentsId<TData = Awaited<ReturnType<typeof getOrderPaymentsId>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderPaymentsIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Atualiza o status de um pagamento específico. Apenas admins podem fazer esta operação.
  * @summary Atualizar status do pagamento
  */
 export const putOrderPaymentsIdUpdateStatus = (
-  id: number,
-  putOrderPaymentsIdUpdateStatusBody: BodyType<PutOrderPaymentsIdUpdateStatusBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<PutOrderPaymentsIdUpdateStatus200>(
-    {
-      url: `/order-payments/${id}/update-status`,
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      data: putOrderPaymentsIdUpdateStatusBody,
+    id: number,
+    putOrderPaymentsIdUpdateStatusBody: BodyType<PutOrderPaymentsIdUpdateStatusBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<PutOrderPaymentsIdUpdateStatus200>(
+      {url: `/order-payments/${id}/update-status`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: putOrderPaymentsIdUpdateStatusBody
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPutOrderPaymentsIdUpdateStatusMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
-    TError,
-    {id: number; data: BodyType<PutOrderPaymentsIdUpdateStatusBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
-  TError,
-  {id: number; data: BodyType<PutOrderPaymentsIdUpdateStatusBody>},
-  TContext
-> => {
-  const mutationKey = ['putOrderPaymentsIdUpdateStatus'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutOrderPaymentsIdUpdateStatusMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>, TError,{id: number;data: BodyType<PutOrderPaymentsIdUpdateStatusBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>, TError,{id: number;data: BodyType<PutOrderPaymentsIdUpdateStatusBody>}, TContext> => {
+
+const mutationKey = ['putOrderPaymentsIdUpdateStatus'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
-    {id: number; data: BodyType<PutOrderPaymentsIdUpdateStatusBody>}
-  > = props => {
-    const {id, data} = props ?? {};
+      
 
-    return putOrderPaymentsIdUpdateStatus(id, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>, {id: number;data: BodyType<PutOrderPaymentsIdUpdateStatusBody>}> = (props) => {
+          const {id,data} = props ?? {};
 
-export type PutOrderPaymentsIdUpdateStatusMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>
->;
-export type PutOrderPaymentsIdUpdateStatusMutationBody =
-  BodyType<PutOrderPaymentsIdUpdateStatusBody>;
-export type PutOrderPaymentsIdUpdateStatusMutationError = ErrorType<void>;
+          return  putOrderPaymentsIdUpdateStatus(id,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutOrderPaymentsIdUpdateStatusMutationResult = NonNullable<Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>>
+    export type PutOrderPaymentsIdUpdateStatusMutationBody = BodyType<PutOrderPaymentsIdUpdateStatusBody>
+    export type PutOrderPaymentsIdUpdateStatusMutationError = ErrorType<void>
+
+    /**
  * @summary Atualizar status do pagamento
  */
-export const usePutOrderPaymentsIdUpdateStatus = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
-    TError,
-    {id: number; data: BodyType<PutOrderPaymentsIdUpdateStatusBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
-  TError,
-  {id: number; data: BodyType<PutOrderPaymentsIdUpdateStatusBody>},
-  TContext
-> => {
-  const mutationOptions =
-    getPutOrderPaymentsIdUpdateStatusMutationOptions(options);
+export const usePutOrderPaymentsIdUpdateStatus = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>, TError,{id: number;data: BodyType<PutOrderPaymentsIdUpdateStatusBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putOrderPaymentsIdUpdateStatus>>,
+        TError,
+        {id: number;data: BodyType<PutOrderPaymentsIdUpdateStatusBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutOrderPaymentsIdUpdateStatusMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna dados analíticos detalhados de um pagamento específico
  * @summary Obter análises do pagamento
  */
 export const getOrderPaymentsIdAnalytics = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderPaymentsIdAnalytics200>(
-    {url: `/order-payments/${id}/analytics`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderPaymentsIdAnalytics200>(
+      {url: `/order-payments/${id}/analytics`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderPaymentsIdAnalyticsQueryKey = (id: number) => {
-  return [`/order-payments/${id}/analytics`] as const;
-};
+export const getGetOrderPaymentsIdAnalyticsQueryKey = (id: number,) => {
+    return [`/order-payments/${id}/analytics`] as const;
+    }
 
-export const getGetOrderPaymentsIdAnalyticsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrderPaymentsIdAnalyticsQueryOptions = <TData = Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetOrderPaymentsIdAnalyticsQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>
-  > = ({signal}) => getOrderPaymentsIdAnalytics(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderPaymentsIdAnalyticsQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrderPaymentsIdAnalyticsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>
->;
-export type GetOrderPaymentsIdAnalyticsQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>> = ({ signal }) => getOrderPaymentsIdAnalytics(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderPaymentsIdAnalyticsQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>>
+export type GetOrderPaymentsIdAnalyticsQueryError = ErrorType<void>
+
 
 /**
  * @summary Obter análises do pagamento
  */
 
-export function useGetOrderPaymentsIdAnalytics<
-  TData = Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderPaymentsIdAnalyticsQueryOptions(id, options);
+export function useGetOrderPaymentsIdAnalytics<TData = Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderPaymentsIdAnalytics>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderPaymentsIdAnalyticsQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

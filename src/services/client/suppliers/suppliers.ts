@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -34,478 +37,358 @@ import type {
   PutSuppliersId401,
   PutSuppliersId403,
   PutSuppliersId404,
-  PutSuppliersIdBody,
+  PutSuppliersIdBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista todos os fornecedores com paginação e filtros opcionais
  * @summary Listar fornecedores
  */
 export const getSuppliers = (
-  params?: GetSuppliersParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetSuppliersParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetSuppliers200>(
-    {url: `/suppliers`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetSuppliers200>(
+      {url: `/suppliers`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetSuppliersQueryKey = (params?: GetSuppliersParams) => {
-  return [`/suppliers`, ...(params ? [params] : [])] as const;
-};
+export const getGetSuppliersQueryKey = (params?: GetSuppliersParams,) => {
+    return [`/suppliers`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetSuppliersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getSuppliers>>,
-  TError = ErrorType<unknown>,
->(
-  params?: GetSuppliersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getSuppliers>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetSuppliersQueryOptions = <TData = Awaited<ReturnType<typeof getSuppliers>>, TError = ErrorType<unknown>>(params?: GetSuppliersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSuppliers>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetSuppliersQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSuppliers>>> = ({
-    signal,
-  }) => getSuppliers(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetSuppliersQueryKey(params);
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getSuppliers>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetSuppliersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getSuppliers>>
->;
-export type GetSuppliersQueryError = ErrorType<unknown>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSuppliers>>> = ({ signal }) => getSuppliers(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSuppliers>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSuppliersQueryResult = NonNullable<Awaited<ReturnType<typeof getSuppliers>>>
+export type GetSuppliersQueryError = ErrorType<unknown>
+
 
 /**
  * @summary Listar fornecedores
  */
 
-export function useGetSuppliers<
-  TData = Awaited<ReturnType<typeof getSuppliers>>,
-  TError = ErrorType<unknown>,
->(
-  params?: GetSuppliersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getSuppliers>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetSuppliersQueryOptions(params, options);
+export function useGetSuppliers<TData = Awaited<ReturnType<typeof getSuppliers>>, TError = ErrorType<unknown>>(
+ params?: GetSuppliersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSuppliers>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetSuppliersQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria um novo fornecedor com upload opcional de foto
  * @summary Criar novo fornecedor
  */
 export const postSuppliers = (
-  postSuppliersBody: BodyType<PostSuppliersBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postSuppliersBody: BodyType<PostSuppliersBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  const formData = new FormData();
-  formData.append(`name`, postSuppliersBody.name);
-  if (postSuppliersBody.description !== undefined) {
-    formData.append(`description`, postSuppliersBody.description);
-  }
-  formData.append(`address`, postSuppliersBody.address);
-  if (postSuppliersBody.photo !== undefined) {
-    formData.append(`photo`, postSuppliersBody.photo);
-  }
+      
+      const formData = new FormData();
+formData.append(`name`, postSuppliersBody.name)
+if(postSuppliersBody.description !== undefined) {
+ formData.append(`description`, postSuppliersBody.description)
+ }
+formData.append(`address`, postSuppliersBody.address)
+if(postSuppliersBody.photo !== undefined) {
+ formData.append(`photo`, postSuppliersBody.photo)
+ }
 
-  return axiosInstance<PostSuppliers201>(
-    {
-      url: `/suppliers`,
-      method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data'},
-      data: formData,
-      signal,
+      return axiosInstance<PostSuppliers201>(
+      {url: `/suppliers`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostSuppliersMutationOptions = <
-  TError = ErrorType<PostSuppliers400 | PostSuppliers401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postSuppliers>>,
-    TError,
-    {data: BodyType<PostSuppliersBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postSuppliers>>,
-  TError,
-  {data: BodyType<PostSuppliersBody>},
-  TContext
-> => {
-  const mutationKey = ['postSuppliers'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostSuppliersMutationOptions = <TError = ErrorType<PostSuppliers400 | PostSuppliers401>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postSuppliers>>, TError,{data: BodyType<PostSuppliersBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postSuppliers>>, TError,{data: BodyType<PostSuppliersBody>}, TContext> => {
+
+const mutationKey = ['postSuppliers'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postSuppliers>>,
-    {data: BodyType<PostSuppliersBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postSuppliers(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postSuppliers>>, {data: BodyType<PostSuppliersBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostSuppliersMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postSuppliers>>
->;
-export type PostSuppliersMutationBody = BodyType<PostSuppliersBody>;
-export type PostSuppliersMutationError = ErrorType<
-  PostSuppliers400 | PostSuppliers401
->;
+          return  postSuppliers(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostSuppliersMutationResult = NonNullable<Awaited<ReturnType<typeof postSuppliers>>>
+    export type PostSuppliersMutationBody = BodyType<PostSuppliersBody>
+    export type PostSuppliersMutationError = ErrorType<PostSuppliers400 | PostSuppliers401>
+
+    /**
  * @summary Criar novo fornecedor
  */
-export const usePostSuppliers = <
-  TError = ErrorType<PostSuppliers400 | PostSuppliers401>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postSuppliers>>,
-    TError,
-    {data: BodyType<PostSuppliersBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postSuppliers>>,
-  TError,
-  {data: BodyType<PostSuppliersBody>},
-  TContext
-> => {
-  const mutationOptions = getPostSuppliersMutationOptions(options);
+export const usePostSuppliers = <TError = ErrorType<PostSuppliers400 | PostSuppliers401>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postSuppliers>>, TError,{data: BodyType<PostSuppliersBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postSuppliers>>,
+        TError,
+        {data: BodyType<PostSuppliersBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostSuppliersMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna os dados de um fornecedor específico
  * @summary Obter fornecedor por ID
  */
 export const getSuppliersId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetSuppliersId200>(
-    {url: `/suppliers/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetSuppliersId200>(
+      {url: `/suppliers/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetSuppliersIdQueryKey = (id: number) => {
-  return [`/suppliers/${id}`] as const;
-};
+export const getGetSuppliersIdQueryKey = (id: number,) => {
+    return [`/suppliers/${id}`] as const;
+    }
 
-export const getGetSuppliersIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getSuppliersId>>,
-  TError = ErrorType<GetSuppliersId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getSuppliersId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetSuppliersIdQueryOptions = <TData = Awaited<ReturnType<typeof getSuppliersId>>, TError = ErrorType<GetSuppliersId404>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSuppliersId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetSuppliersIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSuppliersId>>> = ({
-    signal,
-  }) => getSuppliersId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetSuppliersIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getSuppliersId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetSuppliersIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getSuppliersId>>
->;
-export type GetSuppliersIdQueryError = ErrorType<GetSuppliersId404>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSuppliersId>>> = ({ signal }) => getSuppliersId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSuppliersId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSuppliersIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSuppliersId>>>
+export type GetSuppliersIdQueryError = ErrorType<GetSuppliersId404>
+
 
 /**
  * @summary Obter fornecedor por ID
  */
 
-export function useGetSuppliersId<
-  TData = Awaited<ReturnType<typeof getSuppliersId>>,
-  TError = ErrorType<GetSuppliersId404>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getSuppliersId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetSuppliersIdQueryOptions(id, options);
+export function useGetSuppliersId<TData = Awaited<ReturnType<typeof getSuppliersId>>, TError = ErrorType<GetSuppliersId404>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSuppliersId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetSuppliersIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Atualiza os dados de um fornecedor existente
  * @summary Atualizar fornecedor
  */
 export const putSuppliersId = (
-  id: number,
-  putSuppliersIdBody: BodyType<PutSuppliersIdBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  const formData = new FormData();
-  if (putSuppliersIdBody.name !== undefined) {
-    formData.append(`name`, putSuppliersIdBody.name);
-  }
-  if (putSuppliersIdBody.description !== undefined) {
-    formData.append(`description`, putSuppliersIdBody.description);
-  }
-  if (putSuppliersIdBody.address !== undefined) {
-    formData.append(`address`, putSuppliersIdBody.address);
-  }
-  if (putSuppliersIdBody.photo !== undefined) {
-    formData.append(`photo`, putSuppliersIdBody.photo);
-  }
+    id: number,
+    putSuppliersIdBody: BodyType<PutSuppliersIdBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      const formData = new FormData();
+if(putSuppliersIdBody.name !== undefined) {
+ formData.append(`name`, putSuppliersIdBody.name)
+ }
+if(putSuppliersIdBody.description !== undefined) {
+ formData.append(`description`, putSuppliersIdBody.description)
+ }
+if(putSuppliersIdBody.address !== undefined) {
+ formData.append(`address`, putSuppliersIdBody.address)
+ }
+if(putSuppliersIdBody.photo !== undefined) {
+ formData.append(`photo`, putSuppliersIdBody.photo)
+ }
 
-  return axiosInstance<PutSuppliersId200>(
-    {
-      url: `/suppliers/${id}`,
-      method: 'PUT',
-      headers: {'Content-Type': 'multipart/form-data'},
-      data: formData,
+      return axiosInstance<PutSuppliersId200>(
+      {url: `/suppliers/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPutSuppliersIdMutationOptions = <
-  TError = ErrorType<
-    | PutSuppliersId400
-    | PutSuppliersId401
-    | PutSuppliersId403
-    | PutSuppliersId404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putSuppliersId>>,
-    TError,
-    {id: number; data: BodyType<PutSuppliersIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putSuppliersId>>,
-  TError,
-  {id: number; data: BodyType<PutSuppliersIdBody>},
-  TContext
-> => {
-  const mutationKey = ['putSuppliersId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutSuppliersIdMutationOptions = <TError = ErrorType<PutSuppliersId400 | PutSuppliersId401 | PutSuppliersId403 | PutSuppliersId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putSuppliersId>>, TError,{id: number;data: BodyType<PutSuppliersIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putSuppliersId>>, TError,{id: number;data: BodyType<PutSuppliersIdBody>}, TContext> => {
+
+const mutationKey = ['putSuppliersId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putSuppliersId>>,
-    {id: number; data: BodyType<PutSuppliersIdBody>}
-  > = props => {
-    const {id, data} = props ?? {};
+      
 
-    return putSuppliersId(id, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putSuppliersId>>, {id: number;data: BodyType<PutSuppliersIdBody>}> = (props) => {
+          const {id,data} = props ?? {};
 
-export type PutSuppliersIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putSuppliersId>>
->;
-export type PutSuppliersIdMutationBody = BodyType<PutSuppliersIdBody>;
-export type PutSuppliersIdMutationError = ErrorType<
-  PutSuppliersId400 | PutSuppliersId401 | PutSuppliersId403 | PutSuppliersId404
->;
+          return  putSuppliersId(id,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutSuppliersIdMutationResult = NonNullable<Awaited<ReturnType<typeof putSuppliersId>>>
+    export type PutSuppliersIdMutationBody = BodyType<PutSuppliersIdBody>
+    export type PutSuppliersIdMutationError = ErrorType<PutSuppliersId400 | PutSuppliersId401 | PutSuppliersId403 | PutSuppliersId404>
+
+    /**
  * @summary Atualizar fornecedor
  */
-export const usePutSuppliersId = <
-  TError = ErrorType<
-    | PutSuppliersId400
-    | PutSuppliersId401
-    | PutSuppliersId403
-    | PutSuppliersId404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putSuppliersId>>,
-    TError,
-    {id: number; data: BodyType<PutSuppliersIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putSuppliersId>>,
-  TError,
-  {id: number; data: BodyType<PutSuppliersIdBody>},
-  TContext
-> => {
-  const mutationOptions = getPutSuppliersIdMutationOptions(options);
+export const usePutSuppliersId = <TError = ErrorType<PutSuppliersId400 | PutSuppliersId401 | PutSuppliersId403 | PutSuppliersId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putSuppliersId>>, TError,{id: number;data: BodyType<PutSuppliersIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putSuppliersId>>,
+        TError,
+        {id: number;data: BodyType<PutSuppliersIdBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutSuppliersIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Exclui um fornecedor existente
  * @summary Excluir fornecedor
  */
 export const deleteSuppliersId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<DeleteSuppliersId200>(
-    {url: `/suppliers/${id}`, method: 'DELETE'},
-    options,
-  );
-};
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<DeleteSuppliersId200>(
+      {url: `/suppliers/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteSuppliersIdMutationOptions = <
-  TError = ErrorType<
-    DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteSuppliersId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteSuppliersId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationKey = ['deleteSuppliersId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getDeleteSuppliersIdMutationOptions = <TError = ErrorType<DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSuppliersId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSuppliersId>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteSuppliersId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteSuppliersId>>,
-    {id: number}
-  > = props => {
-    const {id} = props ?? {};
+      
 
-    return deleteSuppliersId(id, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSuppliersId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
 
-export type DeleteSuppliersIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteSuppliersId>>
->;
+          return  deleteSuppliersId(id,requestOptions)
+        }
 
-export type DeleteSuppliersIdMutationError = ErrorType<
-  DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404
->;
+        
 
-/**
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSuppliersIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSuppliersId>>>
+    
+    export type DeleteSuppliersIdMutationError = ErrorType<DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404>
+
+    /**
  * @summary Excluir fornecedor
  */
-export const useDeleteSuppliersId = <
-  TError = ErrorType<
-    DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteSuppliersId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteSuppliersId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationOptions = getDeleteSuppliersIdMutationOptions(options);
+export const useDeleteSuppliersId = <TError = ErrorType<DeleteSuppliersId401 | DeleteSuppliersId403 | DeleteSuppliersId404>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSuppliersId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSuppliersId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getDeleteSuppliersIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUp201UserRole} from './postAuthSignUp201UserRole';
+import type { PostAuthSignUp201UserRole } from './postAuthSignUp201UserRole';
 
 export type PostAuthSignUp201User = {
   /** ID único do usuário */

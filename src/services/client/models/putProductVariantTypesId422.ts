@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PutProductVariantTypesId422Errors} from './putProductVariantTypesId422Errors';
+import type { PutProductVariantTypesId422Errors } from './putProductVariantTypesId422Errors';
 
 export type PutProductVariantTypesId422 = {
   message?: string;

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostProductsBodyVariantsItem} from './postProductsBodyVariantsItem';
+import type { PostProductsBodyVariantsItem } from './postProductsBodyVariantsItem';
 
 export type PostProductsBody = {
   /** Nome do produto */

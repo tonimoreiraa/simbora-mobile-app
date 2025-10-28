@@ -9,8 +9,8 @@
 /**
  * Papel do usuário no sistema
  */
-export type PutProfile200Role =
-  (typeof PutProfile200Role)[keyof typeof PutProfile200Role];
+export type PutProfile200Role = typeof PutProfile200Role[keyof typeof PutProfile200Role];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PutProfile200Role = {

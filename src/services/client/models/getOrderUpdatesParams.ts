@@ -7,23 +7,23 @@
  */
 
 export type GetOrderUpdatesParams = {
-  /**
-   * Filtrar por ID do pedido
-   */
-  orderId?: number;
-  /**
-   * Número da página
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Itens por página
-   * @minimum 1
-   * @maximum 100
-   */
-  perPage?: number;
-  /**
-   * Incluir atualizações privadas (apenas admins)
-   */
-  includePrivate?: boolean;
+/**
+ * Filtrar por ID do pedido
+ */
+orderId?: number;
+/**
+ * Número da página
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Itens por página
+ * @minimum 1
+ * @maximum 100
+ */
+perPage?: number;
+/**
+ * Incluir atualizações privadas (apenas admins)
+ */
+includePrivate?: boolean;
 };

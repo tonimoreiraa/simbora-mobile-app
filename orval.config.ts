@@ -2,9 +2,6 @@ import {defineConfig} from 'orval';
 
 export default defineConfig({
   simbora: {
-    hooks: {
-      afterAllFilesWrite: 'prettier --write .',
-    },
     input: {
       target: './src/services/openapi.json',
       // validation: true,

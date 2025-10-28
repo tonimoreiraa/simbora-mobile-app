@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostAuthSignIn400Errors = {[key: string]: unknown};
+export type PostAuthSignIn400Errors = { [key: string]: unknown };

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostOrdersOrderIdActivityLogsBodyMetadata} from './postOrdersOrderIdActivityLogsBodyMetadata';
+import type { PostOrdersOrderIdActivityLogsBodyMetadata } from './postOrdersOrderIdActivityLogsBodyMetadata';
 
 export type PostOrdersOrderIdActivityLogsBody = {
   /** Ação realizada */

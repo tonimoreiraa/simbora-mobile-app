@@ -7,27 +7,27 @@
  */
 
 export type GetProductsParams = {
-  /**
-   * Termo de busca (nome ou descrição)
-   */
-  query?: string;
-  /**
-   * Filtrar por categoria
-   */
-  categoryId?: number;
-  /**
-   * Número da página
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Itens por página
-   * @minimum 1
-   * @maximum 100
-   */
-  perPage?: number;
-  /**
-   * Agrupar resultados por categoria
-   */
-  groupByCategory?: boolean;
+/**
+ * Termo de busca (nome ou descrição)
+ */
+query?: string;
+/**
+ * Filtrar por categoria
+ */
+categoryId?: number;
+/**
+ * Número da página
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Itens por página
+ * @minimum 1
+ * @maximum 100
+ */
+perPage?: number;
+/**
+ * Agrupar resultados por categoria
+ */
+groupByCategory?: boolean;
 };

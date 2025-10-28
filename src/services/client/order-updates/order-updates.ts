@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -25,278 +28,208 @@ import type {
   PostOrderUpdates401,
   PostOrderUpdates404,
   PostOrderUpdates422,
-  PostOrderUpdatesBody,
+  PostOrderUpdatesBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Cria uma nova atualização para um pedido, alterando seu status e adicionando informações
  * @summary Criar atualização de pedido
  */
 export const postOrderUpdates = (
-  postOrderUpdatesBody: BodyType<PostOrderUpdatesBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postOrderUpdatesBody: BodyType<PostOrderUpdatesBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostOrderUpdates201>(
-    {
-      url: `/order-updates`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postOrderUpdatesBody,
-      signal,
+      
+      
+      return axiosInstance<PostOrderUpdates201>(
+      {url: `/order-updates`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postOrderUpdatesBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostOrderUpdatesMutationOptions = <
-  TError = ErrorType<
-    | PostOrderUpdates400
-    | PostOrderUpdates401
-    | PostOrderUpdates404
-    | PostOrderUpdates422
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderUpdates>>,
-    TError,
-    {data: BodyType<PostOrderUpdatesBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postOrderUpdates>>,
-  TError,
-  {data: BodyType<PostOrderUpdatesBody>},
-  TContext
-> => {
-  const mutationKey = ['postOrderUpdates'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostOrderUpdatesMutationOptions = <TError = ErrorType<PostOrderUpdates400 | PostOrderUpdates401 | PostOrderUpdates404 | PostOrderUpdates422>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderUpdates>>, TError,{data: BodyType<PostOrderUpdatesBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postOrderUpdates>>, TError,{data: BodyType<PostOrderUpdatesBody>}, TContext> => {
+
+const mutationKey = ['postOrderUpdates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postOrderUpdates>>,
-    {data: BodyType<PostOrderUpdatesBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postOrderUpdates(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postOrderUpdates>>, {data: BodyType<PostOrderUpdatesBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostOrderUpdatesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postOrderUpdates>>
->;
-export type PostOrderUpdatesMutationBody = BodyType<PostOrderUpdatesBody>;
-export type PostOrderUpdatesMutationError = ErrorType<
-  | PostOrderUpdates400
-  | PostOrderUpdates401
-  | PostOrderUpdates404
-  | PostOrderUpdates422
->;
+          return  postOrderUpdates(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostOrderUpdatesMutationResult = NonNullable<Awaited<ReturnType<typeof postOrderUpdates>>>
+    export type PostOrderUpdatesMutationBody = BodyType<PostOrderUpdatesBody>
+    export type PostOrderUpdatesMutationError = ErrorType<PostOrderUpdates400 | PostOrderUpdates401 | PostOrderUpdates404 | PostOrderUpdates422>
+
+    /**
  * @summary Criar atualização de pedido
  */
-export const usePostOrderUpdates = <
-  TError = ErrorType<
-    | PostOrderUpdates400
-    | PostOrderUpdates401
-    | PostOrderUpdates404
-    | PostOrderUpdates422
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postOrderUpdates>>,
-    TError,
-    {data: BodyType<PostOrderUpdatesBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postOrderUpdates>>,
-  TError,
-  {data: BodyType<PostOrderUpdatesBody>},
-  TContext
-> => {
-  const mutationOptions = getPostOrderUpdatesMutationOptions(options);
+export const usePostOrderUpdates = <TError = ErrorType<PostOrderUpdates400 | PostOrderUpdates401 | PostOrderUpdates404 | PostOrderUpdates422>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postOrderUpdates>>, TError,{data: BodyType<PostOrderUpdatesBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postOrderUpdates>>,
+        TError,
+        {data: BodyType<PostOrderUpdatesBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostOrderUpdatesMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Lista atualizações de pedidos com filtros por pedido ou usuário
  * @summary Listar atualizações de pedidos
  */
 export const getOrderUpdates = (
-  params?: GetOrderUpdatesParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetOrderUpdatesParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderUpdates200>(
-    {url: `/order-updates`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderUpdates200>(
+      {url: `/order-updates`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderUpdatesQueryKey = (params?: GetOrderUpdatesParams) => {
-  return [`/order-updates`, ...(params ? [params] : [])] as const;
-};
+export const getGetOrderUpdatesQueryKey = (params?: GetOrderUpdatesParams,) => {
+    return [`/order-updates`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetOrderUpdatesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderUpdates>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderUpdatesParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderUpdates>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrderUpdatesQueryOptions = <TData = Awaited<ReturnType<typeof getOrderUpdates>>, TError = ErrorType<void>>(params?: GetOrderUpdatesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdates>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrderUpdatesQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderUpdates>>> = ({
-    signal,
-  }) => getOrderUpdates(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderUpdatesQueryKey(params);
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderUpdates>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrderUpdatesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderUpdates>>
->;
-export type GetOrderUpdatesQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderUpdates>>> = ({ signal }) => getOrderUpdates(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdates>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderUpdatesQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderUpdates>>>
+export type GetOrderUpdatesQueryError = ErrorType<void>
+
 
 /**
  * @summary Listar atualizações de pedidos
  */
 
-export function useGetOrderUpdates<
-  TData = Awaited<ReturnType<typeof getOrderUpdates>>,
-  TError = ErrorType<void>,
->(
-  params?: GetOrderUpdatesParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderUpdates>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderUpdatesQueryOptions(params, options);
+export function useGetOrderUpdates<TData = Awaited<ReturnType<typeof getOrderUpdates>>, TError = ErrorType<void>>(
+ params?: GetOrderUpdatesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdates>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderUpdatesQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Retorna detalhes de uma atualização específica
  * @summary Buscar atualização por ID
  */
 export const getOrderUpdatesId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetOrderUpdatesId200>(
-    {url: `/order-updates/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetOrderUpdatesId200>(
+      {url: `/order-updates/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetOrderUpdatesIdQueryKey = (id: number) => {
-  return [`/order-updates/${id}`] as const;
-};
+export const getGetOrderUpdatesIdQueryKey = (id: number,) => {
+    return [`/order-updates/${id}`] as const;
+    }
 
-export const getGetOrderUpdatesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrderUpdatesId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderUpdatesId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetOrderUpdatesIdQueryOptions = <TData = Awaited<ReturnType<typeof getOrderUpdatesId>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdatesId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrderUpdatesIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getOrderUpdatesId>>
-  > = ({signal}) => getOrderUpdatesId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrderUpdatesIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrderUpdatesId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetOrderUpdatesIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getOrderUpdatesId>>
->;
-export type GetOrderUpdatesIdQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrderUpdatesId>>> = ({ signal }) => getOrderUpdatesId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdatesId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetOrderUpdatesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getOrderUpdatesId>>>
+export type GetOrderUpdatesIdQueryError = ErrorType<void>
+
 
 /**
  * @summary Buscar atualização por ID
  */
 
-export function useGetOrderUpdatesId<
-  TData = Awaited<ReturnType<typeof getOrderUpdatesId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getOrderUpdatesId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetOrderUpdatesIdQueryOptions(id, options);
+export function useGetOrderUpdatesId<TData = Awaited<ReturnType<typeof getOrderUpdatesId>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getOrderUpdatesId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetOrderUpdatesIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

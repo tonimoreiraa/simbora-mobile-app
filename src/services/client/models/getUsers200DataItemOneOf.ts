@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetUsers200DataItemOneOfRole} from './getUsers200DataItemOneOfRole';
+import type { GetUsers200DataItemOneOfRole } from './getUsers200DataItemOneOfRole';
 
 /**
  * Dados completos retornados para usuários admin

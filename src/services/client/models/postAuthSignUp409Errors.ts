@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PostAuthSignUp409Errors = {[key: string]: unknown};
+export type PostAuthSignUp409Errors = { [key: string]: unknown };

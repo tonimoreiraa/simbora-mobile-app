@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetOrderUpdates200DataItem} from './getOrderUpdates200DataItem';
-import type {GetOrderUpdates200Meta} from './getOrderUpdates200Meta';
+import type { GetOrderUpdates200DataItem } from './getOrderUpdates200DataItem';
+import type { GetOrderUpdates200Meta } from './getOrderUpdates200Meta';
 
 export type GetOrderUpdates200 = {
   data?: GetOrderUpdates200DataItem[];

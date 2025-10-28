@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -31,530 +34,400 @@ import type {
   PostCoupons201,
   PostCouponsBody,
   PutCouponsId200,
-  PutCouponsIdBody,
+  PutCouponsIdBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista todos os cupons disponíveis no sistema com filtros opcionais. Requer permissão de administrador.
  * @summary Listar cupons
  */
 export const getCoupons = (
-  params?: GetCouponsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetCouponsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetCoupons200Item[]>(
-    {url: `/coupons`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetCoupons200Item[]>(
+      {url: `/coupons`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetCouponsQueryKey = (params?: GetCouponsParams) => {
-  return [`/coupons`, ...(params ? [params] : [])] as const;
-};
+export const getGetCouponsQueryKey = (params?: GetCouponsParams,) => {
+    return [`/coupons`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetCouponsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCoupons>>,
-  TError = ErrorType<GetCoupons401 | GetCoupons403 | GetCoupons500>,
->(
-  params?: GetCouponsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCoupons>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetCouponsQueryOptions = <TData = Awaited<ReturnType<typeof getCoupons>>, TError = ErrorType<GetCoupons401 | GetCoupons403 | GetCoupons500>>(params?: GetCouponsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCoupons>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetCouponsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoupons>>> = ({
-    signal,
-  }) => getCoupons(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetCouponsQueryKey(params);
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getCoupons>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetCouponsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getCoupons>>
->;
-export type GetCouponsQueryError = ErrorType<
-  GetCoupons401 | GetCoupons403 | GetCoupons500
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoupons>>> = ({ signal }) => getCoupons(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCoupons>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetCouponsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoupons>>>
+export type GetCouponsQueryError = ErrorType<GetCoupons401 | GetCoupons403 | GetCoupons500>
+
 
 /**
  * @summary Listar cupons
  */
 
-export function useGetCoupons<
-  TData = Awaited<ReturnType<typeof getCoupons>>,
-  TError = ErrorType<GetCoupons401 | GetCoupons403 | GetCoupons500>,
->(
-  params?: GetCouponsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCoupons>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetCouponsQueryOptions(params, options);
+export function useGetCoupons<TData = Awaited<ReturnType<typeof getCoupons>>, TError = ErrorType<GetCoupons401 | GetCoupons403 | GetCoupons500>>(
+ params?: GetCouponsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCoupons>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetCouponsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria um novo cupom de desconto. Requer permissão de administrador.
  * @summary Criar novo cupom
  */
 export const postCoupons = (
-  postCouponsBody: BodyType<PostCouponsBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postCouponsBody: BodyType<PostCouponsBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<PostCoupons201>(
-    {
-      url: `/coupons`,
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      data: postCouponsBody,
-      signal,
+      
+      
+      return axiosInstance<PostCoupons201>(
+      {url: `/coupons`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postCouponsBody, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostCouponsMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCoupons>>,
-    TError,
-    {data: BodyType<PostCouponsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postCoupons>>,
-  TError,
-  {data: BodyType<PostCouponsBody>},
-  TContext
-> => {
-  const mutationKey = ['postCoupons'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostCouponsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: BodyType<PostCouponsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: BodyType<PostCouponsBody>}, TContext> => {
+
+const mutationKey = ['postCoupons'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postCoupons>>,
-    {data: BodyType<PostCouponsBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postCoupons(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCoupons>>, {data: BodyType<PostCouponsBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostCouponsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postCoupons>>
->;
-export type PostCouponsMutationBody = BodyType<PostCouponsBody>;
-export type PostCouponsMutationError = ErrorType<void>;
+          return  postCoupons(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostCouponsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoupons>>>
+    export type PostCouponsMutationBody = BodyType<PostCouponsBody>
+    export type PostCouponsMutationError = ErrorType<void>
+
+    /**
  * @summary Criar novo cupom
  */
-export const usePostCoupons = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCoupons>>,
-    TError,
-    {data: BodyType<PostCouponsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postCoupons>>,
-  TError,
-  {data: BodyType<PostCouponsBody>},
-  TContext
-> => {
-  const mutationOptions = getPostCouponsMutationOptions(options);
+export const usePostCoupons = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: BodyType<PostCouponsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postCoupons>>,
+        TError,
+        {data: BodyType<PostCouponsBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostCouponsMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Verifica se um cupom é válido para uso, considerando status ativo, limites de uso, período de validade e outras restrições
  * @summary Verificar validade do cupom
  */
 export const getCouponsVerifyCode = (
-  code: string,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    code: string,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetCouponsVerifyCode200>(
-    {url: `/coupons/verify/${code}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetCouponsVerifyCode200>(
+      {url: `/coupons/verify/${code}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetCouponsVerifyCodeQueryKey = (code: string) => {
-  return [`/coupons/verify/${code}`] as const;
-};
+export const getGetCouponsVerifyCodeQueryKey = (code: string,) => {
+    return [`/coupons/verify/${code}`] as const;
+    }
 
-export const getGetCouponsVerifyCodeQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCouponsVerifyCode>>,
-  TError = ErrorType<
-    GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500
-  >,
->(
-  code: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCouponsVerifyCode>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetCouponsVerifyCodeQueryOptions = <TData = Awaited<ReturnType<typeof getCouponsVerifyCode>>, TError = ErrorType<GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500>>(code: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCouponsVerifyCode>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetCouponsVerifyCodeQueryKey(code);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getCouponsVerifyCode>>
-  > = ({signal}) => getCouponsVerifyCode(code, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetCouponsVerifyCodeQueryKey(code);
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!code,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getCouponsVerifyCode>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetCouponsVerifyCodeQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getCouponsVerifyCode>>
->;
-export type GetCouponsVerifyCodeQueryError = ErrorType<
-  GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCouponsVerifyCode>>> = ({ signal }) => getCouponsVerifyCode(code, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(code), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCouponsVerifyCode>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetCouponsVerifyCodeQueryResult = NonNullable<Awaited<ReturnType<typeof getCouponsVerifyCode>>>
+export type GetCouponsVerifyCodeQueryError = ErrorType<GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500>
+
 
 /**
  * @summary Verificar validade do cupom
  */
 
-export function useGetCouponsVerifyCode<
-  TData = Awaited<ReturnType<typeof getCouponsVerifyCode>>,
-  TError = ErrorType<
-    GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500
-  >,
->(
-  code: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCouponsVerifyCode>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetCouponsVerifyCodeQueryOptions(code, options);
+export function useGetCouponsVerifyCode<TData = Awaited<ReturnType<typeof getCouponsVerifyCode>>, TError = ErrorType<GetCouponsVerifyCode404 | GetCouponsVerifyCode422 | GetCouponsVerifyCode500>>(
+ code: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCouponsVerifyCode>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetCouponsVerifyCodeQueryOptions(code,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Obtém os detalhes de um cupom específico pelo ID. Requer permissão de administrador.
  * @summary Obter detalhes de um cupom
  */
 export const getCouponsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetCouponsId200>(
-    {url: `/coupons/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetCouponsId200>(
+      {url: `/coupons/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetCouponsIdQueryKey = (id: number) => {
-  return [`/coupons/${id}`] as const;
-};
+export const getGetCouponsIdQueryKey = (id: number,) => {
+    return [`/coupons/${id}`] as const;
+    }
 
-export const getGetCouponsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCouponsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCouponsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetCouponsIdQueryOptions = <TData = Awaited<ReturnType<typeof getCouponsId>>, TError = ErrorType<void>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCouponsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetCouponsIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCouponsId>>> = ({
-    signal,
-  }) => getCouponsId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetCouponsIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getCouponsId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetCouponsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getCouponsId>>
->;
-export type GetCouponsIdQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCouponsId>>> = ({ signal }) => getCouponsId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCouponsId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetCouponsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCouponsId>>>
+export type GetCouponsIdQueryError = ErrorType<void>
+
 
 /**
  * @summary Obter detalhes de um cupom
  */
 
-export function useGetCouponsId<
-  TData = Awaited<ReturnType<typeof getCouponsId>>,
-  TError = ErrorType<void>,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getCouponsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetCouponsIdQueryOptions(id, options);
+export function useGetCouponsId<TData = Awaited<ReturnType<typeof getCouponsId>>, TError = ErrorType<void>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getCouponsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetCouponsIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Atualiza um cupom existente. Requer permissão de administrador.
  * @summary Atualizar cupom
  */
 export const putCouponsId = (
-  id: number,
-  putCouponsIdBody: BodyType<PutCouponsIdBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<PutCouponsId200>(
-    {
-      url: `/coupons/${id}`,
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      data: putCouponsIdBody,
+    id: number,
+    putCouponsIdBody: BodyType<PutCouponsIdBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<PutCouponsId200>(
+      {url: `/coupons/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: putCouponsIdBody
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPutCouponsIdMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putCouponsId>>,
-    TError,
-    {id: number; data: BodyType<PutCouponsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putCouponsId>>,
-  TError,
-  {id: number; data: BodyType<PutCouponsIdBody>},
-  TContext
-> => {
-  const mutationKey = ['putCouponsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutCouponsIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: BodyType<PutCouponsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: BodyType<PutCouponsIdBody>}, TContext> => {
+
+const mutationKey = ['putCouponsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putCouponsId>>,
-    {id: number; data: BodyType<PutCouponsIdBody>}
-  > = props => {
-    const {id, data} = props ?? {};
+      
 
-    return putCouponsId(id, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putCouponsId>>, {id: number;data: BodyType<PutCouponsIdBody>}> = (props) => {
+          const {id,data} = props ?? {};
 
-export type PutCouponsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putCouponsId>>
->;
-export type PutCouponsIdMutationBody = BodyType<PutCouponsIdBody>;
-export type PutCouponsIdMutationError = ErrorType<void>;
+          return  putCouponsId(id,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutCouponsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putCouponsId>>>
+    export type PutCouponsIdMutationBody = BodyType<PutCouponsIdBody>
+    export type PutCouponsIdMutationError = ErrorType<void>
+
+    /**
  * @summary Atualizar cupom
  */
-export const usePutCouponsId = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putCouponsId>>,
-    TError,
-    {id: number; data: BodyType<PutCouponsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putCouponsId>>,
-  TError,
-  {id: number; data: BodyType<PutCouponsIdBody>},
-  TContext
-> => {
-  const mutationOptions = getPutCouponsIdMutationOptions(options);
+export const usePutCouponsId = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: BodyType<PutCouponsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putCouponsId>>,
+        TError,
+        {id: number;data: BodyType<PutCouponsIdBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutCouponsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Deleta um cupom existente. Requer permissão de administrador.
  * @summary Deletar cupom
  */
 export const deleteCouponsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<DeleteCouponsId200>(
-    {url: `/coupons/${id}`, method: 'DELETE'},
-    options,
-  );
-};
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<DeleteCouponsId200>(
+      {url: `/coupons/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteCouponsIdMutationOptions = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteCouponsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteCouponsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationKey = ['deleteCouponsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getDeleteCouponsIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCouponsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCouponsId>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteCouponsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteCouponsId>>,
-    {id: number}
-  > = props => {
-    const {id} = props ?? {};
+      
 
-    return deleteCouponsId(id, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCouponsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
 
-export type DeleteCouponsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteCouponsId>>
->;
+          return  deleteCouponsId(id,requestOptions)
+        }
 
-export type DeleteCouponsIdMutationError = ErrorType<void>;
+        
 
-/**
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCouponsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCouponsId>>>
+    
+    export type DeleteCouponsIdMutationError = ErrorType<void>
+
+    /**
  * @summary Deletar cupom
  */
-export const useDeleteCouponsId = <
-  TError = ErrorType<void>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteCouponsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteCouponsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationOptions = getDeleteCouponsIdMutationOptions(options);
+export const useDeleteCouponsId = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCouponsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteCouponsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getDeleteCouponsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

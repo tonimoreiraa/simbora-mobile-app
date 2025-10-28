@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostUserAddresses422Errors} from './postUserAddresses422Errors';
+import type { PostUserAddresses422Errors } from './postUserAddresses422Errors';
 
 export type PostUserAddresses422 = {
   message?: string;

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetNotifications200OrderSharesItem} from './getNotifications200OrderSharesItem';
+import type { GetNotifications200OrderSharesItem } from './getNotifications200OrderSharesItem';
 
 export type GetNotifications200 = {
   /** Lista de pedidos compartilhados não visualizados */

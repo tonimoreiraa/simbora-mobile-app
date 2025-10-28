@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostOrderUpdatesBodyStatus} from './postOrderUpdatesBodyStatus';
+import type { PostOrderUpdatesBodyStatus } from './postOrderUpdatesBodyStatus';
 
 export type PostOrderUpdatesBody = {
   /** ID do pedido a ser atualizado */

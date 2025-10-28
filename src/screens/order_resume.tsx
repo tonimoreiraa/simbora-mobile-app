@@ -30,37 +30,26 @@ function OrderResume() {
   const [shareModalVisible, setShareModalVisible] = useState(false);
 
   // Buscar endereços do usuário
-  const {data: addresses, isLoading: isLoadingAddresses} = useGetUserAddresses();
+  const {data: addresses, isLoading: isLoadingAddresses} =
+    useGetUserAddresses();
 
   // Encontrar o endereço selecionado
   const selectedAddress = addresses?.find((addr: any) => addr.id === addressId);
 
   const createOrderMutation = usePostOrders({
     mutation: {
-      onSuccess: (response) => {
-        console.log('✅ Pedido criado com sucesso! ID:', response?.id);
-        console.log('📦 Resposta completa:', JSON.stringify(response, null, 2));
+      onSuccess: response => {
 
-        // Limpar carrinho e navegar imediatamente
         cart.clear();
-        navigation.navigate('MyOrders');
-
-        // Mostrar mensagem de sucesso após navegar
-        setTimeout(() => {
-          Alert.alert('Sucesso', 'Pedido criado com sucesso!');
-        }, 300);
+        (navigation.navigate as any)('ThankYou', {
+          orderId: response?.id,
+        });
       },
       onError: (error: any) => {
-        console.error('❌ Erro ao criar pedido:', error);
-        console.error('📋 Detalhes do erro:', {
-          status: error?.response?.status,
-          message: error?.response?.data?.message,
-          errors: error?.response?.data?.errors,
-          data: error?.response?.data,
-        });
         Alert.alert(
           'Erro',
-          error?.response?.data?.message || 'Não foi possível criar o pedido. Tente novamente.',
+          error?.response?.data?.message ||
+            'Não foi possível criar o pedido. Tente novamente.',
         );
       },
     },
@@ -88,7 +77,6 @@ function OrderResume() {
       type: 'delivery' as const,
     };
 
-    console.log('📤 Enviando pedido:', JSON.stringify(orderData, null, 2));
 
     createOrderMutation.mutate({data: orderData});
   };
@@ -98,13 +86,38 @@ function OrderResume() {
   };
 
   const handleSelectUser = (user: GetUsers200DataItem) => {
-    console.log('Usuário selecionado:', user);
-    // TODO: Implementar lógica para compartilhar o orçamento com o usuário selecionado
+    if (!addressId) {
+      Alert.alert('Erro', 'Endereço não selecionado');
+      return;
+    }
+
+    if (cart.items.length === 0) {
+      Alert.alert('Erro', 'Carrinho vazio');
+      return;
+    }
+
+    const orderData = {
+      items: cart.items.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        unit_price: item.price,
+        product_variant_id: item.variant?.id,
+      })),
+      addressId: addressId,
+      type: 'delivery' as const,
+      shareWithUserId: user.id, // Adiciona o ID do usuário para compartilhar
+    };
+
+
+    // Fechar modal antes de criar
+    setShareModalVisible(false);
+
+    createOrderMutation.mutate({data: orderData});
   };
 
   const handleShareSuccess = (userName: string) => {
-    // Navigate to thank you screen
-    (navigation.navigate as any)('ThankYou', {userName});
+    // Esta função não é mais necessária pois o fluxo é tratado pelo handleSelectUser
+    // Mas mantenho por compatibilidade com o modal
   };
 
   const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
@@ -131,8 +144,7 @@ function OrderResume() {
     <SafeAreaView style={tw`flex-1 bg-gray-50`}>
       <ScrollView
         contentContainerStyle={tw`px-5 py-6 pb-8`}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* Cabeçalho */}
         <View style={tw`mb-6`}>
           <Text style={tw`text-2xl font-bold text-gray-800 mb-1`}>
@@ -145,9 +157,15 @@ function OrderResume() {
 
         {/* Endereço de Entrega */}
         {selectedAddress && (
-          <View style={tw`bg-white border-neutral-100 border p-4 rounded-xl shadow-sm mb-4`}>
+          <View
+            style={tw`bg-white border-neutral-100 border p-4 rounded-xl shadow-sm mb-4`}>
             <View style={tw`flex-row items-center mb-2`}>
-              <MapPin size={20} color="#1F2937" weight="fill" style={tw`mr-2`} />
+              <MapPin
+                size={20}
+                color="#1F2937"
+                weight="fill"
+                style={tw`mr-2`}
+              />
               <Text style={tw`text-lg font-semibold text-gray-800`}>
                 Endereço de Entrega
               </Text>
@@ -170,7 +188,8 @@ function OrderResume() {
         )}
 
         {/* Itens do Pedido */}
-        <View style={tw`bg-white rounded-xl border border-neutral-100 mb-4 overflow-hidden`}>
+        <View
+          style={tw`bg-white rounded-xl border border-neutral-100 mb-4 overflow-hidden`}>
           <View style={tw`bg-neutral-100 px-4 py-3 border-b border-gray-200`}>
             <Text style={tw`font-semibold text-gray-800`}>
               Itens do Pedido ({cart.quantity})
@@ -182,8 +201,7 @@ function OrderResume() {
               key={`${item.id}-${index}`}
               style={tw`px-4 py-3 ${
                 index < cart.items.length - 1 ? 'border-b border-gray-100' : ''
-              }`}
-            >
+              }`}>
               <View style={tw`flex-row justify-between items-start`}>
                 <View style={tw`flex-1 pr-3`}>
                   <Text style={tw`text-sm font-medium text-gray-800 mb-1`}>
@@ -214,7 +232,8 @@ function OrderResume() {
         </View>
 
         {/* Resumo de Valores */}
-        <View style={tw`bg-white border border-neutral-100 rounded-xl shadow-sm mb-6 p-4`}>
+        <View
+          style={tw`bg-white border border-neutral-100 rounded-xl shadow-sm mb-6 p-4`}>
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-600`}>Subtotal</Text>
             <Text style={tw`text-sm font-medium text-gray-800`}>
@@ -225,9 +244,7 @@ function OrderResume() {
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-600`}>Frete</Text>
             {shippingCost === 0 ? (
-              <Text style={tw`text-sm font-medium text-green-600`}>
-                Grátis
-              </Text>
+              <Text style={tw`text-sm font-medium text-green-600`}>Grátis</Text>
             ) : (
               <Text style={tw`text-sm font-medium text-gray-800`}>
                 {formatPrice(shippingCost)}
@@ -263,8 +280,7 @@ function OrderResume() {
             }`}
             onPress={handlePayment}
             activeOpacity={0.8}
-            disabled={createOrderMutation.isLoading}
-          >
+            disabled={createOrderMutation.isLoading}>
             <View style={tw`flex-row items-center justify-between`}>
               <View style={tw`flex-1`}>
                 <Text style={tw`text-2xl font-bold text-white mb-2`}>
@@ -290,15 +306,15 @@ function OrderResume() {
           <TouchableOpacity
             style={tw`bg-blue-500 rounded-2xl p-6 shadow-lg active:scale-98`}
             onPress={handleShareBudget}
-            activeOpacity={0.8}
-          >
+            activeOpacity={0.8}>
             <View style={tw`flex-row items-center justify-between`}>
               <View style={tw`flex-1`}>
                 <Text style={tw`text-2xl font-bold text-white mb-2`}>
                   Compartilhar orçamento
                 </Text>
                 <Text style={tw`text-sm text-blue-50 leading-5`}>
-                  Enviar para outro usuário aprovar e pagar. Será entregue no endereço escolhido
+                  Enviar para outro usuário aprovar e pagar. Será entregue no
+                  endereço escolhido
                 </Text>
               </View>
               <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>

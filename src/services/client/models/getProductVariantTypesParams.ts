@@ -7,12 +7,12 @@
  */
 
 export type GetProductVariantTypesParams = {
-  /**
-   * Filtrar por nome do tipo
-   */
-  name?: string;
-  /**
-   * Filtrar por unidade padrão
-   */
-  defaultUnit?: string;
+/**
+ * Filtrar por nome do tipo
+ */
+name?: string;
+/**
+ * Filtrar por unidade padrão
+ */
+defaultUnit?: string;
 };

@@ -9,6 +9,4 @@
 /**
  * Dados adicionais (opcional)
  */
-export type PostOrdersOrderIdActivityLogsBodyMetadata = {
-  [key: string]: unknown;
-};
+export type PostOrdersOrderIdActivityLogsBodyMetadata = { [key: string]: unknown };

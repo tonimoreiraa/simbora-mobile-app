@@ -5,12 +5,14 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useQuery} from 'react-query';
+import {
+  useQuery
+} from 'react-query';
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -18,94 +20,79 @@ import type {
   GetUsers400,
   GetUsers401,
   GetUsers500,
-  GetUsersParams,
+  GetUsersParams
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Lista usuários do sistema com filtros e paginação. Usuários não-admin devem fornecer um filtro de pesquisa e recebem dados limitados.
  * @summary Listar usuários
  */
 export const getUsers = (
-  params?: GetUsersParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetUsersParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetUsers200>(
-    {url: `/users`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetUsers200>(
+      {url: `/users`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetUsersQueryKey = (params?: GetUsersParams) => {
-  return [`/users`, ...(params ? [params] : [])] as const;
-};
+export const getGetUsersQueryKey = (params?: GetUsersParams,) => {
+    return [`/users`, ...(params ? [params]: [])] as const;
+    }
 
-export const getGetUsersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUsers>>,
-  TError = ErrorType<GetUsers400 | GetUsers401 | GetUsers500>,
->(
-  params?: GetUsersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUsers>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetUsersQueryOptions = <TData = Awaited<ReturnType<typeof getUsers>>, TError = ErrorType<GetUsers400 | GetUsers401 | GetUsers500>>(params?: GetUsersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUsers>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetUsersQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsers>>> = ({
-    signal,
-  }) => getUsers(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetUsersQueryKey(params);
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getUsers>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetUsersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUsers>>
->;
-export type GetUsersQueryError = ErrorType<
-  GetUsers400 | GetUsers401 | GetUsers500
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsers>>> = ({ signal }) => getUsers(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUsers>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetUsersQueryResult = NonNullable<Awaited<ReturnType<typeof getUsers>>>
+export type GetUsersQueryError = ErrorType<GetUsers400 | GetUsers401 | GetUsers500>
+
 
 /**
  * @summary Listar usuários
  */
 
-export function useGetUsers<
-  TData = Awaited<ReturnType<typeof getUsers>>,
-  TError = ErrorType<GetUsers400 | GetUsers401 | GetUsers500>,
->(
-  params?: GetUsersParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getUsers>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetUsersQueryOptions(params, options);
+export function useGetUsers<TData = Awaited<ReturnType<typeof getUsers>>, TError = ErrorType<GetUsers400 | GetUsers401 | GetUsers500>>(
+ params?: GetUsersParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getUsers>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetUsersQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
+

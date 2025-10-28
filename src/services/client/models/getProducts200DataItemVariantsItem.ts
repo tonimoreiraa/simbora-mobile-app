@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetProducts200DataItemVariantsItemType} from './getProducts200DataItemVariantsItemType';
+import type { GetProducts200DataItemVariantsItemType } from './getProducts200DataItemVariantsItemType';
 
 export type GetProducts200DataItemVariantsItem = {
   id?: number;

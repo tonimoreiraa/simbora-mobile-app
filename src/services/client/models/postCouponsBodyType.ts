@@ -9,8 +9,8 @@
 /**
  * Tipo do desconto
  */
-export type PostCouponsBodyType =
-  (typeof PostCouponsBodyType)[keyof typeof PostCouponsBodyType];
+export type PostCouponsBodyType = typeof PostCouponsBodyType[keyof typeof PostCouponsBodyType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostCouponsBodyType = {

@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostProductVariants422Errors} from './postProductVariants422Errors';
+import type { PostProductVariants422Errors } from './postProductVariants422Errors';
 
 export type PostProductVariants422 = {
   message?: string;

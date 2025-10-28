@@ -7,20 +7,20 @@
  */
 
 export type GetUsersParams = {
-  /**
-   * Filtro de pesquisa por username (obrigatório para usuários não-admin)
-   * @minLength 1
-   */
-  query?: string;
-  /**
-   * Número da página para paginação
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Quantidade de registros por página
-   * @minimum 1
-   * @maximum 100
-   */
-  perPage?: number;
+/**
+ * Filtro de pesquisa por username (obrigatório para usuários não-admin)
+ * @minLength 1
+ */
+query?: string;
+/**
+ * Número da página para paginação
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Quantidade de registros por página
+ * @minimum 1
+ * @maximum 100
+ */
+perPage?: number;
 };

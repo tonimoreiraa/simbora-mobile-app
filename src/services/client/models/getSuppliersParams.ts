@@ -5,28 +5,28 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetSuppliersSortBy} from './getSuppliersSortBy';
-import type {GetSuppliersSortOrder} from './getSuppliersSortOrder';
+import type { GetSuppliersSortBy } from './getSuppliersSortBy';
+import type { GetSuppliersSortOrder } from './getSuppliersSortOrder';
 
 export type GetSuppliersParams = {
-  /**
-   * Número da página para paginação
-   */
-  page?: number;
-  /**
-   * Número de itens por página
-   */
-  limit?: number;
-  /**
-   * Termo de busca para filtrar por nome ou descrição
-   */
-  search?: string;
-  /**
-   * Campo para ordenação
-   */
-  sortBy?: GetSuppliersSortBy;
-  /**
-   * Ordem de classificação
-   */
-  sortOrder?: GetSuppliersSortOrder;
+/**
+ * Número da página para paginação
+ */
+page?: number;
+/**
+ * Número de itens por página
+ */
+limit?: number;
+/**
+ * Termo de busca para filtrar por nome ou descrição
+ */
+search?: string;
+/**
+ * Campo para ordenação
+ */
+sortBy?: GetSuppliersSortBy;
+/**
+ * Ordem de classificação
+ */
+sortOrder?: GetSuppliersSortOrder;
 };

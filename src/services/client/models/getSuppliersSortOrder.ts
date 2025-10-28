@@ -6,8 +6,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetSuppliersSortOrder =
-  (typeof GetSuppliersSortOrder)[keyof typeof GetSuppliersSortOrder];
+export type GetSuppliersSortOrder = typeof GetSuppliersSortOrder[keyof typeof GetSuppliersSortOrder];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetSuppliersSortOrder = {

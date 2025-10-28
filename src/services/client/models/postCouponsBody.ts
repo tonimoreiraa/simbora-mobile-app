@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostCouponsBodyType} from './postCouponsBodyType';
+import type { PostCouponsBodyType } from './postCouponsBodyType';
 
 export type PostCouponsBody = {
   /** Código único do cupom (será convertido para maiúsculo) */

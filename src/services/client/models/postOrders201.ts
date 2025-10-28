@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostOrders201Type} from './postOrders201Type';
-import type {PostOrders201ItemsItem} from './postOrders201ItemsItem';
+import type { PostOrders201Type } from './postOrders201Type';
+import type { PostOrders201ItemsItem } from './postOrders201ItemsItem';
 
 export type PostOrders201 = {
   id?: number;

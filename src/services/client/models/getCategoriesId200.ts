@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetCategoriesId200Category} from './getCategoriesId200Category';
+import type { GetCategoriesId200Category } from './getCategoriesId200Category';
 
 export type GetCategoriesId200 = {
   id?: number;

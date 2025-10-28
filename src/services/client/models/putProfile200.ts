@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PutProfile200Role} from './putProfile200Role';
+import type { PutProfile200Role } from './putProfile200Role';
 
 export type PutProfile200 = {
   /** ID único do usuário */

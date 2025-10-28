@@ -9,8 +9,8 @@
 /**
  * Papel do usuário no sistema
  */
-export type GetProfile200Role =
-  (typeof GetProfile200Role)[keyof typeof GetProfile200Role];
+export type GetProfile200Role = typeof GetProfile200Role[keyof typeof GetProfile200Role];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetProfile200Role = {

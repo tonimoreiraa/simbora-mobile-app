@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignIn200User} from './postAuthSignIn200User';
-import type {PostAuthSignIn200Token} from './postAuthSignIn200Token';
+import type { PostAuthSignIn200User } from './postAuthSignIn200User';
+import type { PostAuthSignIn200Token } from './postAuthSignIn200Token';
 
 export type PostAuthSignIn200 = {
   user?: PostAuthSignIn200User;

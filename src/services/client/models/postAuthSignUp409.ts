@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUp409Errors} from './postAuthSignUp409Errors';
+import type { PostAuthSignUp409Errors } from './postAuthSignUp409Errors';
 
 export type PostAuthSignUp409 = {
   message?: string;

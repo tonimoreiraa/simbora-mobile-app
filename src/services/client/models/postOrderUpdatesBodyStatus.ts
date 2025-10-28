@@ -9,8 +9,8 @@
 /**
  * Novo status do pedido
  */
-export type PostOrderUpdatesBodyStatus =
-  (typeof PostOrderUpdatesBodyStatus)[keyof typeof PostOrderUpdatesBodyStatus];
+export type PostOrderUpdatesBodyStatus = typeof PostOrderUpdatesBodyStatus[keyof typeof PostOrderUpdatesBodyStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostOrderUpdatesBodyStatus = {

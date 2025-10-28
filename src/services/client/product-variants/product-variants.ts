@@ -5,7 +5,10 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import {useMutation, useQuery} from 'react-query';
+import {
+  useMutation,
+  useQuery
+} from 'react-query';
 import type {
   MutationFunction,
   QueryFunction,
@@ -13,7 +16,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
+  UseQueryResult
 } from 'react-query';
 
 import type {
@@ -40,519 +43,355 @@ import type {
   PutProductVariantsId404,
   PutProductVariantsId422,
   PutProductVariantsId500,
-  PutProductVariantsIdBody,
+  PutProductVariantsIdBody
 } from '.././models';
 
-import {axiosInstance} from '../../axios';
-import type {ErrorType, BodyType} from '../../axios';
+import { axiosInstance } from '../../axios';
+import type { ErrorType , BodyType } from '../../axios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Retorna todas as variantes de produtos cadastradas no sistema com seus relacionamentos
  * @summary Listar variantes de produtos
  */
 export const getProductVariants = (
-  params?: GetProductVariantsParams,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    params?: GetProductVariantsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetProductVariants200Item[]>(
-    {url: `/product-variants`, method: 'GET', params, signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetProductVariants200Item[]>(
+      {url: `/product-variants`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetProductVariantsQueryKey = (
-  params?: GetProductVariantsParams,
+export const getGetProductVariantsQueryKey = (params?: GetProductVariantsParams,) => {
+    return [`/product-variants`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetProductVariantsQueryOptions = <TData = Awaited<ReturnType<typeof getProductVariants>>, TError = ErrorType<GetProductVariants401 | GetProductVariants500>>(params?: GetProductVariantsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProductVariants>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  return [`/product-variants`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetProductVariantsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getProductVariants>>,
-  TError = ErrorType<GetProductVariants401 | GetProductVariants500>,
->(
-  params?: GetProductVariantsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProductVariants>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetProductVariantsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetProductVariantsQueryKey(params);
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getProductVariants>>
-  > = ({signal}) => getProductVariants(params, requestOptions, signal);
+  
 
-  return {queryKey, queryFn, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getProductVariants>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductVariants>>> = ({ signal }) => getProductVariants(params, requestOptions, signal);
 
-export type GetProductVariantsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getProductVariants>>
->;
-export type GetProductVariantsQueryError = ErrorType<
-  GetProductVariants401 | GetProductVariants500
->;
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductVariants>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProductVariantsQueryResult = NonNullable<Awaited<ReturnType<typeof getProductVariants>>>
+export type GetProductVariantsQueryError = ErrorType<GetProductVariants401 | GetProductVariants500>
+
 
 /**
  * @summary Listar variantes de produtos
  */
 
-export function useGetProductVariants<
-  TData = Awaited<ReturnType<typeof getProductVariants>>,
-  TError = ErrorType<GetProductVariants401 | GetProductVariants500>,
->(
-  params?: GetProductVariantsParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProductVariants>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetProductVariantsQueryOptions(params, options);
+export function useGetProductVariants<TData = Awaited<ReturnType<typeof getProductVariants>>, TError = ErrorType<GetProductVariants401 | GetProductVariants500>>(
+ params?: GetProductVariantsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProductVariants>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetProductVariantsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Cria uma nova variante para um produto existente com upload de imagem obrigatória
  * @summary Criar variante de produto
  */
 export const postProductVariants = (
-  postProductVariantsBody: BodyType<PostProductVariantsBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    postProductVariantsBody: BodyType<PostProductVariantsBody>,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  const formData = new FormData();
-  formData.append(`productId`, postProductVariantsBody.productId.toString());
-  formData.append(
-    `variantTypeId`,
-    postProductVariantsBody.variantTypeId.toString(),
-  );
-  formData.append(`value`, postProductVariantsBody.value);
-  if (postProductVariantsBody.unit !== undefined) {
-    formData.append(`unit`, postProductVariantsBody.unit);
-  }
-  formData.append(`price`, postProductVariantsBody.price.toString());
-  formData.append(`photo`, postProductVariantsBody.photo);
+      
+      const formData = new FormData();
+formData.append(`productId`, postProductVariantsBody.productId.toString())
+formData.append(`variantTypeId`, postProductVariantsBody.variantTypeId.toString())
+formData.append(`value`, postProductVariantsBody.value)
+if(postProductVariantsBody.unit !== undefined) {
+ formData.append(`unit`, postProductVariantsBody.unit)
+ }
+formData.append(`price`, postProductVariantsBody.price.toString())
+formData.append(`photo`, postProductVariantsBody.photo)
 
-  return axiosInstance<PostProductVariants201>(
-    {
-      url: `/product-variants`,
-      method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data'},
-      data: formData,
-      signal,
+      return axiosInstance<PostProductVariants201>(
+      {url: `/product-variants`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPostProductVariantsMutationOptions = <
-  TError = ErrorType<
-    | PostProductVariants400
-    | PostProductVariants401
-    | PostProductVariants422
-    | PostProductVariants500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postProductVariants>>,
-    TError,
-    {data: BodyType<PostProductVariantsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postProductVariants>>,
-  TError,
-  {data: BodyType<PostProductVariantsBody>},
-  TContext
-> => {
-  const mutationKey = ['postProductVariants'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPostProductVariantsMutationOptions = <TError = ErrorType<PostProductVariants400 | PostProductVariants401 | PostProductVariants422 | PostProductVariants500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postProductVariants>>, TError,{data: BodyType<PostProductVariantsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postProductVariants>>, TError,{data: BodyType<PostProductVariantsBody>}, TContext> => {
+
+const mutationKey = ['postProductVariants'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postProductVariants>>,
-    {data: BodyType<PostProductVariantsBody>}
-  > = props => {
-    const {data} = props ?? {};
+      
 
-    return postProductVariants(data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postProductVariants>>, {data: BodyType<PostProductVariantsBody>}> = (props) => {
+          const {data} = props ?? {};
 
-export type PostProductVariantsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postProductVariants>>
->;
-export type PostProductVariantsMutationBody = BodyType<PostProductVariantsBody>;
-export type PostProductVariantsMutationError = ErrorType<
-  | PostProductVariants400
-  | PostProductVariants401
-  | PostProductVariants422
-  | PostProductVariants500
->;
+          return  postProductVariants(data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostProductVariantsMutationResult = NonNullable<Awaited<ReturnType<typeof postProductVariants>>>
+    export type PostProductVariantsMutationBody = BodyType<PostProductVariantsBody>
+    export type PostProductVariantsMutationError = ErrorType<PostProductVariants400 | PostProductVariants401 | PostProductVariants422 | PostProductVariants500>
+
+    /**
  * @summary Criar variante de produto
  */
-export const usePostProductVariants = <
-  TError = ErrorType<
-    | PostProductVariants400
-    | PostProductVariants401
-    | PostProductVariants422
-    | PostProductVariants500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postProductVariants>>,
-    TError,
-    {data: BodyType<PostProductVariantsBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof postProductVariants>>,
-  TError,
-  {data: BodyType<PostProductVariantsBody>},
-  TContext
-> => {
-  const mutationOptions = getPostProductVariantsMutationOptions(options);
+export const usePostProductVariants = <TError = ErrorType<PostProductVariants400 | PostProductVariants401 | PostProductVariants422 | PostProductVariants500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postProductVariants>>, TError,{data: BodyType<PostProductVariantsBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof postProductVariants>>,
+        TError,
+        {data: BodyType<PostProductVariantsBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPostProductVariantsMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Retorna uma variante específica com seus relacionamentos (produto e tipo)
  * @summary Buscar variante por ID
  */
 export const getProductVariantsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
-  return axiosInstance<GetProductVariantsId200>(
-    {url: `/product-variants/${id}`, method: 'GET', signal},
-    options,
-  );
-};
+      
+      
+      return axiosInstance<GetProductVariantsId200>(
+      {url: `/product-variants/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetProductVariantsIdQueryKey = (id: number) => {
-  return [`/product-variants/${id}`] as const;
-};
+export const getGetProductVariantsIdQueryKey = (id: number,) => {
+    return [`/product-variants/${id}`] as const;
+    }
 
-export const getGetProductVariantsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getProductVariantsId>>,
-  TError = ErrorType<
-    GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500
-  >,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProductVariantsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
+    
+export const getGetProductVariantsIdQueryOptions = <TData = Awaited<ReturnType<typeof getProductVariantsId>>, TError = ErrorType<GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProductVariantsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
-  const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetProductVariantsIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getProductVariantsId>>
-  > = ({signal}) => getProductVariantsId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetProductVariantsIdQueryKey(id);
 
-  return {queryKey, queryFn, enabled: !!id, ...queryOptions} as UseQueryOptions<
-    Awaited<ReturnType<typeof getProductVariantsId>>,
-    TError,
-    TData
-  > & {queryKey: QueryKey};
-};
+  
 
-export type GetProductVariantsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getProductVariantsId>>
->;
-export type GetProductVariantsIdQueryError = ErrorType<
-  GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500
->;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductVariantsId>>> = ({ signal }) => getProductVariantsId(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductVariantsId>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetProductVariantsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getProductVariantsId>>>
+export type GetProductVariantsIdQueryError = ErrorType<GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500>
+
 
 /**
  * @summary Buscar variante por ID
  */
 
-export function useGetProductVariantsId<
-  TData = Awaited<ReturnType<typeof getProductVariantsId>>,
-  TError = ErrorType<
-    GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500
-  >,
->(
-  id: number,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProductVariantsId>>,
-      TError,
-      TData
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-): UseQueryResult<TData, TError> & {queryKey: QueryKey} {
-  const queryOptions = getGetProductVariantsIdQueryOptions(id, options);
+export function useGetProductVariantsId<TData = Awaited<ReturnType<typeof getProductVariantsId>>, TError = ErrorType<GetProductVariantsId401 | GetProductVariantsId404 | GetProductVariantsId500>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getProductVariantsId>>, TError, TData>, request?: SecondParameter<typeof axiosInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const queryOptions = getGetProductVariantsIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions ) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
 
   return query;
 }
+
+
 
 /**
  * Atualiza uma variante existente, incluindo opção de trocar a imagem
  * @summary Atualizar variante de produto
  */
 export const putProductVariantsId = (
-  id: number,
-  putProductVariantsIdBody: BodyType<PutProductVariantsIdBody>,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  const formData = new FormData();
-  formData.append(
-    `variantTypeId`,
-    putProductVariantsIdBody.variantTypeId.toString(),
-  );
-  formData.append(`value`, putProductVariantsIdBody.value);
-  if (putProductVariantsIdBody.unit !== undefined) {
-    formData.append(`unit`, putProductVariantsIdBody.unit);
-  }
-  formData.append(`price`, putProductVariantsIdBody.price.toString());
-  if (putProductVariantsIdBody.photo !== undefined) {
-    formData.append(`photo`, putProductVariantsIdBody.photo);
-  }
+    id: number,
+    putProductVariantsIdBody: BodyType<PutProductVariantsIdBody>,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      const formData = new FormData();
+formData.append(`variantTypeId`, putProductVariantsIdBody.variantTypeId.toString())
+formData.append(`value`, putProductVariantsIdBody.value)
+if(putProductVariantsIdBody.unit !== undefined) {
+ formData.append(`unit`, putProductVariantsIdBody.unit)
+ }
+formData.append(`price`, putProductVariantsIdBody.price.toString())
+if(putProductVariantsIdBody.photo !== undefined) {
+ formData.append(`photo`, putProductVariantsIdBody.photo)
+ }
 
-  return axiosInstance<PutProductVariantsId200>(
-    {
-      url: `/product-variants/${id}`,
-      method: 'PUT',
-      headers: {'Content-Type': 'multipart/form-data'},
-      data: formData,
+      return axiosInstance<PutProductVariantsId200>(
+      {url: `/product-variants/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
-    options,
-  );
-};
+      options);
+    }
+  
 
-export const getPutProductVariantsIdMutationOptions = <
-  TError = ErrorType<
-    | PutProductVariantsId400
-    | PutProductVariantsId401
-    | PutProductVariantsId404
-    | PutProductVariantsId422
-    | PutProductVariantsId500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putProductVariantsId>>,
-    TError,
-    {id: number; data: BodyType<PutProductVariantsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putProductVariantsId>>,
-  TError,
-  {id: number; data: BodyType<PutProductVariantsIdBody>},
-  TContext
-> => {
-  const mutationKey = ['putProductVariantsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getPutProductVariantsIdMutationOptions = <TError = ErrorType<PutProductVariantsId400 | PutProductVariantsId401 | PutProductVariantsId404 | PutProductVariantsId422 | PutProductVariantsId500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProductVariantsId>>, TError,{id: number;data: BodyType<PutProductVariantsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putProductVariantsId>>, TError,{id: number;data: BodyType<PutProductVariantsIdBody>}, TContext> => {
+
+const mutationKey = ['putProductVariantsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putProductVariantsId>>,
-    {id: number; data: BodyType<PutProductVariantsIdBody>}
-  > = props => {
-    const {id, data} = props ?? {};
+      
 
-    return putProductVariantsId(id, data, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putProductVariantsId>>, {id: number;data: BodyType<PutProductVariantsIdBody>}> = (props) => {
+          const {id,data} = props ?? {};
 
-export type PutProductVariantsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putProductVariantsId>>
->;
-export type PutProductVariantsIdMutationBody =
-  BodyType<PutProductVariantsIdBody>;
-export type PutProductVariantsIdMutationError = ErrorType<
-  | PutProductVariantsId400
-  | PutProductVariantsId401
-  | PutProductVariantsId404
-  | PutProductVariantsId422
-  | PutProductVariantsId500
->;
+          return  putProductVariantsId(id,data,requestOptions)
+        }
 
-/**
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutProductVariantsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putProductVariantsId>>>
+    export type PutProductVariantsIdMutationBody = BodyType<PutProductVariantsIdBody>
+    export type PutProductVariantsIdMutationError = ErrorType<PutProductVariantsId400 | PutProductVariantsId401 | PutProductVariantsId404 | PutProductVariantsId422 | PutProductVariantsId500>
+
+    /**
  * @summary Atualizar variante de produto
  */
-export const usePutProductVariantsId = <
-  TError = ErrorType<
-    | PutProductVariantsId400
-    | PutProductVariantsId401
-    | PutProductVariantsId404
-    | PutProductVariantsId422
-    | PutProductVariantsId500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putProductVariantsId>>,
-    TError,
-    {id: number; data: BodyType<PutProductVariantsIdBody>},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof putProductVariantsId>>,
-  TError,
-  {id: number; data: BodyType<PutProductVariantsIdBody>},
-  TContext
-> => {
-  const mutationOptions = getPutProductVariantsIdMutationOptions(options);
+export const usePutProductVariantsId = <TError = ErrorType<PutProductVariantsId400 | PutProductVariantsId401 | PutProductVariantsId404 | PutProductVariantsId422 | PutProductVariantsId500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProductVariantsId>>, TError,{id: number;data: BodyType<PutProductVariantsIdBody>}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof putProductVariantsId>>,
+        TError,
+        {id: number;data: BodyType<PutProductVariantsIdBody>},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
-/**
+      const mutationOptions = getPutProductVariantsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    /**
  * Remove uma variante de produto do sistema
  * @summary Deletar variante de produto
  */
 export const deleteProductVariantsId = (
-  id: number,
-  options?: SecondParameter<typeof axiosInstance>,
-) => {
-  return axiosInstance<void>(
-    {url: `/product-variants/${id}`, method: 'DELETE'},
-    options,
-  );
-};
+    id: number,
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/product-variants/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteProductVariantsIdMutationOptions = <
-  TError = ErrorType<
-    | DeleteProductVariantsId401
-    | DeleteProductVariantsId404
-    | DeleteProductVariantsId500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteProductVariantsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteProductVariantsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationKey = ['deleteProductVariantsId'];
-  const {mutation: mutationOptions, request: requestOptions} = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
+
+export const getDeleteProductVariantsIdMutationOptions = <TError = ErrorType<DeleteProductVariantsId401 | DeleteProductVariantsId404 | DeleteProductVariantsId500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductVariantsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProductVariantsId>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteProductVariantsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
       : {...options, mutation: {...options.mutation, mutationKey}}
-    : {mutation: {mutationKey}, request: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteProductVariantsId>>,
-    {id: number}
-  > = props => {
-    const {id} = props ?? {};
+      
 
-    return deleteProductVariantsId(id, requestOptions);
-  };
 
-  return {mutationFn, ...mutationOptions};
-};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProductVariantsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
 
-export type DeleteProductVariantsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteProductVariantsId>>
->;
+          return  deleteProductVariantsId(id,requestOptions)
+        }
 
-export type DeleteProductVariantsIdMutationError = ErrorType<
-  | DeleteProductVariantsId401
-  | DeleteProductVariantsId404
-  | DeleteProductVariantsId500
->;
+        
 
-/**
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteProductVariantsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProductVariantsId>>>
+    
+    export type DeleteProductVariantsIdMutationError = ErrorType<DeleteProductVariantsId401 | DeleteProductVariantsId404 | DeleteProductVariantsId500>
+
+    /**
  * @summary Deletar variante de produto
  */
-export const useDeleteProductVariantsId = <
-  TError = ErrorType<
-    | DeleteProductVariantsId401
-    | DeleteProductVariantsId404
-    | DeleteProductVariantsId500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteProductVariantsId>>,
-    TError,
-    {id: number},
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
-  Awaited<ReturnType<typeof deleteProductVariantsId>>,
-  TError,
-  {id: number},
-  TContext
-> => {
-  const mutationOptions = getDeleteProductVariantsIdMutationOptions(options);
+export const useDeleteProductVariantsId = <TError = ErrorType<DeleteProductVariantsId401 | DeleteProductVariantsId404 | DeleteProductVariantsId500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductVariantsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteProductVariantsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions);
-};
+      const mutationOptions = getDeleteProductVariantsIdMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

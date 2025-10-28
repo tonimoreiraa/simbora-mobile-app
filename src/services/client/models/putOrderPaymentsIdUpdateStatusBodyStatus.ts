@@ -9,8 +9,8 @@
 /**
  * Novo status do pagamento
  */
-export type PutOrderPaymentsIdUpdateStatusBodyStatus =
-  (typeof PutOrderPaymentsIdUpdateStatusBodyStatus)[keyof typeof PutOrderPaymentsIdUpdateStatusBodyStatus];
+export type PutOrderPaymentsIdUpdateStatusBodyStatus = typeof PutOrderPaymentsIdUpdateStatusBodyStatus[keyof typeof PutOrderPaymentsIdUpdateStatusBodyStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PutOrderPaymentsIdUpdateStatusBodyStatus = {

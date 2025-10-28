@@ -5,7 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {PostAuthSignUpBodyTwoRole} from './postAuthSignUpBodyTwoRole';
+import type { PostAuthSignUpBodyTwoRole } from './postAuthSignUpBodyTwoRole';
 
 export type PostAuthSignUpBodyTwo = {
   /**

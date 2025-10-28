@@ -5,8 +5,8 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
-import type {GetOrderPaymentsIdAnalytics200ProductsSummaryProductsSold} from './getOrderPaymentsIdAnalytics200ProductsSummaryProductsSold';
-import type {GetOrderPaymentsIdAnalytics200ProductsSummaryItemsBreakdownItem} from './getOrderPaymentsIdAnalytics200ProductsSummaryItemsBreakdownItem';
+import type { GetOrderPaymentsIdAnalytics200ProductsSummaryProductsSold } from './getOrderPaymentsIdAnalytics200ProductsSummaryProductsSold';
+import type { GetOrderPaymentsIdAnalytics200ProductsSummaryItemsBreakdownItem } from './getOrderPaymentsIdAnalytics200ProductsSummaryItemsBreakdownItem';
 
 export type GetOrderPaymentsIdAnalytics200ProductsSummary = {
   totalItems?: number;
