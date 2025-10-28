@@ -12,7 +12,7 @@ import {
   Image,
 } from 'react-native';
 import tw from 'twrnc';
-import {useRoute} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import ShippingMethod from '../components/shipping_method';
 import DropDown from '../components/dropdown';
@@ -21,7 +21,7 @@ import AccountInput from '../components/create_account_input';
 import {useCart} from '../contexts/cart_provider';
 import {CreditCard, ShareNetwork, MapPin} from 'phosphor-react-native';
 import {ShareBudgetModal} from '../components/share_budget_modal';
-import type {GetUsers200DataItemOneOf} from '../services/client/models';
+import type {GetUsers200DataItem} from '../services/client/models';
 import Animated, {
   withSpring,
   useSharedValue,
@@ -41,6 +41,7 @@ type PaymentFormData = {
 
 function OrderResume() {
   const route = useRoute();
+  const navigation = useNavigation();
   const {selectedAddress} = (route.params as {selectedAddress?: any}) || {};
   const cart = useCart();
 
@@ -85,16 +86,35 @@ function OrderResume() {
 
   const handlePayment = () => {
     console.log('Iniciando pagamento...');
-    // Navegar para tela de pagamento
+
+    // TODO: Implementar lógica de pagamento real aqui
+    // Por enquanto, vamos simular um pedido confirmado
+    const mockOrderNumber = Math.floor(100000 + Math.random() * 900000).toString();
+    const mockDeliveryAddress = selectedAddress
+      ? `${selectedAddress.streetName}, ${selectedAddress.number || 'S/N'} - ${selectedAddress.city}, ${selectedAddress.state}`
+      : 'Endereço não informado';
+    const mockEstimatedTime = '30-45 minutos';
+
+    // Navigate to order confirmed screen
+    (navigation.navigate as any)('OrderConfirmed', {
+      orderNumber: mockOrderNumber,
+      deliveryAddress: mockDeliveryAddress,
+      estimatedTime: mockEstimatedTime,
+    });
   };
 
   const handleShareBudget = () => {
     setShareModalVisible(true);
   };
 
-  const handleSelectUser = (user: GetUsers200DataItemOneOf) => {
+  const handleSelectUser = (user: GetUsers200DataItem) => {
     console.log('Usuário selecionado:', user);
     // TODO: Implementar lógica para compartilhar o orçamento com o usuário selecionado
+  };
+
+  const handleShareSuccess = (userName: string) => {
+    // Navigate to thank you screen
+    (navigation.navigate as any)('ThankYou', {userName});
   };
 
   const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
@@ -285,6 +305,7 @@ function OrderResume() {
           visible={shareModalVisible}
           onClose={() => setShareModalVisible(false)}
           onSelectUser={handleSelectUser}
+          onShareSuccess={handleShareSuccess}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

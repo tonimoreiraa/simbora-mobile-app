@@ -21,18 +21,20 @@ import {
   Envelope,
 } from 'phosphor-react-native';
 import {useGetUsers} from '../services/client/users/users';
-import type {GetUsers200DataItemOneOf} from '../services/client/models';
+import type {GetUsers200DataItem} from '../services/client/models';
 
 interface ShareBudgetModalProps {
   visible: boolean;
   onClose: () => void;
-  onSelectUser: (user: GetUsers200DataItemOneOf) => void;
+  onSelectUser: (user: GetUsers200DataItem) => void;
+  onShareSuccess?: (userName: string) => void;
 }
 
 export function ShareBudgetModal({
   visible,
   onClose,
   onSelectUser,
+  onShareSuccess,
 }: ShareBudgetModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -54,22 +56,38 @@ export function ShareBudgetModal({
     perPage: 10,
   });
 
-  const handleSelectUser = (user: GetUsers200DataItemOneOf) => {
-    onSelectUser(user);
-    onClose();
-    setSearchQuery('');
-  };
+  const handleSelectUser = useCallback(
+    (user: GetUsers200DataItem) => {
+      console.log('User selected:', user);
+      onSelectUser(user);
 
-  const renderUserItem = useCallback(
-    ({item}: {item: GetUsers200DataItemOneOf}) => (
+      // Call the success callback with the user's name
+      if (onShareSuccess) {
+        const userName = (user as any).name || (user as any).username || 'O cliente';
+        console.log('Calling onShareSuccess with:', userName);
+        onShareSuccess(userName);
+      }
+
+      onClose();
+      setSearchQuery('');
+    },
+    [onSelectUser, onShareSuccess, onClose],
+  );
+
+  const renderUserItem = ({item}: {item: GetUsers200DataItem}) => {
+    console.log('Rendering user item:', item);
+    return (
       <TouchableOpacity
         style={tw`flex-row items-center p-4 border-b border-gray-100 active:bg-gray-50`}
-        onPress={() => handleSelectUser(item)}
+        onPress={() => {
+          console.log('TouchableOpacity pressed for:', (item as any).name);
+          handleSelectUser(item);
+        }}
         activeOpacity={0.7}>
         <View style={tw`mr-3`}>
-          {item.avatar && item.avatar !== 'https://api.rapdo.app/uploads/null' ? (
+          {(item as any).avatar && (item as any).avatar !== 'https://api.rapdo.app/uploads/null' ? (
             <Image
-              source={{uri: item.avatar}}
+              source={{uri: (item as any).avatar}}
               style={tw`w-12 h-12 rounded-full`}
             />
           ) : (
@@ -81,16 +99,15 @@ export function ShareBudgetModal({
         </View>
         <View style={tw`flex-1`}>
           <Text style={tw`text-base font-semibold text-gray-800`}>
-            {item.name || item.username}
+            {(item as any).name || (item as any).username}
           </Text>
-          {item.username && item.name && (
-            <Text style={tw`text-sm text-gray-500`}>@{item.username}</Text>
+          {(item as any).username && (item as any).name && (
+            <Text style={tw`text-sm text-gray-500`}>@{(item as any).username}</Text>
           )}
         </View>
       </TouchableOpacity>
-    ),
-    [],
-  );
+    );
+  };
 
   const renderEmptyState = () => {
     if (isLoading) {

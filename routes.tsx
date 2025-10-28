@@ -20,6 +20,8 @@ import PickupOrder from './src/screens/pickup_order';
 import AllProducts from './src/screens/all-products';
 import CategoryProducts from './src/screens/category-products';
 import OrderDetail from './src/screens/order_detail';
+import ThankYou from './src/screens/thank_you';
+import OrderConfirmed from './src/screens/order_confirmed';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -254,6 +256,22 @@ export default function Routes() {
           headerShown: false,
         }}
         component={OrderDetail}
+      />
+      <Stack.Screen
+        name="ThankYou"
+        options={{
+          title: 'Sucesso',
+          headerShown: false,
+        }}
+        component={ThankYou}
+      />
+      <Stack.Screen
+        name="OrderConfirmed"
+        options={{
+          title: 'Pedido Confirmado',
+          headerShown: false,
+        }}
+        component={OrderConfirmed}
       />
     </Stack.Navigator>
   );
