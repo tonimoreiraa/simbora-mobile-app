@@ -211,7 +211,7 @@ const Product = () => {
   const handleAddCart = () => {
     const displayImages = getDisplayImages();
 
-    if (displayImages.length === 0 || !data.id) {
+    if (!data.id) {
       Toast.show({
         type: 'error',
         text1: 'Produto indisponível',
@@ -225,7 +225,7 @@ const Product = () => {
       name: getDisplayName(),
       price: Number(getDisplayPrice()),
       quantity: 1,
-      image: displayImages[0],
+      image: displayImages?.[0],
       variant: selectedVariant
         ? {
             id: selectedVariant.id,

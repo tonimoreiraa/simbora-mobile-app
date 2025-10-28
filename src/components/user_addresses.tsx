@@ -219,23 +219,32 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
   }
 
   return (
-    <SafeAreaView style={tw`flex-1`}>
-      <ScrollView style={tw`flex-1`}>
-        <View style={tw`px-4`}>
-          <Text style={tw`text-2xl font-bold text-center mb-4`}>
+    <SafeAreaView style={tw`flex-1 `}>
+      <ScrollView style={tw`flex-1 `} showsVerticalScrollIndicator={false}>
+        <View style={tw`px-6 py-6 `}>
+          <Text style={tw`text-2xl font-bold text-gray-900 mb-2`}>
             Selecionar Endereço
+          </Text>
+          <Text style={tw`text-sm text-gray-500 mb-6`}>
+            Escolha o endereço de entrega para seu pedido
           </Text>
 
           {!addresses || addresses.length === 0 ? (
-            <View style={tw`py-10`}>
-              <Text style={tw`text-sm text-stone-600 text-center mb-4`}>
-                Nenhum endereço cadastrado.
+            <View style={tw`py-10 items-center`}>
+              <View style={tw`bg-gray-100 rounded-full p-8 mb-4`}>
+                <NavigationArrow size={48} color="#9CA3AF" weight="regular" />
+              </View>
+              <Text style={tw`text-lg font-semibold text-gray-900 text-center mb-2`}>
+                Nenhum endereço cadastrado
+              </Text>
+              <Text style={tw`text-sm text-gray-500 text-center mb-6 px-4`}>
+                Adicione um endereço para continuar com seu pedido
               </Text>
               <TouchableOpacity
-                style={tw`bg-blue-500 rounded-lg py-3 px-4 items-center`}
+                style={tw`bg-blue-500 rounded-xl py-4 px-8 shadow-sm`}
                 onPress={openModal}>
-                <Text style={tw`text-white font-semibold`}>
-                  Adicionar primeiro endereço
+                <Text style={tw`text-white font-semibold text-base`}>
+                  Adicionar Endereço
                 </Text>
               </TouchableOpacity>
             </View>
@@ -244,74 +253,68 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
               {addresses.map((address: any) => (
                 <TouchableOpacity
                   key={address.id}
-                  style={tw`bg-stone-200 px-4 py-3 flex-row rounded-lg mb-2 ${
+                  style={tw`bg-white border rounded-xl mb-3 p-4 shadow-sm ${
                     selectedAddressId === address.id
-                      ? 'border-2 border-blue-500'
-                      : ''
+                      ? 'border-blue-500 border-2'
+                      : 'border-gray-200'
                   }`}
                   onPress={() => setSelectedAddressId(address.id)}>
-                  <BouncyCheckbox
-                    size={16}
-                    fillColor="#3B82F6"
-                    isChecked={selectedAddressId === address.id}
-                    onPress={() => setSelectedAddressId(address.id)}
-                  />
+                  <View style={tw`flex-row items-start`}>
+                    <View style={tw`pt-1`}>
+                      <BouncyCheckbox
+                        size={20}
+                        fillColor="#3B82F6"
+                        isChecked={selectedAddressId === address.id}
+                        onPress={() => setSelectedAddressId(address.id)}
+                      />
+                    </View>
 
-                  <View style={tw`flex-1 ml-2`}>
-                    <View style={tw`flex-row items-center justify-between`}>
-                      <View style={tw`flex-1`}>
-                        <View style={tw`flex-row items-center`}>
-                          <Text style={tw`font-semibold`}>{address.name}</Text>
+                    <View style={tw`flex-1 ml-2`}>
+                      <View style={tw`flex-row items-center justify-between mb-2`}>
+                        <View style={tw`flex-row items-center flex-1`}>
+                          <Text style={tw`font-bold text-base text-gray-900`}>
+                            {address.name}
+                          </Text>
                           {address.isMain && (
-                            <View
-                              style={tw`bg-blue-100 px-2 py-1 rounded ml-2`}>
-                              <Text
-                                style={tw`text-blue-700 text-xs font-medium`}>
+                            <View style={tw`bg-blue-50 border border-blue-200 px-2 py-1 rounded-md ml-2`}>
+                              <Text style={tw`text-blue-600 text-xs font-medium`}>
                                 Principal
                               </Text>
                             </View>
                           )}
                         </View>
 
-                        <View style={tw`flex items-start mt-1`}>
-                          <NavigationArrow
-                            size={16}
-                            color="#000000"
-                            weight="regular"
-                          />
-                          <Text style={tw`text-sm text-gray-600 ml-1`}>
-                            {address.streetName}, {address.number}
-                            {address.complement
-                              ? `, ${address.complement}`
-                              : ''}
-                          </Text>
-                          <Text style={tw`text-sm text-gray-600 ml-1`}>
-                            {address.neighborhood}, {address.city} -{' '}
-                            {address.state}
-                          </Text>
-                          <Text style={tw`text-sm text-gray-600 ml-1`}>
-                            CEP: {address.zipCode}
-                          </Text>
-                        </View>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleDeleteAddress(address.id, address.name)
+                          }
+                          style={tw`p-2 -mr-2`}>
+                          <Trash size={18} color="#EF4444" weight="fill" />
+                        </TouchableOpacity>
                       </View>
 
-                      <TouchableOpacity
-                        onPress={() =>
-                          handleDeleteAddress(address.id, address.name)
-                        }
-                        style={tw`p-2`}>
-                        <Trash size={16} color="#EF4444" />
-                      </TouchableOpacity>
+                      <View style={tw`mt-1`}>
+                        <Text style={tw`text-sm text-gray-700 leading-5`}>
+                          {address.streetName}, {address.number}
+                          {address.complement ? `, ${address.complement}` : ''}
+                        </Text>
+                        <Text style={tw`text-sm text-gray-600 mt-1 leading-5`}>
+                          {address.neighborhood}, {address.city} - {address.state}
+                        </Text>
+                        <Text style={tw`text-xs text-gray-500 mt-1`}>
+                          CEP: {address.zipCode}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
               ))}
 
               <TouchableOpacity
-                style={tw`bg-stone-200 px-4 py-3 rounded-lg mb-4 flex-row items-center justify-center`}
+                style={tw`bg-gray-50 border border-gray-200 border-dashed px-4 py-4 rounded-xl mb-4 flex-row items-center justify-center`}
                 onPress={openModal}>
-                <Text style={tw`text-base font-medium`}>
-                  + Adicionar novo endereço
+                <Text style={tw`text-base font-semibold text-blue-500`}>
+                  + Adicionar Novo Endereço
                 </Text>
               </TouchableOpacity>
             </>
@@ -319,36 +322,40 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
         </View>
       </ScrollView>
 
-      <View style={tw`px-4 pb-4 pt-2 border-t border-gray-200`}>
-        <TouchableOpacity
-          onPress={handleContinue}
-          disabled={!selectedAddressId}
-          style={tw`bg-blue-500 rounded-2xl py-3 px-3 flex-row items-center justify-center ${
-            !selectedAddressId ? 'opacity-50' : ''
-          }`}>
-          <Text style={tw`text-lg text-white font-semibold`}>Continuar</Text>
-        </TouchableOpacity>
-      </View>
+      {addresses && addresses.length > 0 && (
+        <View style={tw`px-6 pb-6 pt-4 border-t border-gray-100 bg-white`}>
+          <TouchableOpacity
+            onPress={handleContinue}
+            disabled={!selectedAddressId}
+            style={tw`bg-blue-500 rounded-xl py-4 px-4 flex-row items-center justify-center shadow-sm ${
+              !selectedAddressId ? 'opacity-50' : ''
+            }`}>
+            <Text style={tw`text-lg text-white font-semibold`}>Continuar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <Modal
         visible={isModalVisible}
         animationType="slide"
         presentationStyle="pageSheet"
         onRequestClose={closeModal}>
-        <View style={tw`bg-white flex-1`}>
+        <SafeAreaView style={tw`bg-white flex-1`}>
           <View
-            style={tw`flex-row items-center justify-between px-4 py-4 border-b border-gray-100`}>
-            <TouchableOpacity onPress={closeModal}>
-              <X size={24} color="#000" />
+            style={tw`flex-row items-center justify-between px-6 py-4 border-b border-gray-100`}>
+            <TouchableOpacity onPress={closeModal} style={tw`p-2 -ml-2`}>
+              <X size={24} color="#000" weight="bold" />
             </TouchableOpacity>
-            <Text style={tw`text-xl font-bold`}>Adicionar endereço</Text>
-            <View style={tw`w-6`} />
+            <Text style={tw`text-xl font-semibold`}>Novo Endereço</Text>
+            <View style={tw`w-10`} />
           </View>
 
           <ScrollView
-            style={tw`flex-1 px-4 py-6`}
+            style={tw`flex-1 px-6 py-6`}
             showsVerticalScrollIndicator={false}>
-            <Text style={tw`text-xl font-bold mb-4`}>Endereço</Text>
+            <Text style={tw`text-base font-semibold text-gray-700 mb-4`}>
+              Informações do Endereço
+            </Text>
 
             <View style={tw`mb-4`}>
               <Controller
@@ -360,12 +367,13 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>
-                      Nome do endereço
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
+                      Nome do endereço *
                     </Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Casa, Trabalho, etc."
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={50}
@@ -390,19 +398,22 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <View style={tw`flex-row items-center mb-1`}>
-                      <Text style={tw`text-sm text-gray-500`}>CEP</Text>
+                    <View style={tw`flex-row items-center mb-2`}>
+                      <Text style={tw`text-xs text-gray-600 font-medium`}>CEP *</Text>
                       {isLoadingCep && (
                         <ActivityIndicator
                           size="small"
-                          color="#6B7280"
+                          color="#3B82F6"
                           style={tw`ml-2`}
                         />
                       )}
                     </View>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base ${
+                        isLoadingCep ? 'opacity-50' : ''
+                      }`}
                       placeholder="00000-000"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={text => {
                         const maskedValue = applyCepMask(text);
@@ -418,6 +429,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                       maxLength={9}
                       editable={!isLoadingCep}
                     />
+                    {isLoadingCep && (
+                      <Text style={tw`text-xs text-blue-500 mt-1`}>
+                        Buscando endereço...
+                      </Text>
+                    )}
                   </View>
                 )}
               />
@@ -438,10 +454,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>Endereço</Text>
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Endereço *</Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Rua das Flores"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={100}
@@ -456,8 +473,8 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
               )}
             </View>
 
-            <View style={tw`flex-row mb-4`}>
-              <View style={tw`flex-1 mr-2`}>
+            <View style={tw`flex-row mb-4 gap-3`}>
+              <View style={tw`flex-1`}>
                 <Controller
                   name="number"
                   control={control}
@@ -467,10 +484,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Número</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Número *</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="123"
+                        placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={10}
@@ -485,7 +503,7 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 )}
               </View>
 
-              <View style={tw`flex-1 ml-2`}>
+              <View style={tw`flex-1`}>
                 <Controller
                   name="complement"
                   control={control}
@@ -494,12 +512,13 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
                         Complemento
                       </Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="Apto 101"
+                        placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={50}
@@ -525,10 +544,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>Bairro</Text>
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Bairro *</Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Centro"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={50}
@@ -543,8 +563,8 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
               )}
             </View>
 
-            <View style={tw`flex-row mb-4`}>
-              <View style={tw`flex-2 mr-2`}>
+            <View style={tw`flex-row mb-4 gap-3`}>
+              <View style={tw`flex-2`}>
                 <Controller
                   name="city"
                   control={control}
@@ -554,10 +574,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Cidade</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Cidade *</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="São Paulo"
+                        placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={50}
@@ -572,7 +593,7 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 )}
               </View>
 
-              <View style={tw`flex-1 ml-2`}>
+              <View style={tw`flex-1`}>
                 <Controller
                   name="state"
                   control={control}
@@ -583,10 +604,11 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Estado</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>UF *</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="SP"
+                        placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={text => onChange(text.toUpperCase())}
                         maxLength={2}
@@ -609,19 +631,19 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <TouchableOpacity
-                    style={tw`flex-row items-center p-4 bg-gray-100 rounded-lg`}
+                    style={tw`flex-row items-center p-4 bg-gray-50 border border-gray-200 rounded-xl`}
                     onPress={() => onChange(!value)}>
                     <View
-                      style={tw`w-5 h-5 rounded border-2 mr-3 ${
+                      style={tw`w-6 h-6 rounded-lg border-2 mr-3 items-center justify-center ${
                         value
                           ? 'bg-blue-500 border-blue-500'
                           : 'border-gray-300'
                       }`}>
                       {value && (
-                        <Check size={12} color="#fff" style={tw`m-auto`} />
+                        <Check size={14} color="#fff" weight="bold" />
                       )}
                     </View>
-                    <Text style={tw`text-base`}>
+                    <Text style={tw`text-base text-gray-700`}>
                       Definir como endereço principal
                     </Text>
                   </TouchableOpacity>
@@ -630,23 +652,23 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
             </View>
           </ScrollView>
 
-          <View style={tw`px-4 pb-6 pt-4 border-t border-gray-100 bg-white`}>
+          <View style={tw`px-6 pb-6 pt-4 border-t border-gray-100 bg-white`}>
             <TouchableOpacity
               onPress={handleSubmit(onSubmit)}
               disabled={createAddressMutation.isLoading}
-              style={tw`bg-blue-500 rounded-lg p-4 items-center ${
+              style={tw`bg-blue-500 rounded-xl p-4 items-center shadow-sm ${
                 createAddressMutation.isLoading ? 'opacity-50' : ''
               }`}>
               {createAddressMutation.isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text style={tw`text-white text-base font-semibold`}>
-                  Salvar endereço
+                  Salvar Endereço
                 </Text>
               )}
             </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     </SafeAreaView>
   );

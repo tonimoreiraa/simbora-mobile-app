@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView} from 'react-native';
+import {SafeAreaView, ScrollView, View} from 'react-native';
 import {UserAddresses} from '../components/user_addresses';
 import {useCart} from '../contexts/cart_provider';
 import {usePostOrders} from '../services/client/orders/orders';
@@ -20,7 +20,8 @@ export default function Checkout() {
   }, []);
 
   return (
-    <SafeAreaView style={tw`flex-1`}>
+    <View style={tw`flex-1 bg-white`}>
+      <SafeAreaView style={tw`flex-1`}>
       <ScrollView style={tw`px-4`}>
         {step == 'shipping' && (
           <>
@@ -29,5 +30,6 @@ export default function Checkout() {
         )}
       </ScrollView>
     </SafeAreaView>
+    </View>
   );
 }
