@@ -21,9 +21,53 @@ import SocialLogin from '../components/social_login';
 import Terms from '../components/terms';
 import CheckBox from '../components/check_box';
 
+// Função para extrair mensagem de erro amigável
+function getErrorMessage(error: any): string {
+  // Tentar pegar a mensagem do backend primeiro
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  // Verificar se há erros de validação
+  if (error?.response?.data?.errors) {
+    const errors = error.response.data.errors;
+    if (Array.isArray(errors) && errors.length > 0) {
+      return errors[0].message || errors[0];
+    }
+    if (typeof errors === 'object') {
+      const firstError = Object.values(errors)[0];
+      if (typeof firstError === 'string') return firstError;
+      if (Array.isArray(firstError)) return firstError[0];
+    }
+  }
+
+  // Mensagens de erro baseadas no status code
+  if (error?.response?.status === 401) {
+    return 'E-mail ou senha incorretos. Verifique seus dados e tente novamente.';
+  }
+  if (error?.response?.status === 400) {
+    return 'Dados inválidos. Verifique os campos e tente novamente.';
+  }
+  if (error?.response?.status === 404) {
+    return 'Usuário não encontrado. Verifique seu e-mail.';
+  }
+  if (error?.response?.status >= 500) {
+    return 'Erro no servidor. Tente novamente em alguns instantes.';
+  }
+
+  // Mensagens para erros de rede
+  if (error?.message === 'Network Error' || !error?.response) {
+    return 'Erro de conexão. Verifique sua internet e tente novamente.';
+  }
+
+  // Mensagem genérica
+  return 'Não foi possível fazer login. Tente novamente.';
+}
+
 function SignIn() {
   const navigation = useNavigation();
   const auth = useAuth();
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   const signIn = async ({email, password}: SignInPayload) =>
     await auth.signIn(email, password);
@@ -32,7 +76,15 @@ function SignIn() {
     resolver: zodResolver(signInSchema),
   });
 
-  const mutation = useMutation(signIn);
+  const mutation = useMutation(signIn, {
+    onSuccess: () => {
+      setErrorMessage('');
+    },
+    onError: (error: any) => {
+      const message = getErrorMessage(error);
+      setErrorMessage(message);
+    },
+  });
 
   async function handleSubmit(payload: SignInPayload) {
     mutation.mutate(payload);
@@ -48,7 +100,8 @@ function SignIn() {
       <ScrollView
         contentContainerStyle={tw`flex-grow`}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode="on-drag">
         <View style={tw`flex-1 px-6 py-8 justify-between min-h-full`}>
           {/* Header Section */}
           <View style={tw`flex-1 justify-center`}>
@@ -75,11 +128,12 @@ function SignIn() {
                 isPassword
               />
 
-              {mutation.isError && (
-                <Text style={tw`text-red-500 text-sm`}>
-                  {/** @ts-ignore **/}
-                  {mutation.error?.message}
-                </Text>
+              {errorMessage && (
+                <View style={tw`bg-red-50 border border-red-200 rounded-lg p-3`}>
+                  <Text style={tw`text-red-600 text-sm`}>
+                    {errorMessage}
+                  </Text>
+                </View>
               )}
 
               <View style={tw`flex-row justify-between items-center py-2`}>

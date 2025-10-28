@@ -29,13 +29,62 @@ async function signUp(payload: SignUpPayload) {
   return data;
 }
 
+// Função para extrair mensagem de erro amigável
+function getErrorMessage(error: any): string {
+  // Tentar pegar a mensagem do backend primeiro
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  // Verificar se há erros de validação
+  if (error?.response?.data?.errors) {
+    const errors = error.response.data.errors;
+    if (Array.isArray(errors) && errors.length > 0) {
+      return errors[0].message || errors[0];
+    }
+    if (typeof errors === 'object') {
+      const firstError = Object.values(errors)[0];
+      if (typeof firstError === 'string') return firstError;
+      if (Array.isArray(firstError)) return firstError[0];
+    }
+  }
+
+  // Mensagens de erro baseadas no status code
+  if (error?.response?.status === 409) {
+    return 'Este e-mail ou nome de usuário já está em uso. Tente outro.';
+  }
+  if (error?.response?.status === 400) {
+    return 'Dados inválidos. Verifique os campos e tente novamente.';
+  }
+  if (error?.response?.status === 422) {
+    return 'Dados inválidos. Verifique os campos e tente novamente.';
+  }
+  if (error?.response?.status >= 500) {
+    return 'Erro no servidor. Tente novamente em alguns instantes.';
+  }
+
+  // Mensagens para erros de rede
+  if (error?.message === 'Network Error' || !error?.response) {
+    return 'Erro de conexão. Verifique sua internet e tente novamente.';
+  }
+
+  // Mensagem genérica
+  return 'Não foi possível criar a conta. Tente novamente.';
+}
+
 function SignUp() {
   const auth = useAuth();
   const navigation = useNavigation();
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   const mutation = useMutation(signUp, {
     onSuccess: ({user, token}) => {
+      setErrorMessage('');
       auth.signInWithToken(token.token, user);
+    },
+    onError: (error: any) => {
+      const message = getErrorMessage(error);
+      setErrorMessage(message);
     },
   });
 
@@ -54,7 +103,8 @@ function SignUp() {
       <ScrollView
         contentContainerStyle={tw`flex-grow`}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode="on-drag">
         <View style={tw`flex-1 px-6 py-8 justify-between min-h-full`}>
           {/* Back Button */}
           <TouchableOpacity
@@ -110,11 +160,12 @@ function SignUp() {
                 professionalTypeName="professionalType"
               />
 
-              {mutation.isError && (
-                <Text style={tw`text-red-500 text-sm`}>
-                  {/* @ts-ignore */}
-                  {mutation.error?.message || 'Erro ao criar conta'}
-                </Text>
+              {errorMessage && (
+                <View style={tw`bg-red-50 border border-red-200 rounded-lg p-3`}>
+                  <Text style={tw`text-red-600 text-sm`}>
+                    {errorMessage}
+                  </Text>
+                </View>
               )}
 
               {/* Create Account Button */}

@@ -7,308 +7,280 @@ import {
   ScrollView,
   TextInput,
   Switch,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import tw from 'twrnc';
-import {useRoute, useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
-import ShippingMethod from '../components/shipping_method';
-import DropDown from '../components/dropdown';
-import SendRequest from '../components/send_request';
-import AccountInput from '../components/create_account_input';
 import {useCart} from '../contexts/cart_provider';
-import {CreditCard, ShareNetwork, MapPin} from 'phosphor-react-native';
-import {ShareBudgetModal} from '../components/share_budget_modal';
-import type {GetUsers200DataItem} from '../services/client/models';
-import Animated, {
-  withSpring,
-  useSharedValue,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-import {
-  GestureHandlerRootView,
-  PanGestureHandler,
-} from 'react-native-gesture-handler';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {ArrowLeft} from 'phosphor-react-native';
+import {usePostOrders} from '../services/client/orders/orders';
+import {useGetUserAddresses} from '../services/client/user-addresses/user-addresses';
 
-type PaymentFormData = {
-  cardNumber: string;
-  cardholderName: string;
-  expirationDate: string;
-  cvv: string;
-};
+interface RouteParams {
+  addressId: number;
+}
 
 function OrderResume() {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const {selectedAddress} = (route.params as {selectedAddress?: any}) || {};
+  const [isForwardEnabled, setIsForwardEnabled] = useState(false);
+  const [professionalId, setProfessionalId] = useState('');
+
   const cart = useCart();
+  const navigation = useNavigation<any>();
+  const route = useRoute();
+  const {addressId} = (route.params as RouteParams) || {};
 
-  const form = useForm<PaymentFormData>();
+  // Buscar endereços do usuário
+  const {data: addresses, isLoading: isLoadingAddresses} = useGetUserAddresses();
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [shareModalVisible, setShareModalVisible] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  const translateY = useSharedValue(400);
+  // Encontrar o endereço selecionado
+  const selectedAddress = addresses?.find((addr: any) => addr.id === addressId);
 
-  const onGestureEvent = (event: any) => {
-    translateY.value = event.translationY;
-  };
+  const createOrderMutation = usePostOrders({
+    mutation: {
+      onSuccess: () => {
+        // Limpar carrinho e navegar imediatamente
+        cart.clear();
+        navigation.navigate('MyOrders');
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{translateY: translateY.value}],
-    };
+        // Mostrar mensagem de sucesso após navegar
+        setTimeout(() => {
+          Alert.alert('Sucesso', 'Pedido criado com sucesso!');
+        }, 300);
+      },
+      onError: (error: any) => {
+        console.error('Erro ao criar pedido:', error);
+        Alert.alert(
+          'Erro',
+          error?.response?.data?.message || 'Não foi possível criar o pedido. Tente novamente.',
+        );
+      },
+    },
   });
 
-  const toggleDrawer = () => {
-    if (isEnabled) {
-      translateY.value = withSpring(0, {
-        damping: 20,
-        stiffness: 90,
-        mass: 1,
-        overshootClamping: true,
-      });
-    } else {
-      translateY.value = withSpring(400, {
-        damping: 20,
-        stiffness: 90,
-        mass: 1,
-        overshootClamping: true,
-      });
+  // Cálculos do pedido
+  const subtotal = Number(cart.subTotal) || 0;
+  const discount = Number(cart.discounts) || 0;
+  const shipping = 0; // Pode ser calculado baseado no endereço ou método de envio
+  const total = subtotal - discount + shipping;
+
+  const handleCreateOrder = () => {
+    if (!addressId) {
+      Alert.alert('Erro', 'Endereço não selecionado');
+      return;
     }
+
+    if (cart.items.length === 0) {
+      Alert.alert('Erro', 'Carrinho vazio');
+      return;
+    }
+
+    if (isForwardEnabled && !professionalId) {
+      Alert.alert('Erro', 'Digite o ID do profissional para encaminhar o pedido');
+      return;
+    }
+
+    const orderData = {
+      items: cart.items.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        unit_price: item.price,
+        product_variant_id: item.variant?.id,
+      })),
+      addressId: addressId,
+      type: 'delivery' as const,
+    };
+    createOrderMutation.mutate({data: orderData});
   };
 
-  React.useEffect(() => {
-    toggleDrawer();
-  }, [isEnabled]);
-
-  const handlePayment = () => {
-    console.log('Iniciando pagamento...');
-
-    // TODO: Implementar lógica de pagamento real aqui
-    // Por enquanto, vamos simular um pedido confirmado
-    const mockOrderNumber = Math.floor(100000 + Math.random() * 900000).toString();
-    const mockDeliveryAddress = selectedAddress
-      ? `${selectedAddress.streetName}, ${selectedAddress.number || 'S/N'} - ${selectedAddress.city}, ${selectedAddress.state}`
-      : 'Endereço não informado';
-    const mockEstimatedTime = '30-45 minutos';
-
-    // Navigate to order confirmed screen
-    (navigation.navigate as any)('OrderConfirmed', {
-      orderNumber: mockOrderNumber,
-      deliveryAddress: mockDeliveryAddress,
-      estimatedTime: mockEstimatedTime,
-    });
-  };
-
-  const handleShareBudget = () => {
-    setShareModalVisible(true);
-  };
-
-  const handleSelectUser = (user: GetUsers200DataItem) => {
-    console.log('Usuário selecionado:', user);
-    // TODO: Implementar lógica para compartilhar o orçamento com o usuário selecionado
-  };
-
-  const handleShareSuccess = (userName: string) => {
-    // Navigate to thank you screen
-    (navigation.navigate as any)('ThankYou', {userName});
-  };
-
-  const shippingCost = 0; // Pode ser calculado ou vindo dos parâmetros
-
-  const formatPrice = (value: number) => {
-    return value.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
-  };
+  if (isLoadingAddresses) {
+    return (
+      <SafeAreaView style={tw`flex-1 bg-white`}>
+        <View style={tw`flex-1 justify-center items-center`}>
+          <ActivityIndicator size="large" color="#3B82F6" />
+          <Text style={tw`mt-2 text-gray-500`}>Carregando informações...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaView style={tw`flex-1 bg-gray-50`}>
-        <ScrollView
-          contentContainerStyle={tw`px-5 py-6 pb-8`}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Cabeçalho */}
-          <View style={tw`mb-6`}>
-            <Text style={tw`text-2xl font-bold text-gray-800 mb-1`}>
+    <SafeAreaView style={tw`flex-1 bg-white`}>
+      <ScrollView style={tw`flex-1`}>
+        <View style={tw`flex flex-col px-4 py-6`}>
+          {/* Header */}
+          <View style={tw`flex-row items-center mb-6`}>
+            <TouchableOpacity
+              style={tw`p-2 -ml-2`}
+              onPress={() => navigation.goBack()}>
+              <ArrowLeft size={24} color="#000" weight="regular" />
+            </TouchableOpacity>
+            <Text style={tw`text-2xl font-bold flex-1 text-center`}>
               Resumo do Pedido
             </Text>
-            <Text style={tw`text-sm text-gray-500`}>
-              Confira os detalhes antes de prosseguir
-            </Text>
+            <View style={tw`w-8`} />
           </View>
 
           {/* Endereço de Entrega */}
           {selectedAddress && (
-            <View style={tw`bg-white border-neutral-100 border p-4 rounded-xl shadow-sm mb-4`}>
-              <View style={tw`flex-row items-center mb-2`}>
-                <MapPin size={20} color="#1F2937" weight="fill" style={tw`mr-2`} />
-                <Text style={tw`text-lg font-semibold text-gray-800`}>
-                  Endereço de Entrega
+            <View style={tw`w-full mb-4`}>
+              <Text style={tw`text-xl font-bold mb-3`}>Endereço de Entrega</Text>
+              <View style={tw`bg-stone-100 rounded-lg p-4`}>
+                <Text style={tw`font-semibold text-base mb-1`}>
+                  {selectedAddress.name}
+                </Text>
+                <Text style={tw`text-gray-600 text-sm`}>
+                  {selectedAddress.streetName}, {selectedAddress.number}
+                  {selectedAddress.complement ? `, ${selectedAddress.complement}` : ''}
+                </Text>
+                <Text style={tw`text-gray-600 text-sm`}>
+                  {selectedAddress.neighborhood}, {selectedAddress.city} - {selectedAddress.state}
+                </Text>
+                <Text style={tw`text-gray-600 text-sm`}>
+                  CEP: {selectedAddress.zipCode}
                 </Text>
               </View>
-              <Text style={tw`text-sm text-gray-600 leading-5`}>
-                {selectedAddress.streetName}
-                {selectedAddress.number && `, ${selectedAddress.number}`}
-              </Text>
-              {selectedAddress.complement && (
-                <Text style={tw`text-sm text-gray-500 mt-1`}>
-                  {selectedAddress.complement}
-                </Text>
-              )}
-              {selectedAddress.city && selectedAddress.state && (
-                <Text style={tw`text-sm text-gray-600 mt-1`}>
-                  {selectedAddress.city} - {selectedAddress.state}
-                </Text>
-              )}
             </View>
           )}
 
-          {/* Itens do Pedido */}
-          <View style={tw`bg-white rounded-xl border border-neutral-100 mb-4 overflow-hidden`}>
-            <View style={tw`bg-neutral-100 px-4 py-3 border-b border-gray-200`}>
-              <Text style={tw`font-semibold text-gray-800`}>
-                Itens do Pedido ({cart.quantity})
-              </Text>
-            </View>
-
-            {cart.items.map((item, index) => (
-              <View
-                key={`${item.id}-${index}`}
-                style={tw`px-4 py-3 ${
-                  index < cart.items.length - 1 ? 'border-b border-gray-100' : ''
-                }`}
-              >
-                <View style={tw`flex-row justify-between items-start`}>
-                  <View style={tw`flex-1 pr-3`}>
-                    <Text style={tw`text-sm font-medium text-gray-800 mb-1`}>
-                      {item.name}
-                    </Text>
-                    {item.variant && (
-                      <Text style={tw`text-xs text-gray-500 mb-1`}>
-                        {item.variant.value} {item.variant.unit}
-                      </Text>
-                    )}
-                    <Text style={tw`text-xs text-gray-500`}>
-                      Quantidade: {item.quantity}
+          {/* Resumo de Preços */}
+          <View style={tw`w-full mt-2`}>
+            <View style={tw`flex w-full border border-stone-300 p-4 rounded-lg`}>
+              <View style={tw`flex flex-row items-center justify-between py-2`}>
+                <Text>Subtotal</Text>
+                <View style={tw`flex flex-row items-center justify-between`}>
+                  <Text style={tw`font-bold`}>
+                    {subtotal.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </Text>
+                </View>
+              </View>
+              <View style={tw`flex flex-row items-center justify-between`}>
+                <Text>Frete</Text>
+                <View style={tw`flex flex-row items-center justify-between py-2`}>
+                  <Text style={tw`font-bold`}>
+                    {shipping === 0 ? 'Grátis' : shipping.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </Text>
+                </View>
+              </View>
+              {discount > 0 && (
+                <View style={tw`flex flex-row items-center justify-between`}>
+                  <Text>Desconto</Text>
+                  <View style={tw`flex flex-row items-center justify-between py-2`}>
+                    <Text style={tw`font-bold`}>
+                      {discount.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </Text>
                   </View>
-                  <View style={tw`items-end`}>
-                    <Text style={tw`text-sm font-semibold text-gray-800`}>
-                      {formatPrice(item.price * item.quantity)}
+                </View>
+              )}
+              <View style={tw`border-t border-gray-200 mt-3 pt-3`}>
+                <View style={tw`flex flex-row items-center justify-between`}>
+                  <Text style={tw`text-lg font-bold`}>Valor total</Text>
+                  <View style={tw`flex flex-row items-center justify-between py-2`}>
+                    <Text style={tw`text-xl font-bold`}>
+                      {total.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </Text>
-                    {item.quantity > 1 && (
-                      <Text style={tw`text-xs text-gray-500 mt-1`}>
-                        {formatPrice(item.price)} cada
-                      </Text>
-                    )}
                   </View>
                 </View>
               </View>
-            ))}
+            </View>
           </View>
 
-          {/* Resumo de Valores */}
-          <View style={tw`bg-white border border-neutral-100 rounded-xl shadow-sm mb-6 p-4`}>
-            <View style={tw`flex-row justify-between mb-2`}>
-              <Text style={tw`text-sm text-gray-600`}>Subtotal</Text>
-              <Text style={tw`text-sm font-medium text-gray-800`}>
-                {formatPrice(cart.subTotal)}
-              </Text>
+          {/* Encaminhar Pedido */}
+          <View style={tw`w-full mt-6`}>
+            <View style={tw`flex-row items-center justify-between mb-3`}>
+              <Text style={tw`text-xl font-bold`}>Encaminhar Pedido</Text>
+              <Switch
+                trackColor={{false: '#767577', true: '#3183FF'}}
+                thumbColor="white"
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={setIsForwardEnabled}
+                value={isForwardEnabled}
+              />
             </View>
 
-            <View style={tw`flex-row justify-between mb-2`}>
-              <Text style={tw`text-sm text-gray-600`}>Frete</Text>
-              {shippingCost === 0 ? (
-                <Text style={tw`text-sm font-medium text-green-600`}>
-                  Grátis
+            {isForwardEnabled && (
+              <View
+                style={tw`bg-stone-100 rounded-lg p-4`}>
+                <Text style={tw`text-sm text-gray-600 mb-2`}>
+                  ID do Profissional
                 </Text>
-              ) : (
-                <Text style={tw`text-sm font-medium text-gray-800`}>
-                  {formatPrice(shippingCost)}
-                </Text>
-              )}
-            </View>
-
-            {cart.discounts > 0 && (
-              <View style={tw`flex-row justify-between mb-2`}>
-                <Text style={tw`text-sm text-gray-600`}>Descontos</Text>
-                <Text style={tw`text-sm font-medium text-green-600`}>
-                  -{formatPrice(cart.discounts)}
+                <TextInput
+                  style={tw`bg-white rounded-lg p-3 text-base`}
+                  placeholder="Digite o ID do profissional"
+                  value={professionalId}
+                  onChangeText={setProfessionalId}
+                  keyboardType="numeric"
+                />
+                <Text style={tw`text-xs text-gray-500 mt-2`}>
+                  O pedido será encaminhado para o profissional especificado
                 </Text>
               </View>
             )}
+          </View>
 
-            <View style={tw`border-t border-gray-200 mt-3 pt-3`}>
-              <View style={tw`flex-row justify-between items-center`}>
-                <Text style={tw`text-lg font-bold text-gray-800`}>Total</Text>
-                <Text style={tw`text-xl font-bold text-gray-800`}>
-                  {formatPrice(cart.total + shippingCost)}
-                </Text>
-              </View>
+          {/* Informações do Carrinho */}
+          <View style={tw`w-full mt-6`}>
+            <Text style={tw`text-xl font-bold mb-3`}>Itens do Pedido</Text>
+            <View style={tw`bg-stone-100 rounded-lg p-4`}>
+              {cart.items.map((item, index) => (
+                <View
+                  key={item.id}
+                  style={tw`${
+                    index !== 0 ? 'border-t border-gray-300 pt-3' : ''
+                  } ${index !== cart.items.length - 1 ? 'pb-3' : ''}`}>
+                  <View style={tw`flex-row justify-between items-center`}>
+                    <View style={tw`flex-1`}>
+                      <Text style={tw`font-semibold text-base`}>
+                        {item.name}
+                      </Text>
+                      <Text style={tw`text-gray-600 text-sm mt-1`}>
+                        Quantidade: {item.quantity}
+                      </Text>
+                    </View>
+                    <Text style={tw`font-bold text-base`}>
+                      {(item.price * item.quantity).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
+                    </Text>
+                  </View>
+                </View>
+              ))}
             </View>
           </View>
+        </View>
+      </ScrollView>
 
-          {/* Cards de Ação */}
-          <View style={tw`gap-4`}>
-            {/* Card: Eu vou pagar */}
-            <TouchableOpacity
-              style={tw`bg-green-500 rounded-2xl p-6 shadow-lg active:scale-98`}
-              onPress={handlePayment}
-              activeOpacity={0.8}
-            >
-              <View style={tw`flex-row items-center justify-between`}>
-                <View style={tw`flex-1`}>
-                  <Text style={tw`text-2xl font-bold text-white mb-2`}>
-                    Eu vou pagar
-                  </Text>
-                  <Text style={tw`text-sm text-green-50 leading-5`}>
-                    Prosseguir para finalizar a compra e realizar o pagamento
-                  </Text>
-                </View>
-                <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
-                  <CreditCard size={32} color="#FFFFFF" weight="bold" />
-                </View>
-              </View>
-            </TouchableOpacity>
-
-            {/* Card: Compartilhar Orçamento */}
-            <TouchableOpacity
-              style={tw`bg-blue-500 rounded-2xl p-6 shadow-lg active:scale-98`}
-              onPress={handleShareBudget}
-              activeOpacity={0.8}
-            >
-              <View style={tw`flex-row items-center justify-between`}>
-                <View style={tw`flex-1`}>
-                  <Text style={tw`text-2xl font-bold text-white mb-2`}>
-                    Compartilhar orçamento
-                  </Text>
-                  <Text style={tw`text-sm text-blue-50 leading-5`}>
-                    Enviar para outro usuário aprovar e pagar. Será entregue no endereço escolhido
-                  </Text>
-                </View>
-                <View style={tw`bg-white bg-opacity-20 rounded-full p-3`}>
-                  <ShareNetwork size={32} color="#FFFFFF" weight="bold" />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        {/* Share Budget Modal */}
-        <ShareBudgetModal
-          visible={shareModalVisible}
-          onClose={() => setShareModalVisible(false)}
-          onSelectUser={handleSelectUser}
-          onShareSuccess={handleShareSuccess}
-        />
-      </SafeAreaView>
-    </GestureHandlerRootView>
+      {/* Botão de Finalizar */}
+      <View style={tw`px-4 pb-6 pt-4 border-t border-gray-200`}>
+        <TouchableOpacity
+          style={tw`flex flex-col items-center justify-center bg-blue-500 p-4 rounded-xl ${
+            createOrderMutation.isLoading ? 'opacity-50' : ''
+          }`}
+          onPress={handleCreateOrder}
+          disabled={createOrderMutation.isLoading}>
+          {createOrderMutation.isLoading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={tw`font-bold text-lg text-white`}>
+              {isForwardEnabled ? 'Encaminhar Pedido' : 'Criar Pedido'}
+            </Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 

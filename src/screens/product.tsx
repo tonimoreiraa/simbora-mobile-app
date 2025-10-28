@@ -380,7 +380,9 @@ const Product = () => {
           </Text>
         </View>
 
-        {data?.supplier && (
+        {data?.supplier &&
+         data.supplier.name &&
+         data.supplier.name.toLowerCase() !== 'não informado' && (
           <View style={tw`px-4 mt-4`}>
             <Text style={tw`font-bold text-base text-stone-600`}>
               Fornecedor

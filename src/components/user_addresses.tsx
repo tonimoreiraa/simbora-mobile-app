@@ -169,10 +169,7 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
       return;
     }
 
-    const selectedAddress = addresses?.find(
-      addr => addr.id === selectedAddressId,
-    );
-    navigation.navigate('ResumeOrder', {selectedAddress});
+    navigation.navigate('ResumeOrder', {addressId: selectedAddressId});
   };
 
   if (isLoading) {
