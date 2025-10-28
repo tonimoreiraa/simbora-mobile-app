@@ -6,10 +6,8 @@ const DropDown = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-    {label: 'Orange', value: 'orange'},
-    {label: 'Mango', value: 'mango'},
+    {label: 'Cartão de crédito', value: 'credit-card'},
+    {label: 'Cartão de débito', value: 'debit-card'},
   ]);
 
   return (
@@ -21,9 +19,10 @@ const DropDown = () => {
       setValue={setValue}
       setItems={setItems}
       placeholder="Cartão de crédito"
-      style={tw`border-stone-300 rounded-lg border border-transparent bg-stone-100 mt-4`}
-      dropDownContainerStyle={tw`border-transparent bg-stone-100 rounded-lg`}
-      placeholderStyle={tw`text-gray-400`}
+      style={tw`bg-gray-50 border border-neutral-200 rounded-lg mt-4 py-4 px-3`}
+      dropDownContainerStyle={tw`border border-neutral-200 bg-gray-50 rounded-lg`}
+      placeholderStyle={tw`text-neutral-500`}
+      textStyle={tw`text-neutral-700`}
       selectedItemContainerStyle={tw`bg-blue-50`}
       selectedItemLabelStyle={tw`text-blue-600`}
     />
