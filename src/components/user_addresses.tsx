@@ -163,21 +163,6 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
     createAddressMutation.mutate({data: formattedData});
   };
 
-  const handleDeleteAddress = (addressId: number, addressName: string) => {
-    Alert.alert(
-      'Confirmar exclusão',
-      `Tem certeza que deseja excluir o endereço "${addressName}"?`,
-      [
-        {text: 'Cancelar', style: 'cancel'},
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: () => deleteAddressMutation.mutate({id: addressId}),
-        },
-      ],
-    );
-  };
-
   const handleContinue = () => {
     if (!selectedAddressId) {
       Alert.alert('Atenção', 'Selecione um endereço para continuar.');
@@ -221,7 +206,7 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
   return (
     <SafeAreaView style={tw`flex-1 `}>
       <ScrollView style={tw`flex-1 `} showsVerticalScrollIndicator={false}>
-        <View style={tw`px-6 py-6 `}>
+        <View style={tw`px-4 py-6 `}>
           <Text style={tw`text-2xl font-bold text-gray-900 mb-2`}>
             Selecionar Endereço
           </Text>
@@ -253,59 +238,47 @@ export function UserAddresses({onContinue}: UserAddressesProps) {
               {addresses.map((address: any) => (
                 <TouchableOpacity
                   key={address.id}
-                  style={tw`bg-white border rounded-xl mb-3 p-4 shadow-sm ${
+                  style={tw`bg-white border rounded-xl mb-3 p-4 ${
                     selectedAddressId === address.id
                       ? 'border-blue-500 border-2'
                       : 'border-gray-200'
                   }`}
                   onPress={() => setSelectedAddressId(address.id)}>
-                  <View style={tw`flex-row items-start`}>
-                    <View style={tw`pt-1`}>
+                  <View style={tw`flex-row items-center justify-between`}>
+                    <View style={tw`flex-row justify-start items-center flex-1`}>
                       <BouncyCheckbox
                         size={20}
                         fillColor="#3B82F6"
                         isChecked={selectedAddressId === address.id}
                         onPress={() => setSelectedAddressId(address.id)}
+                        useBuiltInState={false}
+                        style={tw`w-4`}
                       />
-                    </View>
 
-                    <View style={tw`flex-1 ml-2`}>
-                      <View style={tw`flex-row items-center justify-between mb-2`}>
-                        <View style={tw`flex-row items-center flex-1`}>
-                          <Text style={tw`font-bold text-base text-gray-900`}>
-                            {address.name}
+                      <Text style={tw`font-bold text-base text-gray-900 ml-4`}>
+                        {address.name}
+                      </Text>
+                      {address.isMain && (
+                        <View style={tw`bg-blue-50 border border-blue-200 px-2 py-1 rounded-md ml-2`}>
+                          <Text style={tw`text-blue-600 text-xs font-medium`}>
+                            Principal
                           </Text>
-                          {address.isMain && (
-                            <View style={tw`bg-blue-50 border border-blue-200 px-2 py-1 rounded-md ml-2`}>
-                              <Text style={tw`text-blue-600 text-xs font-medium`}>
-                                Principal
-                              </Text>
-                            </View>
-                          )}
                         </View>
-
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleDeleteAddress(address.id, address.name)
-                          }
-                          style={tw`p-2 -mr-2`}>
-                          <Trash size={18} color="#EF4444" weight="fill" />
-                        </TouchableOpacity>
-                      </View>
-
-                      <View style={tw`mt-1`}>
-                        <Text style={tw`text-sm text-gray-700 leading-5`}>
-                          {address.streetName}, {address.number}
-                          {address.complement ? `, ${address.complement}` : ''}
-                        </Text>
-                        <Text style={tw`text-sm text-gray-600 mt-1 leading-5`}>
-                          {address.neighborhood}, {address.city} - {address.state}
-                        </Text>
-                        <Text style={tw`text-xs text-gray-500 mt-1`}>
-                          CEP: {address.zipCode}
-                        </Text>
-                      </View>
+                      )}
                     </View>
+                  </View>
+
+                  <View style={tw`ml-8`}>
+                    <Text style={tw`text-sm text-gray-700 leading-5`}>
+                      {address.streetName}, {address.number}
+                      {address.complement ? `, ${address.complement}` : ''}
+                    </Text>
+                    <Text style={tw`text-sm text-gray-600 mt-1 leading-5`}>
+                      {address.neighborhood}, {address.city} - {address.state}
+                    </Text>
+                    <Text style={tw`text-xs text-gray-500 mt-1`}>
+                      CEP: {address.zipCode}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               ))}
