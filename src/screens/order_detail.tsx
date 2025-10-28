@@ -19,6 +19,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useGetOrdersId} from '../services/client/orders/orders';
 import {useGetOrderShippingsId} from '../services/client/order-shippings/order-shippings';
+import {useGetOrdersOrderIdActivityLogs} from '../services/client/order-activity-logs/order-activity-logs';
 import {useGetProductsId} from '../services/client/products/products';
 import {getCorrectImageUrl} from '../utils/image';
 import Price from '../components/price';
@@ -120,7 +121,19 @@ function OrderDetail() {
   const {orderId} = route.params as OrderDetailParams;
 
   const {data: order, isLoading, error} = useGetOrdersId(Number(orderId));
-  const {data: shipping} = useGetOrderShippingsId(Number(orderId));
+  const {data: shipping} = useGetOrderShippingsId(Number(orderId), {
+    query: {retry: false},
+  });
+
+  // Order activity logs (separate endpoint)
+  const {
+    data: orderActivityLogs,
+    isLoading: isLoadingOrderActivityLogs,
+  } = useGetOrdersOrderIdActivityLogs(Number(orderId), undefined, {
+    query: {retry: false},
+  });
+
+  // Debug logs removidos para evitar poluição do console
 
   if (isLoading) {
     return (
@@ -177,9 +190,104 @@ function OrderDetail() {
     return itemsText;
   };
 
-  // Create timeline with shipping logs + default order created log
+  // Helper: translate status coming from activity logs to pt-BR human text
+  const translateActivityStatus = (status?: string | null) => {
+    if (!status) return '';
+    const s = String(status).toLowerCase();
+    switch (s) {
+      case 'completed':
+      case 'entregue':
+        return 'Entregue';
+      case 'delivered':
+      case 'retirada':
+        return 'Retirada';
+      case 'shipped':
+      case 'em rota':
+        return 'Em rota';
+      case 'out for delivery':
+      case 'out_for_delivery':
+        return 'Em rota';
+      case 'processing':
+      case 'processando':
+        return 'Processando';
+      case 'pending':
+      case 'pendente':
+        return 'Pendente';
+      case 'awaiting payment':
+      case 'awaiting_payment':
+        return 'Pendente';
+      case 'confirmed':
+      case 'confirmado':
+        return 'Confirmado';
+      case 'canceled':
+      case 'cancelled':
+      case 'cancelado':
+        return 'Cancelado';
+      default:
+        // Capitalize first letter to look nicer
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+  };
+
+  // Create timeline with activity logs (+ shipping logs) and fallback to creation only if not present
   const renderTimeline = () => {
-    const logs = [];
+    const logs: Array<{
+      title: string;
+      description: string;
+      date: string;
+      isOrderActivity?: boolean;
+      isShipping?: boolean;
+      isOrderCreation?: boolean;
+    }> = [];
+    let hasCreatedLog = false;
+
+    // Add order activity logs (from dedicated endpoint)
+    if (orderActivityLogs && Array.isArray(orderActivityLogs)) {
+      orderActivityLogs.forEach((log: any) => {
+        if (!log?.createdAt) return;
+
+        const action = String(log?.action || '').toLowerCase();
+
+        if (action === 'created') {
+          hasCreatedLog = true;
+          logs.push({
+            title: 'Pedido feito',
+            description: '',
+            date: log.createdAt,
+            isOrderActivity: true,
+            isOrderCreation: true,
+          });
+          return;
+        }
+
+        if (action === 'status_changed' || action === 'status-changed') {
+          const oldLabel = translateActivityStatus(log?.oldStatus);
+          const newLabel = translateActivityStatus(log?.newStatus);
+          const detail = `Status do pedido atualizado de “${oldLabel}” para “${newLabel}”`;
+
+          logs.push({
+            title: detail,
+            description: '',
+            date: log.createdAt,
+            isOrderActivity: true,
+          });
+          return;
+        }
+
+        // Default/custom activities (sem exibir o nome do usuário)
+        const humanize = (s: string) => {
+          const cleaned = s.replace(/[_-]+/g, ' ').trim();
+          return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+        };
+        const text = (log?.description as string) || humanize(String(log?.action || 'Atividade'));
+        logs.push({
+          title: text,
+          description: '',
+          date: log.createdAt,
+          isOrderActivity: true,
+        });
+      });
+    }
 
     // Add shipping activity logs if they exist
     if (shipping?.activityLogs && shipping.activityLogs.length > 0) {
@@ -187,6 +295,7 @@ function OrderDetail() {
         if (log.title && log.createdAt) {
           logs.push({
             title: log.title,
+            description: '',
             date: log.createdAt,
             isShipping: true
           });
@@ -194,12 +303,13 @@ function OrderDetail() {
       });
     }
 
-    // Always add "Pedido feito" log with order creation date
-    if (order?.createdAt) {
+    // Fallback: if API didn't return a created log, add it using order.createdAt
+    if (!hasCreatedLog && order?.createdAt) {
       logs.push({
         title: 'Pedido feito',
+        description: '',
         date: order.createdAt,
-        isShipping: false
+        isOrderCreation: true,
       });
     }
 
@@ -222,27 +332,42 @@ function OrderDetail() {
         <Text style={tw`text-lg font-bold text-gray-900 mb-4`}>
           Acompanhamento
         </Text>
-        {logs.map((log, index) => (
-          <View key={index} style={tw`flex-row items-start ${index < logs.length - 1 ? 'mb-5' : ''}`}>
-            {/* Timeline dot */}
-            <View style={tw`w-3 h-3 bg-blue-500 rounded-full mt-1.5 mr-4`} />
+        {isLoadingOrderActivityLogs ? (
+          <Text style={tw`text-gray-500 text-center py-4`}>
+            Carregando atividades...
+          </Text>
+        ) : logs.length > 0 ? (
+          logs.map((log, index) => (
+            <View key={index} style={tw`flex-row items-start ${index < logs.length - 1 ? 'mb-5' : ''}`}>
+              {/* Timeline dot */}
+              <View style={tw`w-3 h-3 bg-blue-500 rounded-full mt-1.5 mr-4`} />
 
-            {/* Content */}
-            <View style={tw`flex-1`}>
-              <Text style={tw`text-base text-gray-900 font-semibold mb-1`}>
-                {log.title}
-              </Text>
-              <Text style={tw`text-sm text-gray-500`}>
-                {formatLogDate(log.date)}
-              </Text>
+              {/* Content */}
+              <View style={tw`flex-1`}>
+                <Text style={tw`text-base text-gray-900 font-semibold mb-1`}>
+                  {log.title}
+                </Text>
+                {log.description && (
+                  <Text style={tw`text-sm text-gray-600 mb-1`}>
+                    {log.description}
+                  </Text>
+                )}
+                <Text style={tw`text-sm text-gray-500`}>
+                  {formatLogDate(log.date)}
+                </Text>
+              </View>
+
+              {/* Vertical line connecting dots */}
+              {index < logs.length - 1 && (
+                <View style={tw`absolute left-1.5 top-6 w-0.5 h-full bg-gray-300`} />
+              )}
             </View>
-
-            {/* Vertical line connecting dots */}
-            {index < logs.length - 1 && (
-              <View style={tw`absolute left-1.5 top-6 w-0.5 h-10 bg-gray-300`} />
-            )}
-          </View>
-        ))}
+          ))
+        ) : (
+          <Text style={tw`text-gray-500 text-center py-4`}>
+            Nenhuma atividade registrada ainda
+          </Text>
+        )}
       </View>
     );
   };
