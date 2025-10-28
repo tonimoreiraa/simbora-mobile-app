@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 
 export const AXIOS_INSTANCE = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: 'https://api.rapdo.app',
   withCredentials: true,
 });
 

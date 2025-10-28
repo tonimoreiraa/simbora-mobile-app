@@ -10,7 +10,7 @@ export const getCorrectImageUrl = (imageUrl: string): string => {
 
   // Remove duplicação de uploads/https://
   if (imageUrl.includes('uploads/https://')) {
-    return imageUrl.replace('http://localhost:3333/uploads/', '');
+    return imageUrl.replace('https://api.rapdo.app/uploads/', '');
   }
 
   // Se já é uma URL completa, retorna como está

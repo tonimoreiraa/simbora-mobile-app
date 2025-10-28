@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3333",
+      "url": "https://api.rapdo.app",
       "description": "Servidor de desenvolvimento"
     },
     {"url": "https://api.simbora.com", "description": "Servidor de produção"}

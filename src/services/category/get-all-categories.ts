@@ -7,7 +7,7 @@ const getCorrectImageUrl = (imageUrl: string): string => {
   }
 
   if (imageUrl.includes('uploads/https://')) {
-    return imageUrl.replace('http://localhost:3333/uploads/', '');
+    return imageUrl.replace('https://api.rapdo.app/uploads/', '');
   }
 
   if (imageUrl.startsWith('https://') || imageUrl.startsWith('http://')) {
