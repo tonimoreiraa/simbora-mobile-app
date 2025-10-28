@@ -25,9 +25,11 @@ import {
   CreditCard,
   MapPin,
   Phone,
+  SignOut,
 } from 'phosphor-react-native';
 import {useGetProfile, usePutProfile} from '../services/client/profile/profile';
 import AddressManager from '../components/address_manager';
+import {useAuth} from '../contexts/auth_provider';
 
 interface FormData {
   email: string;
@@ -74,12 +76,31 @@ function MyAccount() {
   const [isEditingUsername, setIsEditingUsername] = React.useState(false);
   const [isEditingName, setIsEditingName] = React.useState(false);
 
+  const {signOut} = useAuth();
+
   const handleSelectAvatar = () => {
     Alert.alert('Selecionar foto', 'Escolha uma opção', [
       {text: 'Câmera', onPress: () => console.log('Câmera selecionada')},
       {text: 'Galeria', onPress: () => console.log('Galeria selecionada')},
       {text: 'Cancelar', style: 'cancel'},
     ]);
+  };
+
+  const handleSignOut = () => {
+    Alert.alert(
+      'Desconectar',
+      'Tem certeza que deseja sair da sua conta?',
+      [
+        {text: 'Cancelar', style: 'cancel'},
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: async () => {
+            await signOut();
+          },
+        },
+      ],
+    );
   };
 
   const {data: profileData, isLoading, isError, refetch} = useGetProfile();
@@ -597,6 +618,18 @@ function MyAccount() {
               </Text>
             </View>
             <AddressManager />
+          </View>
+
+          {/* Sign Out Section */}
+          <View style={tw`mb-8 mt-6`}>
+            <TouchableOpacity
+              onPress={handleSignOut}
+              style={tw`bg-red-500 rounded-xl p-4 flex-row items-center justify-center shadow-sm`}>
+              <SignOut size={20} color="#ffffff" weight="bold" />
+              <Text style={tw`text-white font-semibold text-base ml-2`}>
+                Desconectar
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         </ScrollView>
