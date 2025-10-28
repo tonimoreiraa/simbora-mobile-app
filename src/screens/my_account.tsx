@@ -8,15 +8,23 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import tw from 'twrnc';
 import {useForm, Controller} from 'react-hook-form';
 import {
   PencilSimple,
   Check,
   X,
-  FolderSimple,
-  ArrowLeft,
+  Camera,
+  CaretLeft,
+  User,
+  CreditCard,
+  MapPin,
+  Phone,
 } from 'phosphor-react-native';
 import {useGetProfile, usePutProfile} from '../services/client/profile/profile';
 import AddressManager from '../components/address_manager';
@@ -226,35 +234,65 @@ function MyAccount() {
 
   const profile = profileData;
 
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={tw`bg-white flex-1`}>
-      <View style={tw`flex-row items-center justify-between px-4 py-3`}>
-        <TouchableOpacity />
-        <Text style={tw`text-xl font-bold`}>Minha conta</Text>
-        <View style={tw`w-6`} />
+      {/* Header */}
+      <View style={tw`flex-row items-center justify-between px-6 py-4 border-b border-stone-100`}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={tw`p-2 -ml-2`}>
+          <CaretLeft size={24} color="#000000" weight="bold" />
+        </TouchableOpacity>
+        <Text style={tw`text-xl font-semibold`}>Minha Conta</Text>
+        <View style={tw`w-10`} />
       </View>
 
-      <ScrollView style={tw`flex-1`}>
-        <View style={tw`px-4 pb-6`}>
-          <View
-            style={tw`flex flex-row items-center justify-between bg-stone-100 w-full p-2 mt-4 rounded-xl`}>
-            <View style={tw`flex flex-row items-center justify-center`}>
-              <View style={tw`w-14 h-14 bg-stone-200 rounded-lg`} />
-              <View style={tw`ml-4`}>
-                <Text style={tw`text-lg font-bold`}>Foto de perfil</Text>
-                <Text style={tw`text-xs text-gray-500`}>
-                  JPG, PNG ou JPEG - máximo 2MB
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={tw`flex-1`}>
+        <ScrollView
+          style={tw`flex-1 mb-6`}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+        {/* Profile Header */}
+        <View style={tw`items-center pt-8 pb-6 px-6`}>
+          <TouchableOpacity
+            onPress={handleSelectAvatar}
+            style={tw`relative`}>
+            <View style={tw`w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full items-center justify-center shadow-lg`}>
+              {profile?.name ? (
+                <Text style={tw`text-white text-3xl font-bold`}>
+                  {profile.name.charAt(0).toUpperCase()}
                 </Text>
-              </View>
+              ) : (
+                <User size={40} color="#ffffff" weight="bold" />
+              )}
             </View>
-            <TouchableOpacity onPress={handleSelectAvatar}>
-              <FolderSimple size={20} weight="fill" color="#000000" />
-            </TouchableOpacity>
-          </View>
+            <View style={tw`absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 shadow-md`}>
+              <Camera size={16} color="#ffffff" weight="bold" />
+            </View>
+          </TouchableOpacity>
+          <Text style={tw`text-2xl font-bold mt-4`}>
+            {profile?.name || 'Sem nome'}
+          </Text>
+          <Text style={tw`text-gray-500 text-base mt-1`}>
+            @{profile?.username || 'username'}
+          </Text>
+        </View>
 
-          <View style={tw`w-full mt-6`}>
-            <Text style={tw`text-xl font-bold mb-2`}>Nome</Text>
+        <View style={tw`px-6 pb-6`}>
+          {/* Personal Info Section */}
+          <View style={tw`mb-6`}>
+            <View style={tw`flex-row items-center mb-3`}>
+              <User size={20} color="#6B7280" weight="bold" />
+              <Text style={tw`text-base font-semibold text-gray-700 ml-2`}>
+                Informações Pessoais
+              </Text>
+            </View>
 
+            {/* Nome Field */}
             {isEditingName ? (
               <View>
                 <View style={tw`flex flex-row items-end mt-2`}>
@@ -275,9 +313,13 @@ function MyAccount() {
                       }}
                       render={({field: {onChange, value}}) => (
                         <View>
+                          <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
+                            Nome completo
+                          </Text>
                           <TextInput
-                            style={tw`bg-stone-100 rounded-lg p-4`}
+                            style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                             placeholder="Digite seu nome completo"
+                            placeholderTextColor="#9CA3AF"
                             value={value}
                             onChangeText={(text: string) => {
                               if (text.length <= 100) {
@@ -319,21 +361,26 @@ function MyAccount() {
                 )}
               </View>
             ) : (
-              <View
-                style={tw`flex flex-row items-center bg-stone-100 rounded-lg p-4`}>
-                <Text style={tw`flex-1 text-base`}>
-                  {profile?.name || 'Nome não definido'}
-                </Text>
-                <TouchableOpacity onPress={() => setIsEditingName(true)}>
-                  <PencilSimple size={18} color="#6B7280" />
-                </TouchableOpacity>
+              <View style={tw`bg-white border border-gray-200 rounded-xl p-4 mb-3`}>
+                <View style={tw`flex-row items-center justify-between`}>
+                  <View style={tw`flex-1`}>
+                    <Text style={tw`text-xs text-gray-500 mb-1`}>
+                      Nome completo
+                    </Text>
+                    <Text style={tw`text-base text-gray-900`}>
+                      {profile?.name || 'Nome não definido'}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setIsEditingName(true)}
+                    style={tw`ml-3 p-2`}>
+                    <PencilSimple size={20} color="#3B82F6" weight="bold" />
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
-          </View>
 
-          <View style={tw`w-full mt-4`}>
-            <Text style={tw`text-xl font-bold mb-2`}>Seu id person</Text>
-
+            {/* Username Field */}
             {isEditingUsername ? (
               <View>
                 <View style={tw`flex flex-row items-end mt-2`}>
@@ -359,23 +406,29 @@ function MyAccount() {
                       }}
                       render={({field: {onChange, value}}) => (
                         <View>
-                          <TextInput
-                            style={tw`bg-stone-100 rounded-lg p-4`}
-                            placeholder="username123"
-                            value={value}
-                            onChangeText={(text: string) => {
-                              // Remove caracteres inválidos e limita a 50 caracteres
-                              const cleanText = text.replace(
-                                /[^a-zA-Z0-9._-]/g,
-                                '',
-                              );
-                              if (cleanText.length <= 50) {
-                                onChange(cleanText);
-                              }
-                            }}
-                            maxLength={50}
-                            autoCapitalize="none"
-                          />
+                          <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
+                            ID Person
+                          </Text>
+                          <View style={tw`bg-white border border-gray-300 rounded-xl flex-row items-center px-4`}>
+                            <Text style={tw`text-base text-gray-700 font-medium`}>@</Text>
+                            <TextInput
+                              style={tw`flex-1 py-4 pl-2 text-base`}
+                              placeholder="username123"
+                              placeholderTextColor="#9CA3AF"
+                              value={value}
+                              onChangeText={(text: string) => {
+                                const cleanText = text.replace(
+                                  /[^a-zA-Z0-9._-]/g,
+                                  '',
+                                );
+                                if (cleanText.length <= 50) {
+                                  onChange(cleanText);
+                                }
+                              }}
+                              maxLength={50}
+                              autoCapitalize="none"
+                            />
+                          </View>
                         </View>
                       )}
                     />
@@ -409,32 +462,45 @@ function MyAccount() {
                 )}
               </View>
             ) : (
-              <View
-                style={tw`flex flex-row items-center bg-stone-100 rounded-lg p-4`}>
-                <Text style={tw`flex-1 text-base`}>
-                  {profile?.username
-                    ? `@${profile.username}`
-                    : '@username_nao_definido'}
-                </Text>
-                <TouchableOpacity onPress={() => setIsEditingUsername(true)}>
-                  <PencilSimple size={18} color="#6B7280" />
-                </TouchableOpacity>
+              <View style={tw`bg-white border border-gray-200 rounded-xl p-4 mb-3`}>
+                <View style={tw`flex-row items-center justify-between`}>
+                  <View style={tw`flex-1`}>
+                    <Text style={tw`text-xs text-gray-500 mb-1`}>
+                      Username (ID Person)
+                    </Text>
+                    <Text style={tw`text-base text-gray-900`}>
+                      @{profile?.username || 'username_nao_definido'}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setIsEditingUsername(true)}
+                    style={tw`ml-3 p-2`}>
+                    <PencilSimple size={20} color="#3B82F6" weight="bold" />
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
+
+            {/* Email Field (Read-only) */}
+            <View style={tw`bg-gray-50 border border-gray-200 rounded-xl p-4 mb-3`}>
+              <Text style={tw`text-xs text-gray-500 mb-1`}>E-mail</Text>
+              <Text style={tw`text-base text-gray-700`}>
+                {profile?.email || 'email@exemplo.com'}
+              </Text>
+            </View>
           </View>
 
-          <View style={tw` mt-4 w-full`}>
-            <Text style={tw`text-xl font-bold`}>Seu login</Text>
-            <View style={tw`mt-2`}>
-              <View style={tw`bg-stone-100 rounded-lg p-4`}>
-                <Text style={tw`text-sm text-gray-500`}>E-mail cadastrado</Text>
-                <Text style={tw`text-base`}>
-                  {profile?.email || 'email@exemplo.com'}
-                </Text>
-              </View>
+          {/* Contact Section */}
+          <View style={tw`mb-6 mt-6`}>
+            <View style={tw`flex-row items-center mb-3`}>
+              <Phone size={20} color="#6B7280" weight="bold" />
+              <Text style={tw`text-base font-semibold text-gray-700 ml-2`}>
+                Contato
+              </Text>
             </View>
 
-            <View style={tw`mt-4`}>
+            {/* Phone Field */}
+            <View>
               {isEditingPhone ? (
                 <View>
                   <View style={tw`flex flex-row items-end`}>
@@ -454,13 +520,16 @@ function MyAccount() {
                         }}
                         render={({field: {onChange, value}}) => (
                           <View>
+                            <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
+                              Telefone
+                            </Text>
                             <TextInput
-                              style={tw`bg-stone-100 rounded-lg p-4`}
+                              style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                               placeholder="(XX) XXXXX-XXXX"
+                              placeholderTextColor="#9CA3AF"
                               value={value}
                               onChangeText={(text: string) => {
                                 const maskedValue = applyPhoneMask(text);
-                                // Limita a 15 caracteres (máscara completa)
                                 if (maskedValue.length <= 15) {
                                   onChange(maskedValue);
                                 }
@@ -498,64 +567,40 @@ function MyAccount() {
                   )}
                 </View>
               ) : (
-                <View
-                  style={tw`flex flex-row items-center bg-stone-100 rounded-lg p-4`}>
-                  <View style={tw`flex-1`}>
-                    <Text style={tw`text-sm text-gray-500`}>
-                      Número cadastrado
-                    </Text>
-                    <Text style={tw`text-base`}>
-                      {profile?.phoneNumber
-                        ? applyPhoneMask(profile.phoneNumber)
-                        : 'Telefone não cadastrado'}
-                    </Text>
+                <View style={tw`bg-white border border-gray-200 rounded-xl p-4`}>
+                  <View style={tw`flex-row items-center justify-between`}>
+                    <View style={tw`flex-1`}>
+                      <Text style={tw`text-xs text-gray-500 mb-1`}>Telefone</Text>
+                      <Text style={tw`text-base text-gray-900`}>
+                        {profile?.phoneNumber
+                          ? applyPhoneMask(profile.phoneNumber)
+                          : 'Não cadastrado'}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => setIsEditingPhone(true)}
+                      style={tw`ml-3 p-2`}>
+                      <PencilSimple size={20} color="#3B82F6" weight="bold" />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity onPress={() => setIsEditingPhone(true)}>
-                    <PencilSimple size={18} color="#6B7280" />
-                  </TouchableOpacity>
                 </View>
               )}
             </View>
           </View>
 
-          <AddressManager />
-
-          <View style={tw`mt-4 w-full`}>
-            <Text style={tw`text-xl font-bold`}>Cartões cadastrados</Text>
-            <View style={tw`w-full mt-2`}>
-              <View style={tw`bg-stone-100 rounded-lg p-4 mb-2`}>
-                <Text style={tw`text-sm text-gray-500`}>Sandro G Silva</Text>
-                <Text style={tw`font-medium text-base`}>
-                  5558 8991 **** 6998
-                </Text>
-              </View>
-
-              <View style={tw`bg-stone-100 rounded-lg p-4 mb-2`}>
-                <Text style={tw`text-sm text-gray-500`}>Sandro G Silva</Text>
-                <Text style={tw`font-medium text-base`}>
-                  5558 8991 **** 6998
-                </Text>
-              </View>
-
-              <TouchableOpacity
-                style={tw`bg-stone-100 rounded-lg p-4 flex-row items-center justify-between`}>
-                <View>
-                  <Text style={tw`text-sm text-gray-500`}>
-                    Adicionar cartão
-                  </Text>
-                  <Text style={tw`font-medium text-base`}>
-                    0000 0000 0000 0000
-                  </Text>
-                </View>
-                <View
-                  style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
-                  <Text style={tw`text-white text-lg font-bold pb-7.5`}>+</Text>
-                </View>
-              </TouchableOpacity>
+          {/* Address Section */}
+          <View style={tw`mb-6 mt-6`}>
+            <View style={tw`flex-row items-center mb-3`}>
+              <MapPin size={20} color="#6B7280" weight="bold" />
+              <Text style={tw`text-base font-semibold text-gray-700 ml-2`}>
+                Gerenciar Endereços
+              </Text>
             </View>
+            <AddressManager />
           </View>
         </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

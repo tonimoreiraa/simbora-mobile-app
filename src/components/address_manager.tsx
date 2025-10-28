@@ -158,17 +158,13 @@ function AddressManager() {
 
   if (isLoading) {
     return (
-      <View style={tw`mt-4 w-full`}>
-        <Text style={tw`text-xl font-bold`}>Gerenciar endereço</Text>
-        <View style={tw`w-full mt-2`}>
-          <View style={tw`bg-stone-100 rounded-lg p-4`}>
-            <Text style={tw`text-sm text-gray-500`}>Carregando...</Text>
-            <View style={tw`flex-row items-center mt-1`}>
-              <ActivityIndicator size="small" color="#6B7280" />
-              <Text style={tw`font-medium text-base ml-2`}>
-                Carregando endereços
-              </Text>
-            </View>
+      <View style={tw`w-full`}>
+        <View style={tw`bg-white border border-gray-200 rounded-xl p-4`}>
+          <View style={tw`flex-row items-center`}>
+            <ActivityIndicator size="small" color="#3B82F6" />
+            <Text style={tw`text-base text-gray-700 ml-3`}>
+              Carregando endereços...
+            </Text>
           </View>
         </View>
       </View>
@@ -177,104 +173,87 @@ function AddressManager() {
 
   if (isError) {
     return (
-      <View style={tw`mt-4 w-full`}>
-        <Text style={tw`text-xl font-bold`}>Gerenciar endereço</Text>
-        <View style={tw`w-full mt-2`}>
-          <TouchableOpacity
-            style={tw`bg-stone-100 rounded-lg p-4`}
-            onPress={() => refetch()}>
-            <Text style={tw`text-sm text-gray-500`}>Erro ao carregar</Text>
-            <Text style={tw`font-medium text-base`}>
-              Toque para tentar novamente
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={tw`w-full`}>
+        <TouchableOpacity
+          style={tw`bg-white border border-red-200 rounded-xl p-4`}
+          onPress={() => refetch()}>
+          <Text style={tw`text-xs text-red-500 mb-1`}>Erro ao carregar</Text>
+          <Text style={tw`text-base text-gray-900`}>
+            Toque para tentar novamente
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
   return (
-    <View style={tw`mt-4 w-full`}>
-      <Text style={tw`text-xl font-bold`}>Gerenciar endereço</Text>
-
-      <View style={tw`w-full mt-2`}>
-        {addresses && addresses.length > 0 ? (
-          <>
-            {addresses.map((address: any, index: number) => (
-              <View
-                key={address.id || index}
-                style={tw`bg-stone-100 rounded-lg p-4 mb-2`}>
-                <View style={tw`flex-row justify-between items-start`}>
-                  <View style={tw`flex-1`}>
-                    <View style={tw`flex-row items-center`}>
-                      <Text style={tw`text-sm text-gray-500`}>
-                        {address.name || 'Endereço sem nome'}
-                      </Text>
-                      {address.isMain && (
-                        <View style={tw`bg-blue-100 px-2 py-1 rounded ml-2`}>
-                          <Text style={tw`text-blue-700 text-xs font-medium`}>
-                            Principal
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                    <Text style={tw`font-medium text-base`}>
-                      {address.streetName}, {address.number}
-                      {address.complement ? `, ${address.complement}` : ''}
-                      {'\n'}
-                      {address.neighborhood}, {address.city} - {address.state}
-                      {'\n'}CEP: {address.zipCode}
-                    </Text>
-                  </View>
-                  <View style={tw`flex-row ml-2`}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleDeleteAddress(address.id, address.name)
-                      }
-                      style={tw`p-1`}>
-                      <Trash size={16} color="#EF4444" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            ))}
-
-            <TouchableOpacity
-              style={tw`bg-stone-100 rounded-lg p-4 flex-row items-center justify-between`}
-              onPress={() => openModal()}>
-              <View>
-                <Text style={tw`text-sm text-gray-500`}>
-                  Adicionar endereço
-                </Text>
-                <Text style={tw`font-medium text-base`}>Novo endereço</Text>
-              </View>
-              <View
-                style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
-                <Text style={tw`text-white text-lg font-bold leading-none`}>
-                  +
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <TouchableOpacity
-            style={tw`bg-stone-100 rounded-lg p-4 flex-row items-center justify-between`}
-            onPress={() => openModal()}>
-            <View>
-              <Text style={tw`text-sm text-gray-500`}>Adicionar endereço</Text>
-              <Text style={tw`font-medium text-base`}>
-                Nenhum endereço cadastrado
-              </Text>
-            </View>
+    <View style={tw`w-full`}>
+      {addresses && addresses.length > 0 ? (
+        <>
+          {addresses.map((address: any, index: number) => (
             <View
-              style={tw`bg-black rounded-full w-6 h-6 items-center justify-center`}>
-              <Text style={tw`text-white text-lg font-bold leading-none`}>
-                +
-              </Text>
+              key={address.id || index}
+              style={tw`bg-white border border-gray-200 rounded-xl p-4 mb-3`}>
+              <View style={tw`flex-row justify-between items-start`}>
+                <View style={tw`flex-1`}>
+                  <View style={tw`flex-row items-center mb-2`}>
+                    <MapPin size={16} color="#3B82F6" weight="bold" />
+                    <Text style={tw`text-xs text-gray-500 ml-2 font-medium`}>
+                      {address.name || 'Endereço sem nome'}
+                    </Text>
+                    {address.isMain && (
+                      <View style={tw`bg-blue-100 px-2 py-0.5 rounded-full ml-2`}>
+                        <Text style={tw`text-blue-700 text-xs font-semibold`}>
+                          Principal
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  <Text style={tw`text-base text-gray-900 leading-6`}>
+                    {address.streetName}, {address.number}
+                    {address.complement ? `, ${address.complement}` : ''}
+                  </Text>
+                  <Text style={tw`text-sm text-gray-600 mt-1`}>
+                    {address.neighborhood}, {address.city} - {address.state}
+                  </Text>
+                  <Text style={tw`text-xs text-gray-500 mt-1`}>
+                    CEP: {address.zipCode}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleDeleteAddress(address.id, address.name)
+                  }
+                  style={tw`ml-3 p-2`}>
+                  <Trash size={20} color="#EF4444" weight="bold" />
+                </TouchableOpacity>
+              </View>
             </View>
+          ))}
+
+          <TouchableOpacity
+            style={tw`border-2 border-dashed border-gray-300 rounded-xl p-4 flex-row items-center justify-center`}
+            onPress={() => openModal()}>
+            <View style={tw`bg-blue-500 rounded-full w-8 h-8 items-center justify-center mr-3`}>
+              <Text style={tw`text-white text-xl font-bold`}>+</Text>
+            </View>
+            <Text style={tw`text-gray-600 font-semibold text-base`}>
+              Adicionar novo endereço
+            </Text>
           </TouchableOpacity>
-        )}
-      </View>
+        </>
+      ) : (
+        <TouchableOpacity
+          style={tw`border-2 border-dashed border-gray-300 rounded-xl p-5 flex-row items-center justify-center`}
+          onPress={() => openModal()}>
+          <View style={tw`bg-blue-500 rounded-full w-8 h-8 items-center justify-center mr-3`}>
+            <Text style={tw`text-white text-xl font-bold`}>+</Text>
+          </View>
+          <Text style={tw`text-gray-600 font-semibold text-base`}>
+            Adicionar primeiro endereço
+          </Text>
+        </TouchableOpacity>
+      )}
 
       <Modal
         visible={isModalVisible}
@@ -306,12 +285,13 @@ function AddressManager() {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
                       Nome do endereço
                     </Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Casa, Trabalho, etc."
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={50}
@@ -336,19 +316,20 @@ function AddressManager() {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <View style={tw`flex-row items-center mb-1`}>
-                      <Text style={tw`text-sm text-gray-500`}>CEP</Text>
+                    <View style={tw`flex-row items-center mb-2`}>
+                      <Text style={tw`text-xs text-gray-600 font-medium`}>CEP</Text>
                       {isLoadingCep && (
                         <ActivityIndicator
                           size="small"
-                          color="#6B7280"
+                          color="#3B82F6"
                           style={tw`ml-2`}
                         />
                       )}
                     </View>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="00000-000"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={text => {
                         const maskedValue = applyCepMask(text);
@@ -384,10 +365,11 @@ function AddressManager() {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>Endereço</Text>
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Endereço</Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Rua das Flores"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={100}
@@ -413,10 +395,11 @@ function AddressManager() {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Número</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Número</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="123"
+                      placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={10}
@@ -440,12 +423,13 @@ function AddressManager() {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>
                         Complemento
                       </Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="Apto 101"
+                      placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={50}
@@ -471,10 +455,11 @@ function AddressManager() {
                 }}
                 render={({field: {onChange, value}}) => (
                   <View>
-                    <Text style={tw`text-sm text-gray-500 mb-1`}>Bairro</Text>
+                    <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Bairro</Text>
                     <TextInput
-                      style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                      style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                       placeholder="Centro"
+                      placeholderTextColor="#9CA3AF"
                       value={value}
                       onChangeText={onChange}
                       maxLength={50}
@@ -500,10 +485,11 @@ function AddressManager() {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Cidade</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Cidade</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="São Paulo"
+                      placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={onChange}
                         maxLength={50}
@@ -529,10 +515,11 @@ function AddressManager() {
                   }}
                   render={({field: {onChange, value}}) => (
                     <View>
-                      <Text style={tw`text-sm text-gray-500 mb-1`}>Estado</Text>
+                      <Text style={tw`text-xs text-gray-600 mb-2 font-medium`}>Estado</Text>
                       <TextInput
-                        style={tw`bg-gray-100 rounded-lg p-4 text-base`}
+                        style={tw`bg-white border border-gray-300 rounded-xl p-4 text-base`}
                         placeholder="SP"
+                      placeholderTextColor="#9CA3AF"
                         value={value}
                         onChangeText={text => onChange(text.toUpperCase())}
                         maxLength={2}
@@ -555,19 +542,19 @@ function AddressManager() {
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <TouchableOpacity
-                    style={tw`flex-row items-center p-4 bg-gray-100 rounded-lg`}
+                    style={tw`flex-row items-center p-4 bg-gray-50 border border-gray-200 rounded-xl`}
                     onPress={() => onChange(!value)}>
                     <View
-                      style={tw`w-5 h-5 rounded border-2 mr-3 ${
+                      style={tw`w-5 h-5 rounded border-2 mr-3 items-center justify-center ${
                         value
                           ? 'bg-blue-500 border-blue-500'
                           : 'border-gray-300'
                       }`}>
                       {value && (
-                        <Check size={12} color="#fff" style={tw`m-auto`} />
+                        <Check size={14} color="#fff" weight="bold" />
                       )}
                     </View>
-                    <Text style={tw`text-base`}>
+                    <Text style={tw`text-base text-gray-900`}>
                       Definir como endereço principal
                     </Text>
                   </TouchableOpacity>
@@ -579,13 +566,13 @@ function AddressManager() {
             <TouchableOpacity
               onPress={handleSubmit(onSubmit)}
               disabled={createAddressMutation.isLoading}
-              style={tw`bg-blue-500 rounded-lg p-4 items-center ${
-                createAddressMutation.isLoading ? 'opacity-50' : ''
+              style={tw`bg-blue-500 rounded-xl p-4 items-center shadow-md ${
+                createAddressMutation.isLoading ? 'opacity-70' : ''
               }`}>
               {createAddressMutation.isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={tw`text-white text-base font-semibold`}>
+                <Text style={tw`text-white text-base font-bold`}>
                   Salvar endereço
                 </Text>
               )}
