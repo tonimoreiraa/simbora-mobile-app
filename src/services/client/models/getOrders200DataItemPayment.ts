@@ -11,7 +11,10 @@
  * @nullable
  */
 export type GetOrders200DataItemPayment = {
+  id?: number;
+  orderId?: number;
   status?: string;
   paymentMethod?: string;
   price?: number;
+  paymentProvider?: string;
 } | null;

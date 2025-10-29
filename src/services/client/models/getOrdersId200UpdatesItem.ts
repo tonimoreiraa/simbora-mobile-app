@@ -8,10 +8,13 @@
 
 export type GetOrdersId200UpdatesItem = {
   id?: number;
+  orderId?: number;
   status?: string;
   /** @nullable */
   title?: string | null;
   /** @nullable */
   comment?: string | null;
+  private?: boolean;
   createdAt?: string;
+  updatedAt?: string;
 };

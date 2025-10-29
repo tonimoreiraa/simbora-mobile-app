@@ -9,6 +9,7 @@ import type { GetProducts200DataItemVariantsItemType } from './getProducts200Dat
 
 export type GetProducts200DataItemVariantsItem = {
   id?: number;
+  productId?: number;
   variantTypeId?: number;
   value?: string;
   /** @nullable */
@@ -17,4 +18,6 @@ export type GetProducts200DataItemVariantsItem = {
   /** @nullable */
   photo?: string | null;
   type?: GetProducts200DataItemVariantsItemType;
+  createdAt?: string;
+  updatedAt?: string;
 };

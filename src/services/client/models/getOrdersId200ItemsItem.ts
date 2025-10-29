@@ -9,9 +9,15 @@ import type { GetOrdersId200ItemsItemProduct } from './getOrdersId200ItemsItemPr
 
 export type GetOrdersId200ItemsItem = {
   id?: number;
-  productId?: number;
   orderId?: number;
+  productId?: number;
+  /** @nullable */
+  productVariantId?: number | null;
   quantity?: number;
-  price?: number;
+  unitPrice?: number;
+  totalPrice?: number;
+  /** Dados completos do produto */
   product?: GetOrdersId200ItemsItemProduct;
+  createdAt?: string;
+  updatedAt?: string;
 };

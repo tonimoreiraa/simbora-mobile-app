@@ -6,10 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetProducts200DataItemImagesItem = {
-  id?: number;
-  path?: string;
-  productId?: number;
-  createdAt?: string;
-  updatedAt?: string;
+export type DeleteAuthAccount401 = {
+  message?: string;
 };

@@ -7,9 +7,7 @@
  */
 
 /**
- * Dados completos do produto
+ * Dados da variante do produto (se houver)
+ * @nullable
  */
-export type PostOrders201ItemsItemProduct = {
-  id?: number;
-  name?: string;
-};
+export type GetOrders200DataItemItemsItemVariant = { [key: string]: unknown } | null;

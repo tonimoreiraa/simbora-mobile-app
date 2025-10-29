@@ -9,11 +9,15 @@ import type { PostOrders201ItemsItemProduct } from './postOrders201ItemsItemProd
 
 export type PostOrders201ItemsItem = {
   id?: number;
+  orderId?: number;
   productId?: number;
   /** @nullable */
   productVariantId?: number | null;
   quantity?: number;
   unitPrice?: number;
   totalPrice?: number;
+  /** Dados completos do produto */
   product?: PostOrders201ItemsItemProduct;
+  createdAt?: string;
+  updatedAt?: string;
 };

@@ -249,8 +249,8 @@ const Product = () => {
   const displayUnit = getDisplayUnit();
 
   return (
-    <SafeAreaView style={tw`py-4 bg-white`}>
-      <ScrollView style={tw`mb-26`}>
+    <SafeAreaView style={tw`flex-1 bg-white`}>
+      <ScrollView contentContainerStyle={tw`pb-32 pt-4`}>
         <View style={tw`flex flex-row items-center justify-center w-full px-4`}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -404,7 +404,7 @@ const Product = () => {
       </ScrollView>
 
       <View
-        style={tw`absolute flex-row items-center bottom-0 bg-white border-t border-stone-400 w-full py-8 px-4`}>
+        style={tw`flex-row items-center bg-white border-t border-stone-400 w-full py-4 px-4`}>
         <View style={tw`w-1/3`}>
           <View style={tw`flex flex-row items-center`}>
             <Text style={tw`text-lg font-semibold`}>

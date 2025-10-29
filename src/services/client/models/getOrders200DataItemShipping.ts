@@ -11,9 +11,11 @@
  * @nullable
  */
 export type GetOrders200DataItemShipping = {
+  orderId?: number;
   provider?: string;
   /** @nullable */
   shippingCode?: string | null;
   city?: string;
   state?: string;
+  price?: number;
 } | null;

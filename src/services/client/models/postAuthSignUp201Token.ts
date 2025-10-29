@@ -11,8 +11,8 @@ export type PostAuthSignUp201Token = {
   type?: string;
   /** Nome do token */
   name?: string;
-  /** Hash do token para autenticação */
-  hash?: string;
+  /** Token de autenticação (valor público do token) */
+  token?: string;
   /** Permissões associadas ao token */
   abilities?: string[];
   /**

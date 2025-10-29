@@ -5,11 +5,14 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
+import type { GetOrderShippingsId200Order } from './getOrderShippingsId200Order';
+import type { GetOrderShippingsId200User } from './getOrderShippingsId200User';
 import type { GetOrderShippingsId200ActivityLogsItem } from './getOrderShippingsId200ActivityLogsItem';
 
 export type GetOrderShippingsId200 = {
   orderId?: number;
   userId?: number;
+  addressId?: number;
   price?: number;
   provider?: string;
   shippingCode?: string;
@@ -21,7 +24,13 @@ export type GetOrderShippingsId200 = {
   district?: string;
   /** @nullable */
   complement?: string | null;
+  country?: string;
+  /** Dados básicos do pedido */
+  order?: GetOrderShippingsId200Order;
+  /** Dados básicos do usuário */
+  user?: GetOrderShippingsId200User;
   /** Logs de atividade do envio */
   activityLogs?: GetOrderShippingsId200ActivityLogsItem[];
   createdAt?: string;
+  updatedAt?: string;
 };

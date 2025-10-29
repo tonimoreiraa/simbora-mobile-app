@@ -6,6 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './deleteAuthAccount200';
+export * from './deleteAuthAccount401';
+export * from './deleteAuthAccount500';
 export * from './deleteCategoriesId404';
 export * from './deleteCouponsId200';
 export * from './deleteProductVariantTypesId401';
@@ -78,8 +81,12 @@ export * from './getOrderPaymentsParams';
 export * from './getOrderPaymentsStatus';
 export * from './getOrderShippings200';
 export * from './getOrderShippings200DataItem';
+export * from './getOrderShippings200DataItemOrder';
+export * from './getOrderShippings200DataItemUser';
 export * from './getOrderShippingsId200';
 export * from './getOrderShippingsId200ActivityLogsItem';
+export * from './getOrderShippingsId200Order';
+export * from './getOrderShippingsId200User';
 export * from './getOrderShippingsParams';
 export * from './getOrderUpdates200';
 export * from './getOrderUpdates200DataItem';
@@ -90,9 +97,14 @@ export * from './getOrderUpdatesParams';
 export * from './getOrders200';
 export * from './getOrders200DataItem';
 export * from './getOrders200DataItemCustomer';
+export * from './getOrders200DataItemItemsItem';
+export * from './getOrders200DataItemItemsItemProduct';
+export * from './getOrders200DataItemItemsItemVariant';
 export * from './getOrders200DataItemLastUpdate';
 export * from './getOrders200DataItemPayment';
 export * from './getOrders200DataItemShipping';
+export * from './getOrders200DataItemType';
+export * from './getOrders200DataItemUpdatesItem';
 export * from './getOrders200Meta';
 export * from './getOrders401';
 export * from './getOrdersId200';
@@ -101,6 +113,7 @@ export * from './getOrdersId200ItemsItem';
 export * from './getOrdersId200ItemsItemProduct';
 export * from './getOrdersId200Payment';
 export * from './getOrdersId200Shipping';
+export * from './getOrdersId200Type';
 export * from './getOrdersId200UpdatesItem';
 export * from './getOrdersId401';
 export * from './getOrdersId403';

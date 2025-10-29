@@ -20,6 +20,9 @@ import type {
 } from 'react-query';
 
 import type {
+  DeleteAuthAccount200,
+  DeleteAuthAccount401,
+  DeleteAuthAccount500,
   GetAuthSession200,
   GetAuthSession401,
   GetAuthSession500,
@@ -240,3 +243,66 @@ export function useGetAuthSession<TData = Awaited<ReturnType<typeof getAuthSessi
 
 
 
+/**
+ * Remove permanentemente a conta do usuário autenticado, incluindo todos os dados relacionados e revogando todos os tokens de acesso
+ * @summary Deletar conta do usuário
+ */
+export const deleteAuthAccount = (
+    
+ options?: SecondParameter<typeof axiosInstance>,) => {
+      
+      
+      return axiosInstance<DeleteAuthAccount200>(
+      {url: `/auth/account`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteAuthAccountMutationOptions = <TError = ErrorType<DeleteAuthAccount401 | DeleteAuthAccount500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAuthAccount>>, TError,void, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAuthAccount>>, TError,void, TContext> => {
+
+const mutationKey = ['deleteAuthAccount'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAuthAccount>>, void> = () => {
+          
+
+          return  deleteAuthAccount(requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAuthAccountMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAuthAccount>>>
+    
+    export type DeleteAuthAccountMutationError = ErrorType<DeleteAuthAccount401 | DeleteAuthAccount500>
+
+    /**
+ * @summary Deletar conta do usuário
+ */
+export const useDeleteAuthAccount = <TError = ErrorType<DeleteAuthAccount401 | DeleteAuthAccount500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAuthAccount>>, TError,void, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAuthAccount>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteAuthAccountMutationOptions(options);
+
+      return useMutation(mutationOptions );
+    }
+    

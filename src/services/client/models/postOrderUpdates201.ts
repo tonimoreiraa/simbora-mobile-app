@@ -11,6 +11,11 @@ export type PostOrderUpdates201 = {
   id?: number;
   /** ID do pedido atualizado */
   orderId?: number;
+  /**
+   * ID do shipping relacionado
+   * @nullable
+   */
+  orderShippingId?: number | null;
   /** Status aplicado ao pedido */
   status?: string;
   /**

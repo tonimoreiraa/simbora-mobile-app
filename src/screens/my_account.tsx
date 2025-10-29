@@ -260,8 +260,8 @@ function MyAccount() {
         <View style={tw`items-center pt-8 pb-6 px-6`}>
           <TouchableOpacity
             onPress={handleSelectAvatar}
-            style={tw`relative`}>
-            <View style={tw`w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full items-center justify-center shadow-lg`}>
+            style={tw`relative w-24 h-24`}>
+            <View style={tw`w-24 h-24 bg-blue-500 rounded-full items-center justify-center shadow-lg`}>
               {profile?.name ? (
                 <Text style={tw`text-white text-3xl font-bold`}>
                   {profile.name.charAt(0).toUpperCase()}
@@ -270,7 +270,7 @@ function MyAccount() {
                 <User size={40} color="#ffffff" weight="bold" />
               )}
             </View>
-            <View style={tw`absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 shadow-md`}>
+            <View style={tw`absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-2 shadow-md z-10`}>
               <Camera size={16} color="#ffffff" weight="bold" />
             </View>
           </TouchableOpacity>

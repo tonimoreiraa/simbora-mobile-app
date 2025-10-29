@@ -12,8 +12,15 @@
  */
 export type GetOrdersId200Shipping = {
   id?: number;
+  orderId?: number;
+  provider?: string;
+  /** @nullable */
+  shippingCode?: string | null;
   address?: string;
   city?: string;
-  /** @nullable */
-  trackingCode?: string | null;
+  state?: string;
+  zipCode?: string;
+  price?: number;
+  createdAt?: string;
+  updatedAt?: string;
 } | null;

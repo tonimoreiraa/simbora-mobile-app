@@ -8,6 +8,7 @@
 
 export type GetOrderUpdatesId200Order = {
   id?: number;
+  customerId?: number;
   status?: string;
   totalPrice?: number;
 };

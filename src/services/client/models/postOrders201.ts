@@ -13,7 +13,16 @@ export type PostOrders201 = {
   customerId?: number;
   status?: string;
   type?: PostOrders201Type;
-  total?: number;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  discountPrice?: number;
+  shippingPrice?: number;
+  /** @nullable */
+  paymentId?: number | null;
+  /** @nullable */
+  shippingId?: number | null;
+  /** @nullable */
+  couponId?: number | null;
   items?: PostOrders201ItemsItem[];
   createdAt?: string;
   updatedAt?: string;

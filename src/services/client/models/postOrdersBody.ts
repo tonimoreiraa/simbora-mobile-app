@@ -9,6 +9,8 @@ import type { PostOrdersBodyItemsItem } from './postOrdersBodyItemsItem';
 import type { PostOrdersBodyType } from './postOrdersBodyType';
 
 export type PostOrdersBody = {
+  /** ID do usuário que vai compartilhar */
+  shareWithUserId?: number;
   /** Itens do pedido */
   items: PostOrdersBodyItemsItem[];
   /** ID do endereço de entrega (opcional) */

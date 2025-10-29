@@ -6,16 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetOrderUpdates200DataItem = {
+export type GetOrders200DataItemUpdatesItem = {
   id?: number;
   orderId?: number;
-  /** @nullable */
-  orderShippingId?: number | null;
   status?: string;
   title?: string;
-  comment?: string;
-  private?: boolean;
-  onlyMe?: boolean;
   createdAt?: string;
-  updatedAt?: string;
 };

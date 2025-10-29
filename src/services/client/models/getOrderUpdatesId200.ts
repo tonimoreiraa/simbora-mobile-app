@@ -10,6 +10,8 @@ import type { GetOrderUpdatesId200Order } from './getOrderUpdatesId200Order';
 export type GetOrderUpdatesId200 = {
   id?: number;
   orderId?: number;
+  /** @nullable */
+  orderShippingId?: number | null;
   status?: string;
   title?: string;
   comment?: string;
