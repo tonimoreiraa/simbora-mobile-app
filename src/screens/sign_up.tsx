@@ -98,7 +98,8 @@ function SignUp() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       style={tw`flex-1 bg-white`}>
       <ScrollView
         contentContainerStyle={tw`flex-grow`}

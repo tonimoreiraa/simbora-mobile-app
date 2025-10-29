@@ -16,6 +16,11 @@ export type GetProducts200DataItem = {
   description?: string;
   supplierId?: number;
   categoryId?: number;
+  /**
+   * ID externo do produto (usado para importação)
+   * @nullable
+   */
+  externalId?: string | null;
   /** @nullable */
   tags?: string[] | null;
   stock?: number;

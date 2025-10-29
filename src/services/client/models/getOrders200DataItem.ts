@@ -5,15 +5,18 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
+import type { GetOrders200DataItemType } from './getOrders200DataItemType';
+import type { GetOrders200DataItemItemsItem } from './getOrders200DataItemItemsItem';
 import type { GetOrders200DataItemCustomer } from './getOrders200DataItemCustomer';
 import type { GetOrders200DataItemPayment } from './getOrders200DataItemPayment';
 import type { GetOrders200DataItemShipping } from './getOrders200DataItemShipping';
-import type { GetOrders200DataItemLastUpdate } from './getOrders200DataItemLastUpdate';
+import type { GetOrders200DataItemUpdatesItem } from './getOrders200DataItemUpdatesItem';
 
 export type GetOrders200DataItem = {
   id?: number;
   customerId?: number;
   status?: string;
+  type?: GetOrders200DataItemType;
   subtotalPrice?: number;
   totalPrice?: number;
   discountPrice?: number;
@@ -22,8 +25,12 @@ export type GetOrders200DataItem = {
   paymentId?: number | null;
   /** @nullable */
   shippingId?: number | null;
+  /** @nullable */
+  couponId?: number | null;
   /** Quantidade total de itens */
   itemsCount?: number;
+  /** Itens do pedido com produto e variante */
+  items?: GetOrders200DataItemItemsItem[];
   /**
    * Dados básicos do cliente (apenas para admins)
    * @nullable
@@ -43,7 +50,7 @@ export type GetOrders200DataItem = {
    * Última atualização do pedido (se withDetails=true)
    * @nullable
    */
-  lastUpdate?: GetOrders200DataItemLastUpdate;
+  updates?: GetOrders200DataItemUpdatesItem[] | null;
   createdAt?: string;
   updatedAt?: string;
 };

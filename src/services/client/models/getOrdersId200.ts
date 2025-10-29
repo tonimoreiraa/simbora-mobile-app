@@ -5,6 +5,7 @@
  * Documentação da API Simbora
  * OpenAPI spec version: 1.0.0
  */
+import type { GetOrdersId200Type } from './getOrdersId200Type';
 import type { GetOrdersId200Customer } from './getOrdersId200Customer';
 import type { GetOrdersId200ItemsItem } from './getOrdersId200ItemsItem';
 import type { GetOrdersId200Payment } from './getOrdersId200Payment';
@@ -15,7 +16,17 @@ export type GetOrdersId200 = {
   id?: number;
   customerId?: number;
   status?: string;
-  total?: number;
+  type?: GetOrdersId200Type;
+  subtotalPrice?: number;
+  totalPrice?: number;
+  discountPrice?: number;
+  shippingPrice?: number;
+  /** @nullable */
+  paymentId?: number | null;
+  /** @nullable */
+  shippingId?: number | null;
+  /** @nullable */
+  couponId?: number | null;
   /**
    * Dados do cliente (apenas para admins)
    * @nullable

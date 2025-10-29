@@ -457,9 +457,9 @@
                           "description": "Nome do token",
                           "example": "API Token"
                         },
-                        "hash": {
+                        "token": {
                           "type": "string",
-                          "description": "Hash do token para autenticação",
+                          "description": "Token de autenticação (valor público do token)",
                           "example": "oat_2.xyz789abc123def456"
                         },
                         "abilities": {
@@ -706,6 +706,64 @@
                     "message": {
                       "type": "string",
                       "example": "Erro interno do servidor"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/account": {
+      "delete": {
+        "tags": ["Authentication"],
+        "summary": "Deletar conta do usuário",
+        "description": "Remove permanentemente a conta do usuário autenticado, incluindo todos os dados relacionados e revogando todos os tokens de acesso",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Conta deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Conta deletada com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token de acesso inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Erro ao deletar conta"
                     }
                   }
                 }
@@ -3077,6 +3135,7 @@
                         "properties": {
                           "orderId": {"type": "integer", "example": 25},
                           "userId": {"type": "integer", "example": 10},
+                          "addressId": {"type": "integer", "example": 5},
                           "price": {
                             "type": "number",
                             "format": "decimal",
@@ -3089,11 +3148,57 @@
                           },
                           "address": {
                             "type": "string",
-                            "example": "Rua das Flores, 123"
+                            "example": "Rua das Flores"
                           },
+                          "number": {"type": "string", "example": "123"},
                           "city": {"type": "string", "example": "São Paulo"},
                           "state": {"type": "string", "example": "SP"},
+                          "zipCode": {"type": "string", "example": "01234-567"},
+                          "district": {"type": "string", "example": "Centro"},
+                          "complement": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "Apto 101"
+                          },
+                          "country": {"type": "string", "example": "Brasil"},
+                          "order": {
+                            "type": "object",
+                            "description": "Dados básicos do pedido",
+                            "properties": {
+                              "id": {"type": "integer", "example": 25},
+                              "customerId": {"type": "integer", "example": 10},
+                              "status": {
+                                "type": "string",
+                                "example": "Processing"
+                              },
+                              "totalPrice": {
+                                "type": "number",
+                                "format": "decimal",
+                                "example": 299.99
+                              }
+                            }
+                          },
+                          "user": {
+                            "type": "object",
+                            "description": "Dados básicos do usuário",
+                            "properties": {
+                              "id": {"type": "integer", "example": 10},
+                              "name": {
+                                "type": "string",
+                                "example": "João Silva"
+                              },
+                              "email": {
+                                "type": "string",
+                                "example": "joao@email.com"
+                              }
+                            }
+                          },
                           "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T14:30:00.000Z"
+                          },
+                          "updatedAt": {
                             "type": "string",
                             "format": "date-time",
                             "example": "2024-01-15T14:30:00.000Z"
@@ -3247,6 +3352,7 @@
                   "properties": {
                     "orderId": {"type": "integer", "example": 25},
                     "userId": {"type": "integer", "example": 10},
+                    "addressId": {"type": "integer", "example": 5},
                     "price": {
                       "type": "number",
                       "format": "decimal",
@@ -3257,10 +3363,7 @@
                       "type": "string",
                       "example": "BR123456789"
                     },
-                    "address": {
-                      "type": "string",
-                      "example": "Rua das Flores, 123"
-                    },
+                    "address": {"type": "string", "example": "Rua das Flores"},
                     "number": {"type": "string", "example": "123"},
                     "city": {"type": "string", "example": "São Paulo"},
                     "state": {"type": "string", "example": "SP"},
@@ -3271,6 +3374,30 @@
                       "nullable": true,
                       "example": "Apto 101"
                     },
+                    "country": {"type": "string", "example": "Brasil"},
+                    "order": {
+                      "type": "object",
+                      "description": "Dados básicos do pedido",
+                      "properties": {
+                        "id": {"type": "integer", "example": 25},
+                        "customerId": {"type": "integer", "example": 10},
+                        "status": {"type": "string", "example": "Processing"},
+                        "totalPrice": {
+                          "type": "number",
+                          "format": "decimal",
+                          "example": 299.99
+                        }
+                      }
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "Dados básicos do usuário",
+                      "properties": {
+                        "id": {"type": "integer", "example": 10},
+                        "name": {"type": "string", "example": "João Silva"},
+                        "email": {"type": "string", "example": "joao@email.com"}
+                      }
+                    },
                     "activityLogs": {
                       "type": "array",
                       "description": "Logs de atividade do envio",
@@ -3278,6 +3405,7 @@
                         "type": "object",
                         "properties": {
                           "id": {"type": "integer", "example": 15},
+                          "orderShippingId": {"type": "integer", "example": 25},
                           "status": {"type": "string", "example": "Shipped"},
                           "title": {
                             "type": "string",
@@ -3296,6 +3424,11 @@
                       }
                     },
                     "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T14:30:00.000Z"
+                    },
+                    "updatedAt": {
                       "type": "string",
                       "format": "date-time",
                       "example": "2024-01-15T14:30:00.000Z"
@@ -3512,6 +3645,12 @@
                       "description": "ID do pedido atualizado",
                       "example": 25
                     },
+                    "orderShippingId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "description": "ID do shipping relacionado",
+                      "example": null
+                    },
                     "status": {
                       "type": "string",
                       "description": "Status aplicado ao pedido",
@@ -3699,6 +3838,11 @@
                         "properties": {
                           "id": {"type": "integer", "example": 15},
                           "orderId": {"type": "integer", "example": 25},
+                          "orderShippingId": {
+                            "type": "integer",
+                            "nullable": true,
+                            "example": null
+                          },
                           "status": {"type": "string", "example": "Shipped"},
                           "title": {
                             "type": "string",
@@ -3711,6 +3855,11 @@
                           "private": {"type": "boolean", "example": false},
                           "onlyMe": {"type": "boolean", "example": false},
                           "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T14:30:00.000Z"
+                          },
+                          "updatedAt": {
                             "type": "string",
                             "format": "date-time",
                             "example": "2024-01-15T14:30:00.000Z"
@@ -3763,6 +3912,11 @@
                   "properties": {
                     "id": {"type": "integer", "example": 15},
                     "orderId": {"type": "integer", "example": 25},
+                    "orderShippingId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
+                    },
                     "status": {"type": "string", "example": "Shipped"},
                     "title": {"type": "string", "example": "Pedido enviado"},
                     "comment": {
@@ -3775,6 +3929,7 @@
                       "type": "object",
                       "properties": {
                         "id": {"type": "integer", "example": 25},
+                        "customerId": {"type": "integer", "example": 10},
                         "status": {"type": "string", "example": "Shipped"},
                         "totalPrice": {
                           "type": "number",
@@ -3878,6 +4033,11 @@
                           "id": {"type": "integer", "example": 25},
                           "customerId": {"type": "integer", "example": 10},
                           "status": {"type": "string", "example": "Processing"},
+                          "type": {
+                            "type": "string",
+                            "enum": ["delivery", "pickup"],
+                            "example": "delivery"
+                          },
                           "subtotalPrice": {
                             "type": "number",
                             "format": "decimal",
@@ -3908,10 +4068,60 @@
                             "nullable": true,
                             "example": 8
                           },
+                          "couponId": {
+                            "type": "integer",
+                            "nullable": true,
+                            "example": null
+                          },
                           "itemsCount": {
                             "type": "integer",
                             "description": "Quantidade total de itens",
                             "example": 3
+                          },
+                          "items": {
+                            "type": "array",
+                            "description": "Itens do pedido com produto e variante",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {"type": "integer", "example": 1},
+                                "orderId": {"type": "integer", "example": 25},
+                                "productId": {"type": "integer", "example": 15},
+                                "productVariantId": {
+                                  "type": "integer",
+                                  "nullable": true,
+                                  "example": 23
+                                },
+                                "quantity": {"type": "integer", "example": 2},
+                                "unitPrice": {
+                                  "type": "number",
+                                  "format": "decimal",
+                                  "example": 149.99
+                                },
+                                "totalPrice": {
+                                  "type": "number",
+                                  "format": "decimal",
+                                  "example": 299.98
+                                },
+                                "product": {
+                                  "type": "object",
+                                  "description": "Dados completos do produto"
+                                },
+                                "variant": {
+                                  "type": "object",
+                                  "nullable": true,
+                                  "description": "Dados da variante do produto (se houver)"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              }
+                            }
                           },
                           "customer": {
                             "type": "object",
@@ -3934,6 +4144,8 @@
                             "nullable": true,
                             "description": "Informações básicas de pagamento (se withDetails=true)",
                             "properties": {
+                              "id": {"type": "integer", "example": 5},
+                              "orderId": {"type": "integer", "example": 25},
                               "status": {"type": "string", "example": "paid"},
                               "paymentMethod": {
                                 "type": "string",
@@ -3943,6 +4155,10 @@
                                 "type": "number",
                                 "format": "decimal",
                                 "example": 299.99
+                              },
+                              "paymentProvider": {
+                                "type": "string",
+                                "example": "stripe"
                               }
                             }
                           },
@@ -3951,6 +4167,7 @@
                             "nullable": true,
                             "description": "Informações básicas de envio (se withDetails=true)",
                             "properties": {
+                              "orderId": {"type": "integer", "example": 25},
                               "provider": {
                                 "type": "string",
                                 "example": "Correios"
@@ -3964,26 +4181,36 @@
                                 "type": "string",
                                 "example": "São Paulo"
                               },
-                              "state": {"type": "string", "example": "SP"}
+                              "state": {"type": "string", "example": "SP"},
+                              "price": {
+                                "type": "number",
+                                "format": "decimal",
+                                "example": 30
+                              }
                             }
                           },
-                          "lastUpdate": {
-                            "type": "object",
+                          "updates": {
+                            "type": "array",
                             "nullable": true,
                             "description": "Última atualização do pedido (se withDetails=true)",
-                            "properties": {
-                              "status": {
-                                "type": "string",
-                                "example": "Shipped"
-                              },
-                              "title": {
-                                "type": "string",
-                                "example": "Pedido enviado"
-                              },
-                              "createdAt": {
-                                "type": "string",
-                                "format": "date-time",
-                                "example": "2024-01-15T14:30:00.000Z"
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {"type": "integer", "example": 15},
+                                "orderId": {"type": "integer", "example": 25},
+                                "status": {
+                                  "type": "string",
+                                  "example": "Shipped"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "Pedido enviado"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-01-15T14:30:00.000Z"
+                                }
                               }
                             }
                           },
@@ -4084,6 +4311,11 @@
                 "type": "object",
                 "required": ["items"],
                 "properties": {
+                  "shareWithUserId": {
+                    "type": "integer",
+                    "description": "ID do usuário que vai compartilhar",
+                    "example": 1
+                  },
                   "items": {
                     "type": "array",
                     "description": "Itens do pedido",
@@ -4149,10 +4381,40 @@
                       "enum": ["delivery", "pickup"],
                       "example": "delivery"
                     },
-                    "total": {
+                    "subtotalPrice": {
                       "type": "number",
                       "format": "decimal",
                       "example": 299.98
+                    },
+                    "totalPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 299.98
+                    },
+                    "discountPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 0
+                    },
+                    "shippingPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 0
+                    },
+                    "paymentId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
+                    },
+                    "shippingId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
+                    },
+                    "couponId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
                     },
                     "items": {
                       "type": "array",
@@ -4160,6 +4422,7 @@
                         "type": "object",
                         "properties": {
                           "id": {"type": "integer", "example": 1},
+                          "orderId": {"type": "integer", "example": 26},
                           "productId": {"type": "integer", "example": 15},
                           "productVariantId": {
                             "type": "integer",
@@ -4179,6 +4442,7 @@
                           },
                           "product": {
                             "type": "object",
+                            "description": "Dados completos do produto",
                             "properties": {
                               "id": {"type": "integer", "example": 15},
                               "name": {
@@ -4186,7 +4450,12 @@
                                 "example": "Smartphone XYZ"
                               }
                             }
-                          }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {"type": "string", "format": "date-time"}
                         }
                       }
                     },
@@ -4267,10 +4536,45 @@
                     "id": {"type": "integer", "example": 25},
                     "customerId": {"type": "integer", "example": 10},
                     "status": {"type": "string", "example": "Processing"},
-                    "total": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["delivery", "pickup"],
+                      "example": "delivery"
+                    },
+                    "subtotalPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 249.99
+                    },
+                    "totalPrice": {
                       "type": "number",
                       "format": "decimal",
                       "example": 299.99
+                    },
+                    "discountPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 20
+                    },
+                    "shippingPrice": {
+                      "type": "number",
+                      "format": "decimal",
+                      "example": 30
+                    },
+                    "paymentId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": 5
+                    },
+                    "shippingId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": 8
+                    },
+                    "couponId": {
+                      "type": "integer",
+                      "nullable": true,
+                      "example": null
                     },
                     "customer": {
                       "type": "object",
@@ -4289,16 +4593,27 @@
                         "type": "object",
                         "properties": {
                           "id": {"type": "integer", "example": 1},
-                          "productId": {"type": "integer", "example": 15},
                           "orderId": {"type": "integer", "example": 25},
+                          "productId": {"type": "integer", "example": 15},
+                          "productVariantId": {
+                            "type": "integer",
+                            "nullable": true,
+                            "example": 23
+                          },
                           "quantity": {"type": "integer", "example": 2},
-                          "price": {
+                          "unitPrice": {
                             "type": "number",
                             "format": "decimal",
                             "example": 149.99
                           },
+                          "totalPrice": {
+                            "type": "number",
+                            "format": "decimal",
+                            "example": 299.98
+                          },
                           "product": {
                             "type": "object",
+                            "description": "Dados completos do produto",
                             "properties": {
                               "id": {"type": "integer", "example": 15},
                               "name": {
@@ -4311,7 +4626,12 @@
                                 "example": 149.99
                               }
                             }
-                          }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {"type": "string", "format": "date-time"}
                         }
                       }
                     },
@@ -4321,13 +4641,23 @@
                       "description": "Informações de pagamento",
                       "properties": {
                         "id": {"type": "integer", "example": 5},
-                        "method": {"type": "string", "example": "credit_card"},
+                        "orderId": {"type": "integer", "example": 25},
                         "status": {"type": "string", "example": "paid"},
-                        "amount": {
+                        "paymentMethod": {
+                          "type": "string",
+                          "example": "credit_card"
+                        },
+                        "price": {
                           "type": "number",
                           "format": "decimal",
                           "example": 299.99
-                        }
+                        },
+                        "paymentProvider": {
+                          "type": "string",
+                          "example": "stripe"
+                        },
+                        "createdAt": {"type": "string", "format": "date-time"},
+                        "updatedAt": {"type": "string", "format": "date-time"}
                       }
                     },
                     "shipping": {
@@ -4336,16 +4666,27 @@
                       "description": "Informações de envio",
                       "properties": {
                         "id": {"type": "integer", "example": 8},
+                        "orderId": {"type": "integer", "example": 25},
+                        "provider": {"type": "string", "example": "Correios"},
+                        "shippingCode": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "BR123456789"
+                        },
                         "address": {
                           "type": "string",
                           "example": "Rua das Flores, 123"
                         },
                         "city": {"type": "string", "example": "São Paulo"},
-                        "trackingCode": {
-                          "type": "string",
-                          "nullable": true,
-                          "example": "BR123456789"
-                        }
+                        "state": {"type": "string", "example": "SP"},
+                        "zipCode": {"type": "string", "example": "01234-567"},
+                        "price": {
+                          "type": "number",
+                          "format": "decimal",
+                          "example": 30
+                        },
+                        "createdAt": {"type": "string", "format": "date-time"},
+                        "updatedAt": {"type": "string", "format": "date-time"}
                       }
                     },
                     "updates": {
@@ -4355,6 +4696,7 @@
                         "type": "object",
                         "properties": {
                           "id": {"type": "integer", "example": 15},
+                          "orderId": {"type": "integer", "example": 25},
                           "status": {"type": "string", "example": "Shipped"},
                           "title": {
                             "type": "string",
@@ -4366,11 +4708,13 @@
                             "nullable": true,
                             "example": "Enviado via transportadora XYZ"
                           },
+                          "private": {"type": "boolean", "example": false},
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
                             "example": "2024-01-15T14:30:00.000Z"
-                          }
+                          },
+                          "updatedAt": {"type": "string", "format": "date-time"}
                         }
                       }
                     },
@@ -5923,6 +6267,12 @@
                           },
                           "supplierId": {"type": "integer", "example": 5},
                           "categoryId": {"type": "integer", "example": 1},
+                          "externalId": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "ID externo do produto (usado para importação)",
+                            "example": "PROD-12345"
+                          },
                           "tags": {
                             "type": "array",
                             "items": {"type": "string"},
@@ -5956,6 +6306,7 @@
                               "type": "object",
                               "properties": {
                                 "id": {"type": "integer", "example": 8},
+                                "productId": {"type": "integer", "example": 15},
                                 "variantTypeId": {
                                   "type": "integer",
                                   "example": 2
@@ -5987,8 +6338,24 @@
                                     "defaultUnit": {
                                       "type": "string",
                                       "example": "unidade"
+                                    },
+                                    "createdAt": {
+                                      "type": "string",
+                                      "format": "date-time"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string",
+                                      "format": "date-time"
                                     }
                                   }
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
                                 }
                               }
                             }
@@ -6008,6 +6375,10 @@
                                   "type": "string",
                                   "format": "date-time",
                                   "example": "2024-01-15T10:30:00.000Z"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
                                 }
                               }
                             }
@@ -6364,6 +6735,12 @@
                     },
                     "supplierId": {"type": "integer", "example": 5},
                     "categoryId": {"type": "integer", "example": 1},
+                    "externalId": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "ID externo do produto (usado para importação)",
+                      "example": "PROD-12345"
+                    },
                     "tags": {
                       "type": "array",
                       "items": {"type": "string"},

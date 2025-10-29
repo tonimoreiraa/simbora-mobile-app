@@ -6,10 +6,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetProducts200DataItemVariantsItemType = {
+/**
+ * Dados básicos do usuário
+ */
+export type GetOrderShippings200DataItemUser = {
   id?: number;
   name?: string;
-  defaultUnit?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  email?: string;
 };

@@ -9,7 +9,4 @@
 /**
  * Dados completos do produto
  */
-export type PostOrders201ItemsItemProduct = {
-  id?: number;
-  name?: string;
-};
+export type GetOrders200DataItemItemsItemProduct = { [key: string]: unknown };

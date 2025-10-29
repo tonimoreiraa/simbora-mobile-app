@@ -8,6 +8,7 @@
 
 export type GetOrderShippingsId200ActivityLogsItem = {
   id?: number;
+  orderShippingId?: number;
   status?: string;
   title?: string;
   comment?: string;

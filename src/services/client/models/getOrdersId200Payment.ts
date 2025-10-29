@@ -12,7 +12,11 @@
  */
 export type GetOrdersId200Payment = {
   id?: number;
-  method?: string;
+  orderId?: number;
   status?: string;
-  amount?: number;
+  paymentMethod?: string;
+  price?: number;
+  paymentProvider?: string;
+  createdAt?: string;
+  updatedAt?: string;
 } | null;

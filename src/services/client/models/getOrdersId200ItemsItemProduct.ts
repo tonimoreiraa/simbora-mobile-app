@@ -6,6 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * Dados completos do produto
+ */
 export type GetOrdersId200ItemsItemProduct = {
   id?: number;
   name?: string;
